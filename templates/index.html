@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="container-header">
+            <h4>Deposit</h4><br>
+        </div>
+        <div class="items-index">
+            <div class="item">
+                <span>Account Balance: <br> {{ balance }} kr</span><br>
+                <span>Funds not yet allocated: <br>{{ remainder }} kr</span>
+            </div>
+            <div class="item">
+                <form action="/deposit" method="post">
+                    <label for="deposit">General Deposit:</label>
+                    <input type="number" id="deposit" name="deposit" placeholder="Enter amount" required>
+                    <input type="submit" value="Submit">
+                </form>
+                <span>Deposits the amount evenly between posts based on your set % allocation</span>
+            </div>
+            <div class="item">
+                <form action="/specific_deposit" method="post">
+                    <label for="deposit">Specific Deposit:</label>
+                    <select id="post" name="post" required>
+                        <option value="" disabled selected>Select Post</option>
+                        {% for post in posts %}
+                        <option value="{{ post[0] }}">{{ post[0] }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" id="deposit" name="deposit" placeholder="Enter amount" required>
+                    <input type="submit" value="Submit">
+                </form>
+                <span>Deposits the amount to the selected post only</span>
+            </div> 
+        </div>
+    </div>
+        <div class="container">
+            <div class="container-header">
+                <h4>Overview</h4><br>
+            </div>
+                <table id="myTable">
+                    <tr>
+                        <th onclick="sortTable(0)">Post</th>
+                        <th onclick="sortTable(1)">Saved</th>
+                        <th onclick="sortTable(2)">Goal</th>
+                        <th onclick="sortTable(3)">Progress</th>
+                        <th onclick="sortTable(4)">Allocation</th>
+                    </tr>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post[0] }}</td>
+                        <td>{{ "{:,.0f} kr".format(post[2]) }}</td>
+                        <td>{{ "{:,.0f} kr".format(post[3]) }} </td>
+                        <td><progress value="{{ post[2] }}" max="{{ post[3] }}"></progress></td>
+                        <td>{{ "{:0%}".format(post[1] / 100) }} </td>
+                    </tr>
+                    {% endfor %}
+                </table>               
+                <table>
+                    <tr>
+                        <td>Totals</td>
+                        <td>{{ "{:,.0f} kr".format(total_saved) }}</td>
+                        <td>{{ "{:,.0f} kr".format(total_goal) }}</td>
+                        <td><progress value="{{ total_saved }}" max="{{ total_goal }}"></progress></td>
+                        <td>{{ "{:0%}".format(total_alloc / 100) }}</td>
+                    </tr>
+                </table>
+        </div>
+        <div class="container">
+            <div class="container-header">
+                <h4>Withdraw</h4><br>
+            </div>
+            <div class="items-index">
+                <div class="item">
+                    <form action="/withdrawal" method="post">
+                        <label for="withdrawal">Withdrawal:</label>
+                        <select id="post" name="post" required>
+                            <option value="" disabled selected>From post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" id="withdrawal" name="withdrawal" placeholder="Enter amount" required>
+                        <input type="text" id="notes" name="notes" placeholder="Notes" required>
+                        <input type="submit" value="Submit">
+                    </form>
+                    <span>Withdraw set amount from the post of your choice</span>
+                </div>
+                <div class="item">
+                    <form action="/move" method="post">
+                        <label for="move">Move Funds:</label>
+                        <select id="from" name="from" required>
+                            <option value="" disabled selected>From post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="to" name="to" required>
+                            <option value="" disabled selected>To post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" id="amount" name="amount" placeholder="Enter amount" required>
+                        <input type="submit" value="Submit">
+                    </form>
+                    <span>Moves set amount from one post to another. 
+                        If you wish to delete a post please do so under "Edit Posts" -></span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="container-header">
+                <h4>Edit Posts</h4><br>
+            </div>
+            <div class="items-index">
+                <div class="item">
+                </div>
+            </div>
+        </div>
+{% endblock %}

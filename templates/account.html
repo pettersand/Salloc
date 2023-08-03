@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Account
+{% endblock %}
+
+{% block main %}
+    <div class="container-account">
+        <div class="subcontainer">
+            <div class="container-header">
+                <h4>Account Settings</h4><br>
+            </div>
+            <div class="container-items">
+                <div class="item">
+                    <p>Current Savings: <br>{{ balance }} kr</p><br>
+                    <p>Total Goal: <br>{{ total_goal }} kr</p><br><br>
+                    <span>
+                        <p>Change Password</p>
+                        <p>Delete User</p>
+                    </span>
+                </div>
+                <div class="item">
+                    <form action="/commit_savings" method="post">
+                        <label> Commit Changes</label>
+                        <input type="submit" value="Calculate">
+                    </form>
+                    <form action="/reset" method="post">
+                        <label>Reset Account</label>
+                        <input type="submit" value="Reset">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="subcontainer">
+            <div class="container-header">
+                <h4>Set Posts</h4><br>
+            </div>
+            <div class="container-items">
+                <div class="item">
+                    <span>You have {{ remain_alloc }}% remaning for allocation</span>
+                </div>
+                <div class="item">
+                    <form action="/add_post" method="post">
+                        <label for="post">Add Post:</label>
+                        <input type="text" id="post" name="post" placeholder="Post name" required autofocus>
+                        <input type="number" id="allocation" name="allocation" placeholder="Enter % Allocation" required>
+                        <input type="number" id="goal" name="goal" placeholder="Add Goal Amount" required>
+                        <input type="submit" value="Add">
+                    </form>
+                    <form action="/edit_post" method="post">
+                        <label for="post">Edit Post:</label>
+                        <select id="post" name="post" required>
+                            <option value="" disabled selected>Select Post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" id="allocation" name="allocation" placeholder="Enter % Allocation" required>
+                        <input type="number" id="goal" name="goal" placeholder="Add Goal Amount" required>
+                        <input type="submit" value="Edit">
+                    </form>
+                </div>
+                <div class="item">
+                    <form action="/remove_post" method="post">
+                        <label for="post">Remove Post:</label>
+                        <select id="post" name="post" required>
+                            <option value="" disabled selected>Select Post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Remove">
+                    </form>
+                    <form action="/set_savings" method="post">
+                        <label for="savings">Set Total Savings:</label>
+                        <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container-account">
+        <div class="container-header">
+            <h4>Post Overview</h4><br>
+        </div>
+            <div class="item">
+                <table>
+                    <tr>
+                        <th>Post</th>
+                        <th>Goal</th>
+                        <th>Allocation</th>
+                    </tr>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post[0] }}</td>
+                        <td>{{ "{:,.0f} kr".format(post[3]) }} </td>
+                        <td>{{ "{:0%}".format(post[1] / 100) }} </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+        </div>
+    </div>
+{% endblock %}
+{% block graph %}
+<div class="sidebar container"> 
+    <div class="container-header">
+        <h4>Transaction History</h4><br>
+    </div>
+        <div class="side-container">
+            <div class="item">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Post</th>
+                        <th>Notes</th>
+                    </tr>
+                    {% for hist in history %}
+                    <tr>
+                        <td>{{ hist[0] }}</td>
+                        <td>{{ hist[2] }}</td>
+                        <td>{{ "{:,.0f} kr".format(hist[3]) }}</td>
+                        <td>{{ hist[1] }}</td>
+                        <td>{{ hist[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div> 
+</div>
+{% endblock %}

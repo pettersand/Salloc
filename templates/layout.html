@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Layout {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
+  </head>
+  <body id="layout">
+    <header class="header">
+        <div class="nav">
+            <a href="{{ url_for('account') }}"><span>Account</span></a>
+            <a href="{{ url_for('index') }}"><span>Home</span></a>
+            <span>Help</span>
+        </div>
+        <div class="nav2"> 
+            <span>SALLOC</span>
+        </div>
+        <div class="nav3">
+            <span>Language</span>
+            <span>Currency</span>
+            <span><a href="/logout">Log Out</a></span>
+        </div>
+    </header>
+            <main class="main">
+                {% block main %}
+                {% endblock %}
+            </main>
+            {% block graph %}
+            <div class="sidebar container"> 
+                <div class="container-header">
+                    <h4>Graphs</h4><br>
+                </div>
+                <div class="side-container">
+                    <div class="item">
+                        Under Development
+                    </div>
+                </div> 
+            </div>
+            {% endblock %}
+    <footer class="footer">
+    </footer>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        window.onload = function() {
+            sortTable(3);
+          };
+    </script>
+</body>
+</html>

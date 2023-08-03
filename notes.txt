@@ -1,0 +1,34 @@
+python3 -m venv .venv
+
+.venv\Scripts\activate 
+
+flask --app app run --debug
+
+
+Posts:
+buffer
+emergency found
+vacation
+travel
+stocks
+investing
+pension
+retirement
+education
+home improvement
+technology
+personal development
+charity
+Big purchases
+Projects
+Clothing
+Entertainment
+Dining out
+Dept repayment
+hobby
+car
+apartment/house
+home decore/decorative
+fun 
+date night 
+other
