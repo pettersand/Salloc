@@ -215,9 +215,10 @@ def edit_post():
 
 @server.route("/edit_all", methods=["POST"])
 @login_required
+@login_required
 def edit_all():
     conn, cur = create_conncur()
-    with conn:
+    try:
         for key, value in request.form.items():
             if key.startswith("new_goal_"):
                 post = key[len("new_goal_"):]
@@ -244,9 +245,16 @@ def edit_all():
         total = cur.fetchone()[0]
         if total > 100:
             excess = total - 100
+            conn.rollback()
             return f"Error: Total allocation exceeds 100% by {excess}%"
+        else:
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return str(e)
                         
     return redirect("/account")
+
     
     
 @server.route("/commit_savings", methods=["POST"])
