@@ -44,29 +44,29 @@ Index
             </div>
                 <table id="myTable">
                     <tr>
-                        <th onclick="sortTable(0)">Post</th>
+                        <th class="table-post-h" onclick="sortTable(0)">Post</th>
                         <th onclick="sortTable(1)">Saved</th>
                         <th onclick="sortTable(2)">Goal</th>
                         <th onclick="sortTable(3)">Progress</th>
-                        <th onclick="sortTable(4)">Allocation</th>
+                        <th class="table-alloc" onclick="sortTable(4)">% Alloc</th>
                     </tr>
                     {% for post in posts %}
                     <tr>
-                        <td>{{ post[0] }}</td>
+                        <td class="table-post">{{ post[0] }}</td>
                         <td>{{ "{:,.0f} kr".format(post[2]) }}</td>
                         <td>{{ "{:,.0f} kr".format(post[3]) }} </td>
                         <td><progress value="{{ post[2] }}" max="{{ post[3] }}"></progress></td>
-                        <td>{{ "{:0%}".format(post[1] / 100) }} </td>
+                        <td class="table-alloc">{{ "{:0%}".format(post[1] / 100) }} </td>
                     </tr>
                     {% endfor %}
                 </table>               
                 <table>
                     <tr>
-                        <td>Totals</td>
+                        <td class="table-post-h">Totals</td>
                         <td>{{ "{:,.0f} kr".format(total_saved) }}</td>
                         <td>{{ "{:,.0f} kr".format(total_goal) }}</td>
                         <td><progress value="{{ total_saved }}" max="{{ total_goal }}"></progress></td>
-                        <td>{{ "{:0%}".format(total_alloc / 100) }}</td>
+                        <td class="table-alloc">{{ "{:0%}".format(total_alloc / 100) }}</td>
                     </tr>
                 </table>
         </div>

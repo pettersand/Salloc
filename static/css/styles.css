@@ -17,7 +17,6 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -43,6 +42,20 @@ footer {
 
 #myTable {
     font-size: 0.9em;
+    
+}
+
+
+.table-post, td {
+    text-align: left;
+}
+
+.table-post-h {
+    width: 170px;
+}
+
+.table-alloc {
+    width: 60px;
 }
 
 table {
@@ -57,12 +70,13 @@ table {
 th {
     border: 1px solid black;
     text-align: center;
-    padding: 7px;
+    padding: 3px;
 }
 
 td {
     border: 1px solid black;
-    padding: 5px;
+    text-align: center;
+    padding: 3px;
     width: 100%;
 }
 
@@ -273,7 +287,7 @@ span {
 .container-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 .items-index {
