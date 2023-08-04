@@ -406,10 +406,12 @@ def move():
             "UPDATE posts SET total_saved = total_saved - %s WHERE user_id = %s AND name = %s",
             (amount, session["user_id"], pfrom)
         )
+        log_history(conn, session["user_id"], pfrom, amount, "Withdrawal", "Moved From")
         cur.execute(
             "UPDATE posts SET total_saved = total_saved + %s WHERE user_id = %s AND name = %s",
             (amount, session["user_id"], pto)
         )
+        log_history(conn, session["user_id"], pto, amount, "Deposit", "Moved To")
         return redirect("/index")
         
 
