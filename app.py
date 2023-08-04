@@ -26,12 +26,6 @@ def landing():
     return render_template("landing.html")
 
 
-@server.route('/get_cookie')
-def get_cookie():
-    hide_warning = request.cookies.get('hide_warning')
-    # Now you can check the value of hide_warning and decide whether to show the warning
-
-
 # LOGIN
 @server.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,7 +42,13 @@ def login():
 
         if user and bcrypt.checkpw(password, user[2].encode("utf-8")):
             session["user_id"] = user[0]
-            return redirect("/index")
+            if user[3]:
+                resp = make_response(redirect("/index"))
+                if "consent" not in request.cookies:
+                    resp.set_cookie("consent", "true")
+                return resp
+            else:
+                return redirect("/index")
         else:
             return "Incorrect username or password"
         
