@@ -104,7 +104,7 @@ def account():
         )
         balance = cur.fetchone()[0]
         cur.execute(
-            "SELECT name, allocation_percentage, total_saved, goal FROM posts WHERE user_id = %s",
+            "SELECT name, allocation_percentage, total_saved, goal FROM posts WHERE user_id = %s ORDER BY allocation_percentage DESC",
             (session["user_id"],)
         )
         posts = cur.fetchall()
@@ -212,6 +212,41 @@ def edit_post():
         ) 
         conn.commit()
         return redirect("/account")
+
+@server.route("/edit_all", methods=["POST"])
+@login_required
+def edit_all():
+    conn, cur = create_conncur()
+    with conn:
+        for key, value in request.form.items():
+            if key.startswith("new_goal_"):
+                post = key[len("new_goal_"):]
+                goal = value
+                if goal != "":
+                    cur.execute(
+                        "UPDATE posts SET goal = %s WHERE user_id = %s AND name = %s",
+                        (goal, session["user_id"], post)
+                    )
+            if key.startswith("new_alloc_"):
+                post = key[len("new_alloc_"):]
+                alloc = value
+                if alloc != "":
+                    cur.execute(
+                        "UPDATE posts SET allocation_percentage = %s WHERE user_id = %s AND name = %s",
+                        (alloc, session["user_id"], post)
+                    )
+                    
+        # Checks if allocation exceeds 100%           
+        cur.execute(
+            "SELECT SUM(allocation_percentage) FROM posts WHERE user_id = %s",
+            (session["user_id"],)
+        )            
+        total = cur.fetchone()[0]
+        if total > 100:
+            excess = total - 100
+            return f"Error: Total allocation exceeds 100% by {excess}%"
+                        
+    return redirect("/account")
     
     
 @server.route("/commit_savings", methods=["POST"])

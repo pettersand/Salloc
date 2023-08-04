@@ -86,23 +86,32 @@ Account
         <div class="container-header">
             <h4>Post Overview</h4><br>
         </div>
-            <div class="item">
-                <table>
-                    <tr>
-                        <th>Post</th>
-                        <th>Goal</th>
-                        <th>Allocation</th>
-                    </tr>
+            <div class="div-table">
+                <form id="editAll" action="/edit_all" method="post">
+                    <div class="flex-row">
+                        <div class="flex-post-h">Post</div>
+                        <div class="flex-goal-h">Goal</div>
+                        <div class="flex-alloc-h">Allocation</div>
+                    </div>
                     {% for post in posts %}
-                    <tr>
-                        <td>{{ post[0] }}</td>
-                        <td>{{ "{:,.0f} kr".format(post[3]) }} </td>
-                        <td>{{ "{:0%}".format(post[1] / 100) }} </td>
-                    </tr>
+                    <div class="flex-row">
+                        <div class="flex-post">
+                            {{ post[0] }}
+                        </div>
+                        <div class="flex-goal">
+                            <span>{{ "{:,.0f} kr".format(post[3]) }}</span>
+                            <input type="number" name="new_goal_{{ post[0] }}" placeholder="Edit Goal">
+                        </div>
+                        <div class="flex-alloc">
+                            <span>{{ "{:0%}".format(post[1] / 100) }}</span>
+                            <input type="number" name="new_alloc_{{ post[0] }}" placeholder="Edit %">
+                        </div>
+                    </div>
                     {% endfor %}
-                </table>
+                    <input type="submit" value="Update All">
+                </form>
+            </div>
         </div>
-    </div>
 {% endblock %}
 {% block graph %}
 <div class="sidebar container"> 
