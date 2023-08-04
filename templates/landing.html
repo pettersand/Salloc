@@ -27,7 +27,59 @@
                 {% endblock %}
             </div>
         </main>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-cookies">
+                <span class="close">&times;</span>
+                    <h4>Want Cookies?</h4><br>
+                    <p>
+                        This page uses limited cookies for improved user experience.
+                    </p>
+                    <br>
+                    <p>
+                        These cookies save your personal preference on pop-ups for either input confirmation 
+                        or warning of irreversible actions that could delete or reset your account data.
+                        The cookies save NO other data and are ONLY used for improving your user experience.
+                    </p>
+                    <br>
+                    <p>
+                        You may decline, however this will mean you cannot choose to turn off recurring pop-ups from 
+                        specific actions such as removing a savings-post or editing an existing one. 
+                        If you decline I recommend you check out the guided tour of the page. 
+                        The cookies serve as a good learning tool for first time users. 
+                    </p>
+                    <br>
+                    <p>
+                        In opting out of cookies you will not be prompted again unless you register a new account. 
+                        Upon opting in, you may be prompted again if the cookie policy is changed in the future, 
+                        or if you have cleared your cache / deleted a cookie. At that point you may opt out of cookies,
+                        or renew your consent. 
+                    </p>
+                    <br>
+                    <p>
+                        Cookie consent may be managed in your profile settings (pending development)
+                    </p>
+                    <br>
+                    <div class="centered-content">
+                        <div class="in-line">
+                            <input type="checkbox" id="consent" name="consent">
+                            <label for="consent">I <b>consent</b> to the use of cookies</label>
+                        </div>
+                            <br>
+                        <div class="in-line">
+                            <input type="checkbox" id="noConsent" name="noConsent">
+                            <label for="noConsent">I do <b>NOT</b> consent to the use of cookies</label>
+                        </div>
+                        <br>
+                        <br>
+                        <h4>Do you wish to complete your registration?</h4>
+                        <br>
+                        <button id="continueButton">Yes, continue</button>
+                        <button onclick="closeModal()">No, Exit</button>
+                    </div>
+              </div>
+        </div>
     <footer></footer>
-    <script src="index.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

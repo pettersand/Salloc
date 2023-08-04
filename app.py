@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, make_response
 import dash
 from dash import html
 from dash import dcc
 from decimal import Decimal
 import psycopg2
-from helper import log_history
+from helper import log_history, login_required
 from functools import wraps
 import bcrypt
 
@@ -17,14 +17,6 @@ def create_conncur():
     )
     return conn, conn.cursor()
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect(url_for('login', next=request.url))
-        return f(*args, **kwargs)
-    return decorated_function
-
 server = Flask(__name__)
 server.secret_key = "sarapus1"
 
@@ -32,6 +24,12 @@ server.secret_key = "sarapus1"
 @server.route("/")
 def landing():
     return render_template("landing.html")
+
+
+@server.route('/get_cookie')
+def get_cookie():
+    hide_warning = request.cookies.get('hide_warning')
+    # Now you can check the value of hide_warning and decide whether to show the warning
 
 
 # LOGIN
@@ -56,6 +54,7 @@ def login():
         
     return render_template("landing.html")
 
+
 @server.route("/register", methods=["GET", "POST"])
 def register():
     if "user_id" in session:
@@ -63,6 +62,11 @@ def register():
     
     if request.method == "POST":
         username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+        consent = request.form.get("consentField")
+        hashpass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        hashpass = hashpass.decode("utf-8")
         conn, cur = create_conncur()
         with conn:
             cur.execute(
@@ -72,20 +76,25 @@ def register():
             check = cur.fetchone()
             if check:
                 return "Username already registered, did you forget your password?"
-                
-            password = request.form.get("password")
-            confirm = request.form.get("confirm")
             if password != confirm:
                 return "Password did not match with confirmation password"
+            if consent == "yes":
+                consent_db = "t"
+            elif consent == "no":
+                consent_db = "f"
+            else:
+                return "Invalid or missing cookie consent value"    
             
-            hashpass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-            hashpass = hashpass.decode("utf-8")
             cur.execute(
-                "INSERT INTO users (username, password) VALUES (%s, %s)",
-                (username, hashpass)
+                "INSERT INTO users (username, password, cookies) VALUES (%s, %s, %s)",
+                (username, hashpass, consent_db)
             )
-            return redirect("/account")
-    
+            resp = make_response(redirect("/account"))
+            
+            if consent == "yes":
+                resp.set_cookie('consent', 'true', max_age=60*60*24*365*2)   
+            return resp
+            
     return render_template("register.html")
 
 @server.route("/logout")
