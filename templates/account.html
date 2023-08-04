@@ -62,7 +62,7 @@ Account
                     </form>
                 </div>
                 <div class="item">
-                    <form action="/remove_post" method="post">
+                    <form id="removePostForm" action="/remove_post" method="post">
                         <label for="post">Remove Post:</label>
                         <select id="post" name="post" required>
                             <option value="" disabled selected>Select Post</option>
@@ -70,7 +70,7 @@ Account
                             <option value="{{ post[0] }}">{{ post[0] }}</option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value="Remove">
+                        <input type="button" id="removePostButton" value="Remove">
                     </form>
                     <form action="/set_savings" method="post">
                         <label for="savings">Set Total Savings:</label>
@@ -140,5 +140,6 @@ Account
                 </table>
             </div>
         </div> 
+        
 </div>
 {% endblock %}

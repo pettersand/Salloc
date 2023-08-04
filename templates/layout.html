@@ -44,13 +44,24 @@
                 </div> 
             </div>
             {% endblock %}
+        <div id="warningModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-warning">
+                <p id="warningMessage"></p>
+                <input type="checkbox" id="ignoreThisCheckbox"> Ignore this warning in the future
+                <input type="checkbox" id="ignoreAllCheckbox"> Ignore all warnings in the future
+                <button id="cancelButton">Cancel</button>
+                <button id="acceptButton">Accept</button>
+            </div>
+        </div>
     <footer class="footer">
     </footer>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
         window.onload = function() {
             sortTable(3);
-          };
+            closeModal();
+        };
     </script>
 </body>
 </html>

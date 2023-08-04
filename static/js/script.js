@@ -80,18 +80,115 @@ function sortTable(n) {
     }
   }
 
-// MODAL JS
 
-window.onload = function() {
+
+// MODAL JS
+// Function to show warning popup
+function showWarningPopup(modalId, message, action, warningName) {
     // Get the modal
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById(modalId);
     if (!modal) return;  // If there's no modal on the page, stop the script
 
-    // Get the <span> element that closes the modal
+    // Set the warning message
+    var warningMessageElement = document.getElementById("warningMessage");
+    if (warningMessageElement) {
+        warningMessageElement.textContent = message;
+    }
+
+    // Handle the "Cancel" button
+    var cancelButton = document.getElementById("cancelButton");
+    if (cancelButton) {
+        cancelButton.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
+
+    // Handle the "Accept" button
+    var acceptButton = document.getElementById("acceptButton");
+    if (acceptButton) {
+        acceptButton.onclick = function() {
+            modal.style.display = "none";
+            action();
+        }
+    }
+
+    // Handle the checkboxes
+    var ignoreThisCheckbox = document.getElementById("ignoreThisCheckbox");
+    var ignoreAllCheckbox = document.getElementById("ignoreAllCheckbox");
+    if (ignoreThisCheckbox && ignoreAllCheckbox) {
+        ignoreThisCheckbox.onclick = function() {
+            if (ignoreThisCheckbox.checked) {
+                ignoreAllCheckbox.checked = false;
+                // Update the user's cookie preferences
+                document.cookie = warningName + "=true; path=/";
+            }
+        }
+        ignoreAllCheckbox.onclick = function() {
+            if (ignoreAllCheckbox.checked) {
+                ignoreThisCheckbox.checked = false;
+                // Update the user's cookie preferences
+                document.cookie = "ignoreAllWarnings=true; path=/";
+            }
+        }
+    }
+
+    // Show the modal
+    modal.style.display = "block";
+}
+
+// Function to check the user's cookie preferences
+function checkCookiePreferences(modalId, message, action, warningName) {
+    // Check the user's cookies
+    var consent = document.cookie.split('; ').find(row => row.startsWith('consent='));
+    var ignoreThisWarning = document.cookie.split('; ').find(row => row.startsWith(warningName + '='));
+    var ignoreAllWarnings = document.cookie.split('; ').find(row => row.startsWith('ignoreAllWarnings='));
+
+    // If the user has not given consent, show the warning popup
+    if (!consent) {
+        showWarningPopup(modalId, message, action, warningName);
+    } else if (!ignoreThisWarning && !ignoreAllWarnings) {
+        // If the user has given consent but has not opted to ignore this warning or all warnings, show the warning popup
+        showWarningPopup(modalId, message, action, warningName);
+    } else {
+        // If the user has given consent and has opted to ignore this warning or all warnings, perform the action
+        action();
+    }
+}
+
+// Attach the checkCookiePreferences function to the "Remove Post" button
+var removePostButton = document.getElementById("removePostButton");
+if (removePostButton) {
+    removePostButton.onclick = function(event) {
+        event.preventDefault();  // Prevent the form from being submitted
+        checkCookiePreferences(
+            "warningModal",  // The ID of the modal to display
+            "Warning: Removing a post may affect certain aspects of the program.",
+            function() {
+                // Action to perform if the user accepts the warning
+                document.getElementById("removePostForm").submit();
+            },
+            "ignoreRemovePostWarning"  // The name of the warning
+        );
+    }
+}
+
+// Function to close the modal
+function closeModal(modalId) {
+    var modal = document.getElementById(modalId);
+    if (modal) {  // If the modal exists on the page
+      modal.style.display = "none";
+    }
+  }
+
+// Get the modal
+var modal = document.getElementById("myModal");
+if (modal) {  // If there's no modal on the page, stop the script
+
+// Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
     if (span) {
         span.onclick = function() {
-            modal.style.display = "none";
+            closeModal("myModal");  // Close the modal
         }
     }
 
@@ -106,7 +203,7 @@ window.onload = function() {
     // Handle consent checkboxes
     var consentCheckbox = document.getElementById("consent");
     var noConsentCheckbox = document.getElementById("noConsent");
-    var consentField = document.getElementById("consentField"); // Make sure this is the ID of the hidden input field in the form
+    var consentField = document.getElementById("consentField"); 
 
     if (consentCheckbox && noConsentCheckbox) {
         consentCheckbox.onclick = function() {
@@ -139,9 +236,4 @@ window.onload = function() {
     }
 }
 
-
-// Function to close the modal
-function closeModal() {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "none";
-}
+console.log("CookiePref Loaded");
