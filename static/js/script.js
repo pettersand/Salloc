@@ -210,12 +210,28 @@ if (removePostButton) {
         event.preventDefault();  // Prevent the form from being submitted
         checkCookiePreferences(
             "warningModal",  // The ID of the modal to display
-            "Warning: Removing a post may affect certain aspects of the program.",
+            "Warning: Removing a post will also delete any currently saved funds for that post. Consider using the transfer and delete form, or manually move funds from your Home page.",
             function() {
                 // Action to perform if the user accepts the warning
                 document.getElementById("removePostForm").submit();
             },
             "ignoreRemovePostWarning"  // The name of the warning
+        );
+    }
+}
+
+var resetAccountButton = document.getElementById("resetAccountButton");
+if (resetAccountButton) {
+    resetAccountButton.onclick = function(event) {
+        event.preventDefault();  // Prevent the form from being submitted
+        checkCookiePreferences(
+            "warningModal",  // The ID of the modal to display
+            "Warning: Resetting your account will delete all of your posts, goals, allocation, savings, and account balance. This is meant as a clean reset. The data is not retrievable once deleted. But don't worry, this is not connected to your bank. It's just numbers on a page ;)",
+            function() {
+                // Action to perform if the user accepts the warning
+                document.getElementById("resetAccountForm").submit();
+            },
+            "ignoreResetAccountWarning"  // The name of the warning
         );
     }
 }

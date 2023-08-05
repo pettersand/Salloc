@@ -164,7 +164,7 @@ def reset():
             "DELETE FROM posts WHERE user_id = %s",
             (user_id,)
         )
-    return redirect("/index")
+    return redirect("/account")
 
 # Add new post for user, updates db
 @server.route("/add_post", methods=["POST"])
