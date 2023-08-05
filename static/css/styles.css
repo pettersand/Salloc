@@ -472,7 +472,7 @@ span {
   }
   
   /* Modal Content */
-  .modal-cookies {
+.modal-cookies {
     background-color: #fefefe;
     position: absolute;
     top: 40%;
@@ -483,9 +483,9 @@ span {
     border: 1px solid #888;
     max-height: 800px;
     max-width: 500px;
-  }
+}
 
-  .modal-warning {
+.modal-warning {
     background-color: #fefefe;
     position: absolute;
     top: 40%;
@@ -496,14 +496,43 @@ span {
     border: 1px solid #888;
     max-height: 800px;
     max-width: 500px;
-  }
-  
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+}
+
 .centered-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
+#customSetupForm {
+    display: flex;
+    flex-flow: column wrap;
+    width: auto;
+}
+
+#suggestionsContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  #suggestionsList {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
 
 .in-line {
     display: flex;
@@ -513,18 +542,19 @@ span {
     gap: 15px;
 }
 
-  /* The Close Button */
-  .close {
+/* The Close Button */
+.close {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
+    position: relative;
+    width: fit-content;
+}
+
+.close:hover,
+.close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-  }
-  
+}

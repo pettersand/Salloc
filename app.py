@@ -7,6 +7,7 @@ import psycopg2
 from helper import log_history, login_required
 from functools import wraps
 import bcrypt
+import string
 
 def create_conncur():
     conn = psycopg2.connect(
@@ -338,7 +339,39 @@ def generate_template():
             )
         return redirect("/account")
         
-        
+
+@server.route("/custom_setup", methods=["POST"])
+@login_required
+def custom_setup():
+    post_names = request.form.getlist("postName[]")
+    post_goals = request.form.getlist("postGoal[]")
+    post_alloc = request.form.getlist("postAllocation[]")
+    conn, cur = create_conncur()
+    with conn: 
+        for name, goal, alloc in zip(post_names, post_goals, post_alloc):
+            if name.strip () == "":
+                continue
+            
+            name = string.capwords(name)
+            goal = goal.strip() or "0"
+            alloc = alloc.strip() or "0"
+
+            cur.execute(
+                "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
+                (session["user_id"], name, alloc, goal)
+            )
+        cur.execute(
+            "SELECT SUM(allocation_percentage) FROM posts WHERE user_id = %s",
+            (session["user_id"],)
+        )
+        check = cur.fetchone()[0]
+        if check > 100:
+            return "Total % exceeds 100%"
+
+                
+    return redirect("/account")
+
+
 @server.route("/index")
 @login_required
 def index():

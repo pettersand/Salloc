@@ -332,4 +332,109 @@ if (modal) {  // If there's no modal on the page, stop the script
     }
 }
 
+
+// TABLE MODAL
+// Get the modal
+// Get the form element
+var customSetupForm = document.getElementById("customSetupForm");
+
+// Function to update the remaining percentage
+function updateRemainingPercentage() {
+  var initialRemainingAllocation = parseFloat(document.getElementById("initialRemainingAllocation").value);
+  var inputs = document.getElementsByName("postAllocation[]");
+  var totalAllocation = 0;
+  for (var i = 0; i < inputs.length; i++) {
+    totalAllocation += parseFloat(inputs[i].value) || 0;
+  }
+  var remainingPercentage = initialRemainingAllocation - totalAllocation;
+  document.getElementById("remainingPercentage").innerText = "Remaining Percentage: " + remainingPercentage + "%";
+  return remainingPercentage; // Return the remaining percentage
+}
+
+// Attach the updateRemainingPercentage function to the input change event
+var inputs = document.getElementsByName("postAllocation[]");
+for (var i = 0; i < inputs.length; i++) {
+  inputs[i].addEventListener("input", updateRemainingPercentage);
+}
+
+// Update the remaining percentage when the page loads
+updateRemainingPercentage();
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+if (span) {
+  span.onclick = function() {
+    closeModal("customSetupModal");  // Close the modal
+  }
+}
+
+var setupButton = document.getElementById("setupButton");
+if (setupButton) {
+  setupButton.onclick = function(event) {
+    event.preventDefault();  // Prevent the form from being submitted
+    customSetupModal.style.display = "block";  // Display the modal
+  }
+}
+
+// Add functionality to add a new row
+document.getElementById("addRowButton").onclick = function() {
+  var table = document.getElementById("customSetupTable").getElementsByTagName('tbody')[0];
+  var newRow = table.insertRow(table.rows.length);
+
+  var cell1 = newRow.insertCell(0);
+  var cell2 = newRow.insertCell(1);
+  var cell3 = newRow.insertCell(2);
+
+  cell1.innerHTML = '<input type="text" name="postName[]" placeholder="Name">';
+  cell2.innerHTML = '<input type="number" name="postGoal[]" placeholder="Goal">';
+  cell3.innerHTML = '<input type="number" name="postAllocation[]" placeholder="% Allocation">';
+
+  // Attach the updateRemainingPercentage function to the input change event
+  var inputs = document.getElementsByName("postAllocation[]");
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener("input", updateRemainingPercentage);
+  }
+}
+
+var suggestions = {
+  "Financial:": ["Emergency Fund", "Retirement", "Pension", "Investment", "Debt Repayment", "Home Improvement", "Career Development", "Education"],
+  "Recreational:": ["Personal Spending", "Technology", "Shopping", "Hobby", "Entertainment", "Dining Out", "Gaming", "Fun"],
+  "Lifestyle & Goals:": ["Home Purchase", "Car Purchase", "Vacation/Travel", "Wedding", "Family", "Charity", "Home Decor", "Clothing"]
+};
+
+document.getElementById("showSuggestionsButton").onclick = function() {
+  var container = document.getElementById("suggestionsContainer");
+  var list = document.getElementById("suggestionsList");
+
+  // Toggle the display of the container
+  container.style.display = container.style.display === "none" ? "block" : "none";
+
+  // Clear the existing list
+  list.innerHTML = "";
+
+  // Populate the list with suggestions
+  for (var category in suggestions) {
+    var categoryItem = document.createElement("li");
+    categoryItem.textContent = category;
+    var subList = document.createElement("ul");
+    suggestions[category].forEach(function(suggestion) {
+      var listItem = document.createElement("li");
+      listItem.textContent = suggestion;
+      subList.appendChild(listItem);
+    });
+    categoryItem.appendChild(subList);
+    list.appendChild(categoryItem);
+  }
+};
+
+customSetupForm.addEventListener("submit", function(event) {
+  var remainingPercentage = updateRemainingPercentage();
+  if (remainingPercentage < 0) {
+    alert("Allocation exceeds 100%");
+    event.preventDefault(); // Prevent the form from being submitted
+  }
+});
+
+  
+
 console.log("CookiePref Loaded");

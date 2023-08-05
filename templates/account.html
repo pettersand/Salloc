@@ -85,11 +85,51 @@ Account
                 <div class="item">
                     <form id="generateTemplate" action="/generate_template" method="post">
                         <label for="generate">Generate Template</label>
-                        <input type="submit" value="Generate Example Template">
+                        <input type="submit" value="Generate Example">
+                    </form>
+                    <form>
+                        <label for="custom">Customize By List</label>
+                        <input id="setupButton" type="submit" value="Custom Post Setup">
                     </form>
                 </div>
             </div>
         </div>
+        <div id="customSetupModal" class="modal">
+            <div class="modal-content">
+                <form id="customSetupForm" action="/custom_setup" method="post">                  
+                    <h2>Custom Setup<span class="close">&times;</span></h2>
+                    <input type="hidden" id="initialRemainingAllocation" value="{{ remain_alloc }}">
+                    <span id="remainingPercentage">Remaining Percentage: 100%</span>
+                    <table id="customSetupTable">
+                        <thead>
+                        <tr>
+                            <th>Post Name</th>
+                            <th>Goal</th>
+                            <th>% Allocation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" name="postName[]" placeholder="Name"></td>
+                            <td><input type="number" name="postGoal[]" placeholder="Goal"></td>
+                            <td><input type="number" name="postAllocation[]" placeholder="% Allocation"></td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <div class="in-line">
+                            <button id="addRowButton" type="button">Add Row</button>
+                            <button id="submitCustomSetup" type="submit">Submit</button>
+                            <button id="showSuggestionsButton" type="button">Post Suggestions</button>
+                        </div>
+                        <div id="suggestionsContainer" style="display: none;">
+                            <ul id="suggestionsList">
+                        <!-- Suggestions will be populated here -->
+                            </ul>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div>   
     </div>
     </div>
     <div class="container-account">
