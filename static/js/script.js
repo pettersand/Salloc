@@ -112,29 +112,42 @@ function showWarningPopup(modalId, message, action, warningName) {
         }
     }
 
+    // Check the user's cookies
+    var consent = document.cookie.split('; ').find(row => row.startsWith('consent='));
+
+    // Get the checkbox container
+    var checkboxContainer = document.getElementById("checkboxContainer");
+
     // Handle the checkboxes
     var ignoreThisCheckbox = document.getElementById("ignoreThisCheckbox");
     var ignoreAllCheckbox = document.getElementById("ignoreAllCheckbox");
-    if (ignoreThisCheckbox && ignoreAllCheckbox) {
-        ignoreThisCheckbox.onclick = function() {
-            if (ignoreThisCheckbox.checked) {
-                ignoreAllCheckbox.checked = false;
-                // Update the user's cookie preferences
-                var popups = getPopupPreferences();
-                popups[warningName] = true;
-                setPopupPreferences(popups);
-            }
-        }
-        ignoreAllCheckbox.onclick = function() {
-            if (ignoreAllCheckbox.checked) {
-                ignoreThisCheckbox.checked = false;
-                // Update the user's cookie preferences
-                var popups = getPopupPreferences();
-                for (var key in popups) {
-                    popups[key] = true;
+    if (ignoreThisCheckbox && ignoreAllCheckbox && checkboxContainer) {
+        // If the user has given consent, show the checkboxes and handle their clicks
+        if (consent) {
+            checkboxContainer.style.display = "block";
+            ignoreThisCheckbox.onclick = function() {
+                if (ignoreThisCheckbox.checked) {
+                    ignoreAllCheckbox.checked = false;
+                    // Update the user's cookie preferences
+                    var popups = getPopupPreferences();
+                    popups[warningName] = true;
+                    setPopupPreferences(popups);
                 }
-                setPopupPreferences(popups);
             }
+            ignoreAllCheckbox.onclick = function() {
+                if (ignoreAllCheckbox.checked) {
+                    ignoreThisCheckbox.checked = false;
+                    // Update the user's cookie preferences
+                    var popups = getPopupPreferences();
+                    for (var key in popups) {
+                        popups[key] = true;
+                    }
+                    setPopupPreferences(popups);
+                }
+            }
+        } else {
+            // If the user has not given consent, hide the checkboxes
+            checkboxContainer.style.display = "none";
         }
     }
 
