@@ -120,14 +120,20 @@ function showWarningPopup(modalId, message, action, warningName) {
             if (ignoreThisCheckbox.checked) {
                 ignoreAllCheckbox.checked = false;
                 // Update the user's cookie preferences
-                document.cookie = warningName + "=true; path=/";
+                var popups = getPopupPreferences();
+                popups[warningName] = true;
+                setPopupPreferences(popups);
             }
         }
         ignoreAllCheckbox.onclick = function() {
             if (ignoreAllCheckbox.checked) {
                 ignoreThisCheckbox.checked = false;
                 // Update the user's cookie preferences
-                document.cookie = "ignoreAllWarnings=true; path=/";
+                var popups = getPopupPreferences();
+                for (var key in popups) {
+                    popups[key] = true;
+                }
+                setPopupPreferences(popups);
             }
         }
     }
@@ -136,29 +142,58 @@ function showWarningPopup(modalId, message, action, warningName) {
     modal.style.display = "block";
 }
 
+// Function to get the user's popup preferences from the cookie
+function getPopupPreferences() {
+  console.log("getPopupPreferences run");
+  var cookie = document.cookie.split('; ').find(row => row.startsWith('popups='));
+  if (cookie) {
+      var cookieValue = cookie.split('=')[1];
+      return JSON.parse(decodeURIComponent(cookieValue));
+  } else {
+      return {};
+  }
+}
+
+// Function to set the user's popup preferences in the cookie
+function setPopupPreferences(popups) {
+  console.log("setPopupPreference run");
+  document.cookie = "popups=" + encodeURIComponent(JSON.stringify(popups)) + "; path=/";
+}
+
 // Function to check the user's cookie preferences
 function checkCookiePreferences(modalId, message, action, warningName) {
-    // Check the user's cookies
+  // Check the user's cookies
     var consent = document.cookie.split('; ').find(row => row.startsWith('consent='));
-    var ignoreThisWarning = document.cookie.split('; ').find(row => row.startsWith(warningName + '='));
-    var ignoreAllWarnings = document.cookie.split('; ').find(row => row.startsWith('ignoreAllWarnings='));
+    var popups = getPopupPreferences();
+
+    // If the popups cookie doesn't exist and the user has given consent, create it
+    if (consent && Object.keys(popups).length === 0) {
+      console.log("Checks for popup existance, creates it");
+      setPopupPreferences({[warningName]: false});
+      popups = getPopupPreferences();
+  }
 
     // If the user has not given consent, show the warning popup
     if (!consent) {
-        showWarningPopup(modalId, message, action, warningName);
-    } else if (!ignoreThisWarning && !ignoreAllWarnings) {
-        // If the user has given consent but has not opted to ignore this warning or all warnings, show the warning popup
-        showWarningPopup(modalId, message, action, warningName);
-    } else {
-        // If the user has given consent and has opted to ignore this warning or all warnings, perform the action
-        action();
-    }
+      console.log("Showing warning popup because user has not given consent");
+      showWarningPopup(modalId, message, action, warningName);
+    } else if (!popups[warningName]) {
+      // If the user has given consent but has NOT opted to ignore this warning or all warnings, show the warning popup
+      console.log("Showing warning popup because user has not opted to ignore this warning or all warnings");
+      showWarningPopup(modalId, message, action, warningName);
+  } else {
+      // If the user has given consent and has opted to ignore this warning or all warnings, perform the action
+      console.log("Performing action because user has given consent and has opted to ignore this warning or all warnings");
+      action();
+  }
 }
 
 // Attach the checkCookiePreferences function to the "Remove Post" button
 var removePostButton = document.getElementById("removePostButton");
+console.log(removePostButton);
 if (removePostButton) {
     removePostButton.onclick = function(event) {
+        console.log("Button clicked");
         event.preventDefault();  // Prevent the form from being submitted
         checkCookiePreferences(
             "warningModal",  // The ID of the modal to display
