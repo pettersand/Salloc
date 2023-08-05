@@ -127,7 +127,12 @@ Index
                             <option value="{{ post[0] }}">{{ post[0] }}</option>
                             {% endfor %}
                         </select>
-                        <select id="to" name="to" required>
+                        <select id="type" name="type" required>
+                            <option value="" disabled selected required>Type</option>
+                            <option value="general">General</option>
+                            <option value="specific">Specific</option>
+                        </select>
+                        <select id="to" name="to">
                             <option value="" disabled selected>To post</option>
                             {% for post in posts %}
                             <option value="{{ post[0] }}">{{ post[0] }}</option>
@@ -135,7 +140,8 @@ Index
                         </select>
                         <input type="submit" value="Submit">
                     </form>
-                    <span>Transfers ALL funds from one post to another, 
+                    <span>Transfers ALL funds from one post to another (specific), 
+                        or evenly distributed (general),
                         and deletes the "From" account</span>
                 </div>
             </div>

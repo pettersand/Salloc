@@ -24,6 +24,10 @@ Account
                         <label> Commit Changes</label>
                         <input id="commitSavingsButton" type="submit" value="Calculate">
                     </form>
+                    <form id="resetPostsForm" action="/reset_posts" method="post">
+                        <label>Reset Posts</label>
+                        <input id="resetPostsButton"  type="submit" value="Reset">
+                    </form>
                     <form id="resetAccountForm" action="/reset" method="post">
                         <label>Reset Account</label>
                         <input id="resetAccountButton"  type="submit" value="Reset">
@@ -76,6 +80,12 @@ Account
                         <label for="savings">Set Total Savings:</label>
                         <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
                         <input type="submit" value="Submit">
+                    </form>
+                </div>
+                <div class="item">
+                    <form id="generateTemplate" action="/generate_template" method="post">
+                        <label for="generate">Generate Template</label>
+                        <input type="submit" value="Generate Example Template">
                     </form>
                 </div>
             </div>

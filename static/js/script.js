@@ -236,6 +236,22 @@ if (commitSavingsButton) {
     }
 }
 
+var resetPostsButton = document.getElementById("resetPostsButton");
+if (resetPostsButton) {
+    resetPostsButton.onclick = function(event) {
+        event.preventDefault();  // Prevent the form from being submitted
+        checkCookiePreferences(
+            "warningModal",  // The ID of the modal to display
+            "Warning: Resetting posts will not affect your transaction history or account balance. However it will delete all your posts. This action is not reversible.",
+            function() {
+                // Action to perform if the user accepts the warning
+                document.getElementById("resetPostsForm").submit();
+            },
+            "ignoreResetPostsWarning"  // The name of the warning
+        );
+    }
+}
+
 var resetAccountButton = document.getElementById("resetAccountButton");
 if (resetAccountButton) {
     resetAccountButton.onclick = function(event) {

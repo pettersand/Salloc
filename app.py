@@ -166,6 +166,17 @@ def reset():
         )
     return redirect("/account")
 
+@server.route("/reset_posts", methods=["POST"])
+@login_required
+def reset_posts():
+    conn, cur = create_conncur()
+    with conn:
+        cur.execute(
+            "DELETE FROM posts WHERE user_id = %s",
+            (session["user_id"],)
+        )
+    return redirect("/account")
+
 # Add new post for user, updates db
 @server.route("/add_post", methods=["POST"])
 @login_required
@@ -290,7 +301,44 @@ def commit_savings():
         conn.commit()
     return redirect("/index")
 
-
+@server.route("/generate_template", methods=["POST"])
+@login_required
+def generate_template():
+    conn, cur = create_conncur()
+    with conn:
+        cur.execute(
+            "SELECT balance FROM users WHERE id = %s",
+            (session["user_id"],)
+        )
+        balance = cur.fetchone()[0]
+        if balance <= 0:
+            return "Please set total savings before generating posts"
+        cur.execute(
+            "SELECT * FROM posts WHERE user_id = %s",
+            (session["user_id"],)
+        )
+        check = cur.fetchone()
+        if check:
+            return "Please reset your posts before adding template"
+        template_posts = {
+            "Emergency": 25,
+            "Retirement": 20,
+            "Debt Repayment": 10,
+            "Vacation": 15,
+            "Home Improvement": 15,
+            "Personal": 5,
+            "Investment": 10
+        }
+        for post_name, allocation_percentage in template_posts.items():
+            current_savings = (Decimal(allocation_percentage) / 100) * balance
+            goal = 2 * current_savings
+            cur.execute(
+                "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
+                (session["user_id"], post_name, allocation_percentage, goal)
+            )
+        return redirect("/account")
+        
+        
 @server.route("/index")
 @login_required
 def index():
@@ -466,7 +514,58 @@ def move():
         log_history(conn, session["user_id"], pto, amount, "Deposit", "Moved To")
         return redirect("/index")
         
-
+        
+@server.route("/transfer", methods=["POST"])
+@login_required
+def transfer():
+    pfrom = request.form.get("from")
+    pto = request.form.get("to")
+    transfer_type = request.form.get("type")
+    conn, cur = create_conncur()
+    with conn:
+        cur.execute(
+            "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
+            (session["user_id"], pfrom) 
+        )
+        transfer_funds = cur.fetchone()[0]
+        if transfer_type == "specific":          
+            cur.execute(
+                "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
+                (session["user_id"], pto)
+            )
+            posts = cur.fetchone()[0]
+            new_saved = posts + transfer_funds
+            cur.execute(
+                "DELETE FROM posts WHERE user_id = %s AND name = %s",
+                (session["user_id"], pfrom)
+            )
+            cur.execute(
+                "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
+                (new_saved, session["user_id"], pto)
+            )
+            return redirect("/index")
+        
+        else:
+            cur.execute(
+                "DELETE FROM posts WHERE user_id = %s AND name = %s",
+                (session["user_id"], pfrom)
+            )
+            cur.execute(
+                "SELECT id, total_saved, allocation_percentage FROM posts WHERE user_id = %s",
+                (session["user_id"],)
+            )
+            posts = cur.fetchall()
+            for post in posts:
+                transfer = transfer_funds * (post[2] / 100)
+                new_total = post[1] + transfer
+                cur.execute(
+                    "UPDATE posts SET total_saved = %s WHERE id = %s",
+                    (new_total, post[0])
+                )
+            
+        return redirect("/index")
+            
+            
 # Dash part
 app = dash.Dash(
     __name__,
