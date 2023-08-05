@@ -220,6 +220,22 @@ if (removePostButton) {
     }
 }
 
+var commitSavingsButton = document.getElementById("commitSavingsButton");
+if (commitSavingsButton) {
+    commitSavingsButton.onclick = function(event) {
+        event.preventDefault();  // Prevent the form from being submitted
+        checkCookiePreferences(
+            "warningModal",  // The ID of the modal to display
+            "Warning: Committing changes will recalculate your current savings per post based on your account balance. This is only intended for newly created accounts, after a reset, or if you want to only reallocate funds accordingly.",
+            function() {
+                // Action to perform if the user accepts the warning
+                document.getElementById("commitSavingsForm").submit();
+            },
+            "ignoreCommitSavingsWarning"  // The name of the warning
+        );
+    }
+}
+
 var resetAccountButton = document.getElementById("resetAccountButton");
 if (resetAccountButton) {
     resetAccountButton.onclick = function(event) {

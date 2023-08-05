@@ -118,6 +118,26 @@ Index
                 <h4>Edit Posts</h4><br>
             </div>
             <div class="items-index">
+                <div class="item">
+                    <form action="/transfer" method="post">
+                        <label for="move">Transfer & Delete</label>
+                        <select id="from" name="from" required>
+                            <option value="" disabled selected>From post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="to" name="to" required>
+                            <option value="" disabled selected>To post</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Submit">
+                    </form>
+                    <span>Transfers ALL funds from one post to another, 
+                        and deletes the "From" account</span>
+                </div>
             </div>
         </div>
 {% endblock %}
