@@ -15,8 +15,7 @@ Account
                     <p>Current Savings: <br>{{ balance }} kr</p><br>
                     <p>Total Goal: <br>{{ total_goal }} kr</p><br><br>
                     <span>
-                        <p>Change Password</p>
-                        <p>Delete User</p>
+                        <button id="profileSettingsButton">Profile Settings</button>
                     </span>
                 </div>
                 <div class="item">
@@ -190,6 +189,38 @@ Account
                 </table>
             </div>
         </div> 
-        
 </div>
+<div id="profileSettingsModal" class="modal">
+    <div class="modal-content">
+        <div>
+            <span class="close">&times;</span>
+            <h2 class="centered-content">Profile Settings</h2>
+            <br>  
+        </div>
+      <!-- Cookie Preferences Section -->
+      <div class="settings-container">
+        <div class="settings-item">
+            <h3>Cookie Preferences:</h3>
+                <form>
+                    <div>
+                    <input type="checkbox" id="consentCookies">
+                    <label for="consentCookies">Activate Cookies</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="nonconsentCookies">
+                    <label for="consentCookies">Deactivate Cookies</label>
+                </div>
+                <input id="updateConsent" type="submit" value="Submit">
+            </form>
+            </div>
+      <!-- Delete Account Section -->
+      <div class="settings-item">
+        <h3>Account Deletion:</h3>
+        <form id="deleteAccountForm" action="/delete_account" method="post">
+          <button id="deleteConfirmation" type="button">Delete Account</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

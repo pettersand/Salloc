@@ -268,6 +268,13 @@ if (resetAccountButton) {
     }
 }
 
+document.getElementById("deleteConfirmation").onclick = function() {
+  var confirmation = window.confirm("Are you sure you want to delete your account and all your data? This action cannot be undone.");
+  if (confirmation) {
+    document.getElementById("deleteAccountForm").submit();
+  }
+};
+
 // Function to close the modal
 function closeModal(modalId) {
     var modal = document.getElementById(modalId);
@@ -434,6 +441,15 @@ customSetupForm.addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the form from being submitted
   }
 });
+
+// Get the modal and button elements
+var profileSettingsModal = document.getElementById("profileSettingsModal");
+var profileSettingsButton = document.getElementById("profileSettingsButton");
+
+// Open the modal when the button is clicked
+profileSettingsButton.onclick = function() {
+  profileSettingsModal.style.display = "block";
+}
 
   
 

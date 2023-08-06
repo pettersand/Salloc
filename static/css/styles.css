@@ -106,7 +106,7 @@ form {
 input[type=submit] {
     padding: 5px 15px;
     background: var(--dark1);
-    border: 0 none;
+    border: 1px solid white;
     width: auto;
 }
 
@@ -118,8 +118,8 @@ input[type=button] {
 
 button {
     padding: 5px 15px;
-    background: var(--dark1);
-    border: 0 none;
+    background: var(--dark2);
+    border: 1px solid white;
 }
 
 select {
@@ -504,13 +504,38 @@ span {
     padding: 20px;
     border: 1px solid #888;
     width: 40%;
+    height: auto;
 }
+
+.settings-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.settings-item {
+    display: flex;
+    flex: 1;
+    flex-flow: column wrap;
+    align-content: center;
+    width: 50%;
+}
+
+.checkbox-container {
+    display: flex;
+}
+
+
 
 .centered-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.textbox {
+    display: flex;
 }
 
 #customSetupForm {

@@ -43,7 +43,7 @@ def login():
 
         if user and bcrypt.checkpw(password, user[2].encode("utf-8")):
             session["user_id"] = user[0]
-            if user[3]:
+            if user[4]:
                 resp = make_response(redirect("/index"))
                 if "consent" not in request.cookies:
                     resp.set_cookie("consent", "true")
@@ -102,6 +102,35 @@ def register():
 def logout():
     session.pop("user_id", None)
     return redirect("/")
+
+
+@server.route("/delete_account", methods=["POST"])
+@login_required
+def delete_account():
+    conn, cur = create_conncur()
+    with conn:
+        cur.execute(
+            "DELETE FROM posts WHERE user_id = %s",
+            (session["user_id"],)
+        )
+        cur.execute(
+            "DELETE FROM history WHERE user_id = %s",
+            (session["user_id"],)
+        )
+        cur.execute(
+            "DELETE FROM users WHERE id = %s",
+            (session["user_id"],)
+        )
+    
+    session.pop("user_id", None)
+    return redirect("/")
+
+
+@server.route("/update_consent", methods=["POST"])
+@login_required
+def update_consent():
+    return redirect("/index")
+
 
 @server.route("/account")
 @login_required
