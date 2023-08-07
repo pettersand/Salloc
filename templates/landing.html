@@ -20,7 +20,7 @@
                 <form action="/login" method="post" autocomplete="off">
                     <label id="LogOn">Login</label><br>
                     <input type="text" id="username" name="username" placeholder="Enter username" required>
-                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
                     <input type="submit" value="Login">
                     <input type="button" onclick="window.location.href='/register'" value="Register">
                 </form><br>
@@ -61,22 +61,24 @@
                     </p>
                     <br>
                     <div class="centered-content">
-                        <div class="in-line">
+                        <div id="checkboxContainer"> <!-- Add an id to the container -->
+                          <div class="in-line">
                             <input type="checkbox" id="consent" name="consent">
                             <label for="consent">I <b>consent</b> to the use of cookies</label>
-                        </div>
-                            <br>
-                        <div class="in-line">
+                          </div>
+                          <br>
+                          <div class="in-line">
                             <input type="checkbox" id="noConsent" name="noConsent">
                             <label for="noConsent">I do <b>NOT</b> consent to the use of cookies</label>
+                          </div>
                         </div>
                         <br>
                         <br>
                         <h4>Do you wish to complete your registration?</h4>
                         <br>
                         <button id="continueButton">Yes, continue</button>
-                        <button onclick="closeModal()">No, Exit</button>
-                    </div>
+                        <button id="exitButton">No, Exit</button>
+                      </div>
               </div>
         </div>
     <footer></footer>

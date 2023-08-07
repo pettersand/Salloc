@@ -201,18 +201,21 @@ Account
       <div class="settings-container">
         <div class="settings-item">
             <h3>Cookie Preferences:</h3>
-                <form>
+            <div id="checkboxProfileContainer">
+                <form id="profileSettingsForm" action="/update_consent" method="post">
                     <div>
-                    <input type="checkbox" id="consentCookies">
-                    <label for="consentCookies">Activate Cookies</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="nonconsentCookies">
-                    <label for="consentCookies">Deactivate Cookies</label>
-                </div>
-                <input id="updateConsent" type="submit" value="Submit">
-            </form>
-            </div>
+                        <input type="checkbox" id="consentCookies" name="consentCookies">
+                        <label for="consentCookies">Activate Cookies</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="noCookies" name="noCookies">
+                        <label for="noCookies">Deactivate Cookies</label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="consentUpdate" name="consentUpdate">
+                    <input id="updateConsent" type="submit" value="Submit">
+                </form>
+        </div>
       <!-- Delete Account Section -->
       <div class="settings-item">
         <h3>Account Deletion:</h3>

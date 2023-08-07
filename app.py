@@ -129,7 +129,28 @@ def delete_account():
 @server.route("/update_consent", methods=["POST"])
 @login_required
 def update_consent():
-    return redirect("/index")
+    consent = request.form.get("consentUpdate")
+    resp = make_response(redirect("/account"))
+    
+    if consent == "yes":
+        consent_db = "t"
+        resp.set_cookie('consent', 'true', max_age=60*60*24*365*2)   
+    elif consent == "no":
+        consent_db = "f"
+        cookies_to_delete = [cookie for cookie in request.cookies if cookie != "session"]
+        for cookie_name in cookies_to_delete:
+            resp.delete_cookie(cookie_name)
+    else:
+        return "No consent registered"
+    
+    conn, cur = create_conncur()
+    with conn:
+        cur.execute(
+            "UPDATE users SET cookies = %s WHERE id = %s",
+            (consent_db, session["user_id"],)
+        )
+        return resp
+        
 
 
 @server.route("/account")

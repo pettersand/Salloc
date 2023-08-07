@@ -1,89 +1,57 @@
 //// TABLE SORTING ////
 
-// Sorting of overview table
 function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("myTable");
-  if (!table) return; // If the table doesn't exist, exit the function
-  switching = true;
-  // Set the sorting direction to descending:
-  dir = "desc"; 
-  // Remove the sort symbol from all columns:
-  for (i = 0; i < 5; i++) {
-    table.rows[0].getElementsByTagName("TH")[i].innerHTML = table.rows[0].getElementsByTagName("TH")[i].innerHTML.replace(" ▲", "").replace(" ▼", "");
-  }
-  while (switching) {
-    switching = false;
-    rows = table.rows;
-    for (i = 1; i < (rows.length - 1); i++) {
-      shouldSwitch = false;
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      if (dir == "desc") {
+    let table = document.getElementById("myTable");
+    if (!table) return; // If the table doesn't exist, exit the function
+    let switching = true;
+    let dir = "desc"; // Set the sorting direction to descending
+    let switchcount = 0;
+  
+    // Remove the sort symbol from all columns
+    for (let i = 0; i < 5; i++) {
+      table.rows[0].getElementsByTagName("TH")[i].innerHTML = table.rows[0].getElementsByTagName("TH")[i].innerHTML.replace(" ▲", "").replace(" ▼", "");
+    }
+  
+    while (switching) {
+      switching = false;
+      const rows = table.rows;
+      for (let i = 1; i < (rows.length - 1); i++) {
+        let shouldSwitch = false;
+        const x = rows[i].getElementsByTagName("TD")[n];
+        const y = rows[i + 1].getElementsByTagName("TD")[n];
+        let xVal, xMax, yVal, yMax;
+  
         if (n === 3) { // if it's the progress bar column
-          var xVal = x.getElementsByTagName("progress")[0].value;
-          var xMax = x.getElementsByTagName("progress")[0].max;
-          var yVal = y.getElementsByTagName("progress")[0].value;
-          var yMax = y.getElementsByTagName("progress")[0].max;
-          if ((xVal / xMax) < (yVal / yMax)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (isNaN(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) { // if it's a string
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else { // if it's a number
-          if (Number(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', '')) < Number(y.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) {
-            shouldSwitch = true;
-            break;
-          }
+          xVal = x.getElementsByTagName("progress")[0].value;
+          xMax = x.getElementsByTagName("progress")[0].max;
+          yVal = y.getElementsByTagName("progress")[0].value;
+          yMax = y.getElementsByTagName("progress")[0].max;
+        } else {
+          xVal = Number(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''));
+          yVal = Number(y.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''));
         }
-      } else if (dir == "asc") {
-        if (n === 3) { // if it's the progress bar column
-          var xVal = x.getElementsByTagName("progress")[0].value;
-          var xMax = x.getElementsByTagName("progress")[0].max;
-          var yVal = y.getElementsByTagName("progress")[0].value;
-          var yMax = y.getElementsByTagName("progress")[0].max;
-          if ((xVal / xMax) > (yVal / yMax)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (isNaN(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) { // if it's a string
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else { // if it's a number
-          if (Number(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', '')) > Number(y.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) {
-            shouldSwitch = true;
-            break;
-          }
+  
+        if (dir === "desc" && ((n === 3 && (xVal / xMax) < (yVal / yMax)) || (isNaN(xVal) && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) || (!isNaN(xVal) && xVal < yVal))) {
+          shouldSwitch = true;
+        } else if (dir === "asc" && ((n === 3 && (xVal / xMax) > (yVal / yMax)) || (isNaN(xVal) && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) || (!isNaN(xVal) && xVal > yVal))) {
+          shouldSwitch = true;
+        }
+  
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        } else if (switchcount === 0 && dir === "desc") {
+          dir = "asc";
+          switching = true;
         }
       }
-    }
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      switchcount ++;      
-    } else {
-      if (switchcount == 0 && dir == "desc") {
-        dir = "asc";
-        switching = true;
-      }
+  
+      // Add the sort symbol to the sorted column
+      table.rows[0].getElementsByTagName("TH")[n].innerHTML += dir === "asc" ? " ▼" : " ▲";
     }
   }
-  // Add the sort symbol to the sorted column:
-  if (dir == "asc") {
-    table.rows[0].getElementsByTagName("TH")[n].innerHTML += " ▼";
-  } else if (dir == "desc") {
-    table.rows[0].getElementsByTagName("TH")[n].innerHTML += " ▲";
-  }
-}
-
-
-
+  
 
 
 
@@ -130,6 +98,8 @@ function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.style.display = 'block';
+    } else {
+      console.error(`Modal with ID ${modalId} not found.`);
     }
   }
   
@@ -138,6 +108,8 @@ function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.style.display = 'none';
+    } else {
+      console.error(`Modal with ID ${modalId} not found.`);
     }
   }
   
@@ -158,98 +130,77 @@ function setupModalClickOutsideClose(modalId, enableClickOutsideClose = true) {
   }
 
 
-// CHECKBOX HANDLING //
+  // WARNING POPUP FUNCTIONALITY //
 
-function setupSingleCheckbox(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return; // If the container doesn't exist, stop the script
-
-  const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach((checkbox) => {
-    checkbox.onclick = () => {
-      checkboxes.forEach((cb) => {
-        if (cb !== checkbox) {
-          cb.checked = false;
-        }
-      });
-    };
-  });
-}
-
-
-
-// WARNING POPUP FUNCTIONALITY //
-
-function showWarningPopup(modalId, message, action, warningName) {
-  const modal = document.getElementById(modalId);
-  if (!modal) return; // If there's no modal on the page, stop the script
-
-  // Set the warning message
-  const warningMessageElement = document.getElementById("warningMessage");
-  if (warningMessageElement) {
-    warningMessageElement.textContent = message;
-  }
-
-  // Handle the "Cancel" and "Accept" buttons
-  const cancelButton = document.getElementById("cancelButton");
-  const acceptButton = document.getElementById("acceptButton");
-  if (cancelButton) cancelButton.onclick = () => modal.style.display = "none";
-  if (acceptButton) acceptButton.onclick = () => { modal.style.display = "none"; action(); };
-
-  // Check the user's cookies
-  const consent = document.cookie.split('; ').find(row => row.startsWith('consent='));
-
-  // Get the checkbox container
-  const checkboxContainer = document.getElementById("checkboxContainer");
-  const ignoreThisCheckbox = document.getElementById("ignoreThisCheckbox");
-  const ignoreAllCheckbox = document.getElementById("ignoreAllCheckbox");
-
-  // Handle the checkboxes
-  if (ignoreThisCheckbox && ignoreAllCheckbox && checkboxContainer) {
-    if (consent) {
-      checkboxContainer.style.display = "block";
-      setupSingleCheckbox("checkboxContainer");
-      ignoreThisCheckbox.onclick = handleCheckboxClick(warningName, true);
-      ignoreAllCheckbox.onclick = handleCheckboxClick(warningName, false);
-    } else {
-      checkboxContainer.style.display = "none";
-    }
-  }
-
-  // Show the modal
-  modal.style.display = "block";
-}
+  function showWarningPopup(modalId, message, action, warningName) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return; // If there's no modal on the page, stop the script
   
-function handleCheckboxClick(warningName, isIgnoreThis) {
-  return function() {
-    const popups = getPopupPreferences();
-    if (isIgnoreThis) {
-      popups[warningName] = true;
-    } else {
-      for (const key in popups) {
-        popups[key] = true;
+    // Set the warning message
+    const warningMessageElement = document.getElementById("warningMessage");
+    if (warningMessageElement) {
+      warningMessageElement.textContent = message;
+    }
+  
+    // Handle the "Cancel" and "Accept" buttons
+    const cancelButton = document.getElementById("cancelButton");
+    const acceptButton = document.getElementById("acceptButton");
+    if (cancelButton) cancelButton.onclick = () => modal.style.display = "none";
+    if (acceptButton) acceptButton.onclick = () => { modal.style.display = "none"; action(); };
+  
+    // Check the user's cookies
+    const consent = document.cookie.split('; ').find(row => row.startsWith('consent='));
+  
+    // Get the checkbox container
+    const checkboxContainer = document.getElementById("checkboxContainer");
+    const ignoreThisCheckbox = document.getElementById("ignoreThisCheckbox");
+    const ignoreAllCheckbox = document.getElementById("ignoreAllCheckbox");
+  
+    // Handle the checkboxes
+    if (ignoreThisCheckbox && ignoreAllCheckbox && checkboxContainer) {
+      if (consent) {
+        checkboxContainer.style.display = "block";
+        ignoreThisCheckbox.onclick = handleCheckboxClick(warningName, true);
+        ignoreAllCheckbox.onclick = handleCheckboxClick(warningName, false);
+      } else {
+        checkboxContainer.style.display = "none";
       }
     }
-    setPopupPreferences(popups);
-  };
-}
-
-function addButtonClickHandler(buttonId, modalId, warningMessage, formId, warningName) {
-  const button = document.getElementById(buttonId);
-  if (button) {
-      button.onclick = function(event) {
-          event.preventDefault(); // Prevent the form from being submitted
-          checkCookiePreferences(
-              modalId, // The ID of the modal to display
-              warningMessage,
-              function() {
-                  // Action to perform if the user accepts the warning
-                  document.getElementById(formId).submit();
-              },
-              warningName // The name of the warning
-          );
-      };
+  
+    // Show the modal
+    modal.style.display = "block";
   }
+  
+  function handleCheckboxClick(warningName, isIgnoreThis) {
+    return function() {
+      const popups = getPopupPreferences();
+      if (isIgnoreThis) {
+        popups[warningName] = true;
+      } else {
+        for (const key in popups) {
+          popups[key] = true;
+        }
+      }
+      setPopupPreferences(popups);
+    };
+  }
+
+  function addButtonClickHandler(buttonId, modalId, warningMessage, formId, warningName) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.onclick = function(event) {
+            event.preventDefault(); // Prevent the form from being submitted
+            checkCookiePreferences(
+                modalId, // The ID of the modal to display
+                warningMessage,
+                function() {
+                    // Action to perform if the user accepts the warning
+                    document.getElementById(formId).submit();
+                },
+                warningName // The name of the warning
+            );
+        };
+    }
 }
 
 addButtonClickHandler(
@@ -333,9 +284,6 @@ if (document.getElementById("myModal")) {
     if (consentCheckbox && noConsentCheckbox) {
       consentCheckbox.onclick = handleCheckboxClick("consent", false);
       noConsentCheckbox.onclick = handleCheckboxClick("noConsent", false);
-
-      // Call the function to set up the only one checkbox functionality
-      setupSingleCheckbox("checkboxContainer");
     }
 
     const continueButton = document.getElementById("continueButton");
@@ -353,21 +301,13 @@ if (document.getElementById("myModal")) {
         }
       };
     }
-
-    const exitButton = document.getElementById("exitButton");
-    if (exitButton) {
-      exitButton.onclick = function() {
-        closeModal("myModal"); // Close the modal
-      };
-    }
   }
 }
 
 
 //// CUSTOM SETUP TABLE FORM ////
-if (document.getElementById("customSetupForm")) {
-  const customSetupForm = document.getElementById("customSetupForm");
-}
+
+const customSetupForm = document.getElementById("customSetupForm");
 
 // Function to update the remaining percentage
 if (document.getElementById("customSetupForm")) {
@@ -469,29 +409,10 @@ if (document.getElementById("customSetupForm")) {
 }
 
 //// PROFILE SETTING MODAL ////
-if (document.getElementById("profileSettingsButton")) {
-  const profileSettingsButton = document.getElementById("profileSettingsButton");
-  if (profileSettingsButton) {
-      profileSettingsButton.onclick = function () {
-          openModal("profileSettingsModal");
 
-          const consentCookies = document.getElementById("consentCookies");
-          const noCookies = document.getElementById("noCookies");
-          const consentUpdate = document.getElementById("consentUpdate");
-
-          setupSingleCheckbox("profileSettingsForm");
-
-          const continueButton = document.getElementById("updateConsent");
-          if (continueButton && consentUpdate) {
-              continueButton.onclick = function () {
-                  if (consentCookies.checked) {
-                      consentUpdate.value = 'yes';
-                  } else if (noCookies.checked) {
-                      consentUpdate.value = 'no';
-                  }
-                  // The form will submit normally with the updated consent value
-              };
-          }
-      };
-  }
+const profileSettingsButton = document.getElementById("profileSettingsButton");
+if (profileSettingsButton) {
+  profileSettingsButton.onclick = function() {
+    openModal("profileSettingsModal");
+  };
 }
