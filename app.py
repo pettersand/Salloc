@@ -40,18 +40,17 @@ def login():
                 (username,)
             )
             user = cur.fetchone()
-
-        if user and bcrypt.checkpw(password, user[2].encode("utf-8")):
-            session["user_id"] = user[0]
-            if user[4]:
-                resp = make_response(redirect("/index"))
-                if "consent" not in request.cookies:
-                    resp.set_cookie("consent", "true")
-                return resp
+            if user and bcrypt.checkpw(password, user[2].encode("utf-8")):
+                session["user_id"] = user[0]
+                if user[4]:
+                    resp = make_response(redirect("/index"))
+                    if "consent" not in request.cookies:
+                        resp.set_cookie("consent", "true")
+                    return resp
+                else:
+                    return redirect("/index")
             else:
-                return redirect("/index")
-        else:
-            return "Incorrect username or password"
+                return "Incorrect username or password"
         
     return render_template("landing.html")
 
@@ -522,24 +521,39 @@ def specific_deposit():
 @server.route("/undefined", methods=["POST"])
 @login_required
 def undefined():
-    post = request.form.get("post")
+    destination = request.form.get("post")
     amount = Decimal(request.form.get("remainder"))
     if amount <= 0:
         return redirect("/index")
     
     conn, cur = create_conncur()
     with conn:
+        if destination == "general":
+            cur.execute(
+                "SELECT id, name, allocation_percentage, total_saved FROM posts WHERE user_id = %s",
+                (session["user_id"],)
+            )
+            posts = cur.fetchall()
+            for post in posts:
+                deposit_amount = amount * (post[2] / 100)
+                new_total = post[3] + deposit_amount
+                cur.execute(
+                    "UPDATE posts SET total_saved = %s WHERE id = %s",
+                    (new_total, post[0])
+                )
+            return redirect("/index")
+        
         cur.execute(
             "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-            (session["user_id"], post)
+            (session["user_id"], destination)
         )
         savings = cur.fetchone()[0]
         new_savings = savings + amount
         cur.execute(
             "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
-            (new_savings, session["user_id"], post)
+            (new_savings, session["user_id"], destination)
         )
-        conn.commit()
+
     return redirect("/index")
 
 

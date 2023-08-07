@@ -13,6 +13,21 @@ Index
             <div class="item">
                 <span>Account Balance: <br> {{ balance }} kr</span><br>
                 <span>Funds not yet allocated: <br>{{ remainder }} kr</span>
+                <div class="item">
+                    <form action="/undefined" method="post">
+                        <label for="undefined">Allocate now?</label>
+                        <select id="post" name="post" required>
+                            <option value="" disabled selected>Select Post</option>
+                            <option value="general">All by %</option>
+                            {% for post in posts %}
+                            <option value="{{ post[0] }}">{{ post[0] }}</option>
+                            {% endfor %}
+                            
+                        </select>
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input type="submit" value="Allocate">
+                    </form>
+                </div>
             </div>
             <div class="item">
                 <form action="/deposit" method="post">
