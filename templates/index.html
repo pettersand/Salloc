@@ -153,8 +153,13 @@ Index
                     <option value="{{ post[0] }}">{{ post[0] }}</option>
                     {% endfor %}   
                 </select>
-                <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
-                <input type="submit" value="Allocate">
+                <div class="info-container">
+                    <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                    <input class="info-button" type="submit" id="allocateButton" value="Allocate">
+                    <span class="info-icon" onclick="showInfo(event);">
+                        <i class="fa-solid fa-info-circle"></i>
+                    <span>
+                </div>
             </form>
         </div>
         <div class="item">
@@ -204,7 +209,7 @@ Index
             </form>
         </div>
         <div class="item">
-            <form id="setupCustom">
+            <form id="setupCustomTemplate">
                 <label for="custom">Add Posts</label>
                 <div class="info-container">
                     <input class="info-button" id="setupButton" type="submit" value="Custom Post Setup">
@@ -213,6 +218,8 @@ Index
                     <span>
                 </div>
             </form>
+        </div>
+        <div class="item">
             <form id="generateTemplate" action="/generate_template" method="post">
                 <label for="generate">Generate Template</label>
                     <div class="info-container">

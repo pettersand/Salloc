@@ -562,14 +562,16 @@ function showInfo(event) {
   if (parentContainer.querySelector('#setupButton')) infoType = "setupCustom";
   if (parentContainer.querySelector('#generateTemplateButton')) infoType = "generateTemplate";
   if (parentContainer.querySelector('#commitSavingsButton')) infoType = "commitSavings";
+  if (parentContainer.querySelector('#allocateButton')) infoType = "allocateUndefined";
   // Add more conditions as needed
 
   const infoContent = {
-    "setSavings": "Explanation about setting total savings.",
-    "removePost": "Explanation about removing a post.",
-    "setupCustom": "Explanation about setting up initial custom form.",
-    "generateTemplate": "Explanation on template generation.",
-    "commitSavings": "Explanation on committing changes."
+    "setSavings": "Info: Sets the total balance of your account.",
+    "removePost": "Info: Removes a post and all its values completely, without transfer.",
+    "setupCustom": "Info: Add posts and their goal / allocation values.",
+    "generateTemplate": "Info: Generates a template post setup. Great learning tool.",
+    "commitSavings": "Info: Commits current balance to your post based on % Allocation spread.",
+    "allocateUndefined": "Info: Adds any excess funds to a spread based on your % Allocation or to a specified post."
     // Add more content as needed
   };
 
