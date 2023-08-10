@@ -200,7 +200,7 @@ def account():
         total_goal = sum(post[3] for post in posts)
         remain_alloc = max(0, 100 - total_alloc)
     return render_template(
-        "account.html", 
+        "index.html", 
         posts=posts, 
         history=history, 
         remain_alloc=remain_alloc, 
@@ -217,7 +217,7 @@ def set_savings():
     with conn:
         cur.execute("UPDATE users SET balance = %s WHERE id = %s", (savings, session["user_id"]))
         conn.commit()
-        return redirect("/account")
+        return redirect("/index")
     
 @server.route("/reset", methods=["POST"])
 @login_required
@@ -237,7 +237,7 @@ def reset():
             "DELETE FROM posts WHERE user_id = %s",
             (user_id,)
         )
-    return redirect("/account")
+    return redirect("/index")
 
 @server.route("/reset_posts", methods=["POST"])
 @login_required
@@ -248,7 +248,7 @@ def reset_posts():
             "DELETE FROM posts WHERE user_id = %s",
             (session["user_id"],)
         )
-    return redirect("/account")
+    return redirect("/index")
 
 # Add new post for user, updates db
 @server.route("/add_post", methods=["POST"])
@@ -275,7 +275,7 @@ def add_post():
             "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)", 
             (session["user_id"], post, allocation, goal)
         )
-        return redirect("/account")
+        return redirect("/index")
         
 @server.route("/remove_post", methods=["POST"])
 @login_required
@@ -288,7 +288,7 @@ def remove_post():
             (session["user_id"], post)
         )
         conn.commit()
-        return redirect("/account")
+        return redirect("/index")
     
     
 @server.route("/edit_post", methods=["POST"])
@@ -304,7 +304,7 @@ def edit_post():
             (allocation, goal, session["user_id"], post)
         ) 
         conn.commit()
-        return redirect("/account")
+        return redirect("/index")
 
 @server.route("/update_table", methods=["POST"])
 @login_required
@@ -349,48 +349,6 @@ def update_table():
             print("Finished Adding - looping")
                 
     return redirect("/index")
-
-@server.route("/edit_", methods=["POST"])
-@login_required
-def edit_():
-    conn, cur = create_conncur()
-    try:
-        for key, value in request.form.items():
-            if key.startswith("new_goal_"):
-                post = key[len("new_goal_"):]
-                goal = value
-                if goal != "":
-                    cur.execute(
-                        "UPDATE posts SET goal = %s WHERE user_id = %s AND name = %s",
-                        (goal, session["user_id"], post)
-                    )
-            if key.startswith("new_alloc_"):
-                post = key[len("new_alloc_"):]
-                alloc = value
-                if alloc != "":
-                    cur.execute(
-                        "UPDATE posts SET allocation_percentage = %s WHERE user_id = %s AND name = %s",
-                        (alloc, session["user_id"], post)
-                    )
-                    
-        # Checks if allocation exceeds 100%           
-        cur.execute(
-            "SELECT SUM(allocation_percentage) FROM posts WHERE user_id = %s",
-            (session["user_id"],)
-        )            
-        total = cur.fetchone()[0]
-        if total > 100:
-            excess = total - 100
-            conn.rollback()
-            return f"Error: Total allocation exceeds 100% by {excess}%"
-        else:
-            conn.commit()
-    except Exception as e:
-        conn.rollback()
-        return str(e)
-                        
-    return redirect("/account")
-
     
     
 @server.route("/commit_savings", methods=["POST"])
@@ -452,7 +410,7 @@ def generate_template():
                 "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
                 (session["user_id"], post_name, allocation_percentage, goal)
             )
-        return redirect("/account")
+        return redirect("/index")
         
 
 @server.route("/custom_setup", methods=["POST"])
@@ -484,7 +442,7 @@ def custom_setup():
             return "Total % exceeds 100%"
 
                 
-    return redirect("/account")
+    return redirect("/index")
 
 
 @server.route("/index")
@@ -502,14 +460,21 @@ def index():
             (session["user_id"],)
         )
         posts = cur.fetchall()
-        print(posts)
+        alerts = []
         # Calulates remaining % to allocate
         total_alloc = sum(post[1] for post in posts)
         remain_alloc = int(max(0, 100 - total_alloc))
         total_saved = sum(post[2] for post in posts)
         total_goal = sum(post[3] for post in posts)
         remainder = balance - total_saved
+        for post in posts:
+            if post[2] >= post[3]:
+                alerts.append(f"Congratulations! You've reached your goal for Post '{post[0]}'. Don't forget to either increase the goal, or reallocate its percentage.")
         
+        if remainder > 0:
+            alerts.append(f"You have funds not yet allocated to the sum of {remainder}. Use the 'Allocate now' button")
+        if remain_alloc > 0: 
+            alerts.append(f"You have {remain_alloc}% left to allocate.")
         cur.execute(
             "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC LIMIT 7",
             (session["user_id"],)
@@ -525,7 +490,8 @@ def index():
         remain_alloc=remain_alloc,
         balance=balance,
         remainder=remainder,
-        history=history
+        history=history,
+        alerts=alerts
     )
 
 

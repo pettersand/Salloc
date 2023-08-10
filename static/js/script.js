@@ -101,35 +101,64 @@ function getPopupPreferences() {
 
 // Function to open a modal
 function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = 'block';
-    }
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'block';
   }
-  
-  // Function to close a modal
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = 'none';
-    }
+}
+
+// JavaScript to close all modals with the class "modal"
+const modals = document.querySelectorAll('.modal');
+modals.forEach(function(modal) {
+  const modalId = modal.id;
+  const closeButton = modal.querySelector('.close');
+  if (closeButton) {
+    closeButton.onclick = function() {
+      closeModal(modalId);
+    };
   }
-  
-// Function to close a modal when clicking outside of it, with an option to disable this behavior
-function setupModalClickOutsideClose(modalId, enableClickOutsideClose = true) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      if (enableClickOutsideClose) {
-        window.onclick = function(event) {
-          if (event.target === modal) {
-            modal.style.display = 'none';
-          }
-        };
-      }
-    } else {
-      console.error(`Modal with ID ${modalId} not found.`);
-    }
+});
+
+// Function to close the modal
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
   }
+}
+
+// Function to handle the "Esc" key press
+function handleEscKey(event) {
+  if (event.key === 'Escape') {
+    modals.forEach(function(modal) {
+      closeModal(modal.id);
+    });
+  }
+}
+
+// Function to handle clicking outside the modal
+function handleClickOutside(event) {
+  modals.forEach(function(modal) {
+    if (event.target === modal) {
+      closeModal(modal.id);
+    }
+  });
+}
+
+// Attach event listeners for the "Esc" key and clicking outside the modal
+document.addEventListener('keydown', handleEscKey);
+document.addEventListener('click', handleClickOutside);
+
+// Attach click event to the close button of each modal
+modals.forEach(function(modal) {
+  const modalId = modal.id;
+  const closeButton = modal.querySelector('.close');
+  if (closeButton) {
+    closeButton.onclick = function() {
+      closeModal(modalId);
+    };
+  }
+});
 
 
 // CHECKBOX HANDLING //
@@ -341,10 +370,8 @@ if (document.getElementById("myModal")) {
 //// CUSTOM SETUP TABLE FORM ////
 if (document.getElementById("customSetupForm")) {
   const customSetupForm = document.getElementById("customSetupForm");
-}
-
+  const customSetupModal = document.getElementById("customSetupModal");
 // Function to update the remaining percentage
-if (document.getElementById("customSetupForm")) {
   function updateRemainingPercentage() {
     const initialRemainingAllocation = parseFloat(document.getElementById("initialRemainingAllocation").value);
     const inputs = document.getElementsByName("postAllocation[]");
@@ -367,7 +394,7 @@ if (document.getElementById("customSetupForm")) {
   updateRemainingPercentage();
 
   // Get the <span> element that closes the modal
-  const span = document.getElementsByClassName("close")[0];
+  const span = customSetupModal.querySelector('.close'); // Use querySelector on the modal element
   if (span) {
     span.onclick = function() {
       closeModal("customSetupModal"); // Close the modal
@@ -470,8 +497,8 @@ if (document.getElementById("profileSettingsButton")) {
   }
 }
 
-//// UPDATING USER EDITS FROM TABLE ////
 
+//// UPDATING USER EDITS FROM TABLE ////
 $(document).ready(function () {
   const initialRemainingAllocation = parseInt($("#hiddenRemainAlloc").val()); // Parse as integer
   let totalAllocation = initialRemainingAllocation; // Initialize with the remaining allocation

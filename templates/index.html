@@ -305,9 +305,14 @@ Index
     <div class="container-header">
         <h4>Alerts</h4><br>
     </div>
-    <div class="side-container">
-        <div class="item">
-        </div>
+    <div class="alerts-container">
+
+            {% for alert in alerts %}
+            <div class="alert">
+                {{ alert }}
+            </div>
+        {% endfor %}
+
     </div> 
 </div>
 {% endblock %}
