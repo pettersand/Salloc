@@ -332,12 +332,9 @@ span {
     gap: 10px;
 }
 
-
-
 .container-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 7px;
 }
 
 .items-index {
@@ -517,20 +514,25 @@ span {
 
 /******* SIDEBAR *******/
 .sidebar.container {
+    display: flex;
+    justify-content: space-between;
     width: auto;
     height: auto;
-    padding: 10px;
+    padding-inline: 10px;
 }
 
 .side-container {
+    flex: 1;
     background: var(--dark2);
     box-shadow: -4px 7px 7px 7px rgba(0, 0, 0, 0.6);
     padding: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
     flex-flow: column nowrap;
-    max-height: 90vh;
     font-size: 0.8em;
+    
 
 
 }
@@ -538,6 +540,9 @@ span {
 
 /******* FOOTER *******/
 
+.foot-nav {
+    display: flex;
+}
 
 /******* MODAL *******/
 

@@ -128,5 +128,95 @@ Index
             <button id="updateButton">Update Changes</button>
     </div>
 </div>
-
 {% endblock %}
+{% block  sidebar %}
+<div class="sidebar container"> 
+    <div class="container-header">
+        <h4>Account</h4><br>
+    </div>
+    <div class="side-container">
+        <div class="item">
+            <p>Current Savings: <br>{{ balance }} kr</p><br>
+            <p>Total Goal: <br>{{ total_goal }} kr</p><br><br>
+            <span>
+                <button id="profileSettingsButton">Profile Settings</button>
+            </span>
+        </div>
+        <div class="item">
+            <span>Funds not yet allocated: <br>{{ remainder }} kr</span>
+            <form action="/undefined" method="post">
+                <label for="undefined">Allocate now?</label>
+                <select id="post" name="post" required>
+                    <option value="" disabled selected>Select Post</option>
+                    <option value="general">All by %</option>
+                    {% for post in posts %}
+                    <option value="{{ post[0] }}">{{ post[0] }}</option>
+                    {% endfor %}   
+                </select>
+                <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                <input type="submit" value="Allocate">
+            </form>
+        </div>
+        <div class="item">
+            <form id="resetAccountForm" action="/reset" method="post">
+                <label>Reset Account</label>
+                <input id="resetAccountButton"  type="submit" value="Reset">
+            </form>
+        </div>
+        <div class="item">
+            <form id="resetPostsForm" action="/reset_posts" method="post">
+                <label>Reset Posts</label>
+                <input id="resetPostsButton"  type="submit" value="Reset">
+            </form>
+        </div>
+    </div> 
+    <div class="container-header">
+        <h4>Setup / Controls</h4><br>
+    </div>
+    <div class="side-container">
+        <div class="item">
+            <form action="/set_savings" method="post">
+                <label for="savings">Set Total Savings:</label>
+                <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="item">
+            <form id="removePostForm" action="/remove_post" method="post">
+                <label for="post">Remove Post:</label>
+                <select id="post" name="post" required>
+                    <option value="" disabled selected>Select Post</option>
+                    {% for post in posts %}
+                    <option value="{{ post[0] }}">{{ post[0] }}</option>
+                    {% endfor %}
+                </select>
+                <input type="button" id="removePostButton" value="Remove">
+            </form>
+        </div>
+        <div class="item">
+            <form>
+                <label for="custom">Add Posts</label>
+                <input id="setupButton" type="submit" value="Custom Post Setup">
+            </form>
+            <form id="generateTemplate" action="/generate_template" method="post">
+                <label for="generate">Generate Template</label>
+                <input type="submit" value="Generate Example">
+            </form>
+        </div>
+        <div class="item">
+            <form id="commitSavingsForm" action="/commit_savings" method="post">
+                <label> Commit Changes</label>
+                <input id="commitSavingsButton" type="submit" value="Calculate">
+            </form>
+        </div>
+    </div> 
+    <div class="container-header">
+        <h4>Alerts</h4><br>
+    </div>
+    <div class="side-container">
+        <div class="item">
+        </div>
+    </div> 
+</div>
+{% endblock %}
+

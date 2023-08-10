@@ -15,8 +15,9 @@
   <body id="layout">
     <header class="header">
         <div class="nav">
-            <a href="{{ url_for('account') }}"><span>Account</span></a>
             <a href="{{ url_for('index') }}"><span>Home</span></a>
+            <span>History</span>
+            <span>Dashboard</span>
             <span>Help</span>
         </div>
         <div class="nav2"> 
@@ -28,21 +29,12 @@
             <span><a href="/logout">Log Out</a></span>
         </div>
     </header>
+    
             <main class="main">
                 {% block main %}
                 {% endblock %}
             </main>
-            {% block graph %}
-            <div class="sidebar container"> 
-                <div class="container-header">
-                    <h4>Graphs</h4><br>
-                </div>
-                <div class="side-container">
-                    <div class="item">
-                        Under Development
-                    </div>
-                </div> 
-            </div>
+            {% block sidebar %}
             {% endblock %}
         <div id="warningModal" class="modal">
             <!-- Modal content -->
@@ -59,7 +51,80 @@
                 <button id="acceptButton">Accept</button>
             </div>
         </div>
+        <div id="customSetupModal" class="modal">
+            <div class="modal-content">
+                <form id="customSetupForm" action="/custom_setup" method="post">                  
+                    <h2>Custom Setup<span class="close">&times;</span></h2>
+                    <input type="hidden" id="initialRemainingAllocation" value="{{ remain_alloc }}">
+                    <span id="remainingPercentage">Remaining Percentage: 100%</span>
+                    <table id="customSetupTable">
+                        <thead>
+                        <tr>
+                            <th>Post Name</th>
+                            <th>Goal</th>
+                            <th>% Allocation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" name="postName[]" placeholder="Name"></td>
+                            <td><input type="number" name="postGoal[]" placeholder="Goal"></td>
+                            <td><input type="number" name="postAllocation[]" placeholder="% Allocation"></td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <div class="in-line">
+                            <button id="addRowButton" type="button">Add Row</button>
+                            <button id="submitCustomSetup" type="submit">Submit</button>
+                            <button id="showSuggestionsButton" type="button">Post Suggestions</button>
+                        </div>
+                        <div id="suggestionsContainer" style="display: none;">
+                            <ul id="suggestionsList">
+                        <!-- Suggestions will be populated here -->
+                            </ul>
+                        </div>
+                </div>
+            </form>
+        </div>
+        <div id="profileSettingsModal" class="modal">
+            <div class="modal-content">
+                <div>
+                    <span class="close">&times;</span>
+                    <h2 class="centered-content">Profile Settings</h2>
+                    <br>  
+                </div>
+              <!-- Cookie Preferences Section -->
+              <div class="settings-container">
+                <div class="settings-item">
+                    <h3>Cookie Preferences:</h3>
+                    <div id="checkboxProfileContainer">
+                        <form id="profileSettingsForm" action="/update_consent" method="post">
+                            <div>
+                                <input type="checkbox" id="consentCookies" name="consentCookies">
+                                <label for="consentCookies">Activate Cookies</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="noCookies" name="noCookies">
+                                <label for="noCookies">Deactivate Cookies</label>
+                            </div>
+                            </div>
+                            <input type="hidden" id="consentUpdate" name="consentUpdate">
+                            <input id="updateConsent" type="submit" value="Submit">
+                        </form>
+                </div>
+              <!-- Delete Account Section -->
+              <div class="settings-item">
+                <h3>Account Deletion:</h3>
+                <form id="deleteAccountForm" action="/delete_account" method="post">
+                  <button id="deleteConfirmation" type="button">Delete Account</button>
+                </form>
+              </div>
+              </div>
+            </div>
+          </div>
     <footer class="footer">
+        <div cass="foot-nav">
+        </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
