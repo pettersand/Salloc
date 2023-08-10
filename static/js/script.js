@@ -552,6 +552,58 @@ $(document).ready(function () {
   });
 });
 
+//// INFO MODAL POPUP ////
+function showInfo(event) {
+  // Determine the infoType based on the parent container's class or ID
+  const parentContainer = event.target.closest('.item');
+  let infoType = "";
+  if (parentContainer.querySelector('#setSavings')) infoType = "setSavings";
+  if (parentContainer.querySelector('#removePostButton')) infoType = "removePost";
+  if (parentContainer.querySelector('#setupButton')) infoType = "setupCustom";
+  if (parentContainer.querySelector('#generateTemplateButton')) infoType = "generateTemplate";
+  if (parentContainer.querySelector('#commitSavingsButton')) infoType = "commitSavings";
+  // Add more conditions as needed
+
+  const infoContent = {
+    "setSavings": "Explanation about setting total savings.",
+    "removePost": "Explanation about removing a post.",
+    "setupCustom": "Explanation about setting up initial custom form.",
+    "generateTemplate": "Explanation on template generation.",
+    "commitSavings": "Explanation on committing changes."
+    // Add more content as needed
+  };
+
+  // Remove any existing tooltip
+  const existingTooltip = document.querySelector(".tooltip");
+  if (existingTooltip) existingTooltip.remove();
+
+  // Create a new tooltip element
+  const tooltip = document.createElement("div");
+  tooltip.className = "tooltip";
+  tooltip.innerText = infoContent[infoType];
+
+  // Append the tooltip to the document (temporarily, to get its dimensions)
+  document.body.appendChild(tooltip);
+
+  // Position the tooltip to the left of the clicked element
+  const iconElement = event.target.closest('.info-icon');
+  const iconRect = iconElement.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+  tooltip.style.left = (iconRect.left - tooltipRect.width - 250) + "px"; // 10px gap to the left
+  tooltip.style.top = (iconRect.top - 50) + "px";
+
+  // Show the tooltip
+  tooltip.style.display = "block";
+}
+
+// Optional: Hide the tooltip when clicking anywhere else on the page
+document.addEventListener("click", function(event) {
+  if (!event.target.closest(".info-icon")) {
+    const tooltip = document.querySelector(".tooltip");
+    if (tooltip) tooltip.style.display = "none";
+  }
+});
+
 
 
 
