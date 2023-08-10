@@ -102,6 +102,7 @@ form {
     display: flex;
     flex-direction: column;
     width: 180px;
+    align-items: flex-start;
 }
 
 
@@ -252,7 +253,7 @@ span {
     border: 1px solid black;
     flex: 1;
     background-color: var(--dark3);
-    margin: 15x;
+    margin: 15px;
     padding: 15px;
     gap: 1%;
 }
@@ -261,9 +262,11 @@ span {
     flex: 1;
     display: flex;
     flex-flow: row wrap;
+    align-items: stretch;
 }
 
-.history-table {
+.table-half {
+    flex: 0.7;
     display: flex;
 }
 
@@ -271,8 +274,20 @@ span {
     flex: 1;
     display: flex;
     flex-flow: column wrap;
+    min-width: fit-content;
+    height: auto;
+    gap: 5%;
+    align-content: center;
+    align-items: flex-start;
+}
+
+.table-group {
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
     width: 100%;
     gap: 5%;
+    align-content: center;
     align-items: center;
 }
 
@@ -656,6 +671,15 @@ span {
     width: 90%;
 }
 
+#contactForm h2 {
+    width: 100%;
+    align-items: flex-end;
+}
+
+#contactForm input, textarea {
+    width: 100%;
+}
+
 .in-line {
     display: flex;
     flex-direction: row;
@@ -750,6 +774,11 @@ input[type=submit] {
     border: 1px solid white;
 }
 
+input[type=text] {
+    width: 160px;
+    box-sizing: border-box;
+}
+
 input[type=button] {
     padding: 5px 15px;
     background: var(--dark1);
@@ -767,7 +796,7 @@ select {
 
 button {
     padding: 5px 15px;
-    background: var(--dark2);
+    background: var(--dark1);
     border: 1px solid white;
 }
 

@@ -563,6 +563,11 @@ function showInfo(event) {
   if (parentContainer.querySelector('#generateTemplateButton')) infoType = "generateTemplate";
   if (parentContainer.querySelector('#commitSavingsButton')) infoType = "commitSavings";
   if (parentContainer.querySelector('#allocateButton')) infoType = "allocateUndefined";
+  if (parentContainer.querySelector('#depositButton')) infoType = "depositFunds";
+  if (parentContainer.querySelector('#specificDepositButton')) infoType = "specificDeposit";
+  if (parentContainer.querySelector('#withdrawButton')) infoType = "withdrawFunds";
+  if (parentContainer.querySelector('#moveFundsButton')) infoType = "moveFunds";
+  if (parentContainer.querySelector('#transferFundsButton')) infoType = "transferFunds";
   // Add more conditions as needed
 
   const infoContent = {
@@ -571,7 +576,13 @@ function showInfo(event) {
     "setupCustom": "Info: Add posts and their goal / allocation values.",
     "generateTemplate": "Info: Generates a template post setup. Great learning tool.",
     "commitSavings": "Info: Commits current balance to your post based on % Allocation spread.",
-    "allocateUndefined": "Info: Adds any excess funds to a spread based on your % Allocation or to a specified post."
+    "allocateUndefined": "Info: Adds any excess funds to a spread based on your % Allocation or to a specified post.",
+    "depositFunds": "Info: Deposits funds evenly spread based on % Allocation.",
+    "specificDeposit": "Info: Deposits funds directly to specified post only.",
+    "withdrawFunds": "Info: Withdraws amount from specified post.",
+    "moveFunds": "Info: Moves specified amount from one post to another.",
+    "transferFunds": "Info: Moves all funds from one post to your destination, then deletes the post entirely."
+
     // Add more content as needed
   };
 

@@ -7,8 +7,8 @@ Index
 {% block main %}
 <div class="container-index">
     <div class="container-main">
-        <div class="container-half">
-            <div class="container-group">
+        <div class="table-half">
+            <div class="table-group">
                 <div class="container-header">
                     <h4>Transaction History</h4><br>
                 </div>
@@ -41,7 +41,13 @@ Index
                 <form action="/deposit" method="post">
                     <label for="deposit">General Deposit:</label>
                     <input type="number" id="deposit" name="deposit" placeholder="Enter amount" required>
-                    <input type="submit" value="Submit">
+                    <div class="info-container">
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input class="info-button" type="submit" id="depositButton" value="Submit">
+                        <span class="info-icon" onclick="showInfo(event);">
+                            <i class="fa-solid fa-info-circle"></i>
+                        <span>
+                    </div>
                 </form>
             </div>
             <div class="item">
@@ -54,12 +60,19 @@ Index
                         {% endfor %}
                     </select>
                     <input type="number" id="deposit" name="deposit" placeholder="Enter amount" required>
-                    <input type="submit" value="Submit">
+                    <div class="info-container">
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input class="info-button" type="submit" id="specificDepositButton" value="Submit">
+                        <span class="info-icon" onclick="showInfo(event);">
+                            <i class="fa-solid fa-info-circle"></i>
+                        <span>
+                    </div>
                 </form>
             </div> 
         </div>
         <div class="container-group">
-            <label for="container-group"><h3>Withdrawal:</h3></label>
+            <label for="container-group">
+                <h3>Withdrawal:</h3></label>
             <div class="item">
                 <form action="/withdrawal" method="post">
                     <label for="withdrawal">Withdrawal:</label>
@@ -71,7 +84,13 @@ Index
                     </select>
                     <input type="number" id="withdrawal" name="withdrawal" placeholder="Enter amount" required>
                     <input type="text" id="notes" name="notes" placeholder="Notes" required>
-                    <input type="submit" value="Submit">
+                    <div class="info-container">
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input class="info-button" type="submit" id="withdrawButton" value="Submit">
+                        <span class="info-icon" onclick="showInfo(event);">
+                            <i class="fa-solid fa-info-circle"></i>
+                        <span>
+                    </div>
                 </form>
             </div>
         </div>
@@ -93,7 +112,13 @@ Index
                         {% endfor %}
                     </select>
                     <input type="number" id="amount" name="amount" placeholder="Enter amount" required>
-                    <input type="submit" value="Submit">
+                    <div class="info-container">
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input class="info-button" type="submit" id="moveFundsButton" value="Submit">
+                        <span class="info-icon" onclick="showInfo(event);">
+                            <i class="fa-solid fa-info-circle"></i>
+                        <span>
+                    </div>
                 </form>
             </div>
             <div class="item">
@@ -116,7 +141,13 @@ Index
                         <option value="{{ post[0] }}">{{ post[0] }}</option>
                         {% endfor %}
                     </select>
-                    <input type="submit" value="Submit">
+                    <div class="info-container">
+                        <input type="hidden" id="remainder" name="remainder" value="{{ remainder }}">
+                        <input class="info-button" type="submit" id="transferFundsButton" value="Submit">
+                        <span class="info-icon" onclick="showInfo(event);">
+                            <i class="fa-solid fa-info-circle"></i>
+                        <span>
+                    </div>
                 </form>
             </div>
         </div>
@@ -194,13 +225,13 @@ Index
         <div class="item">
             <form id="resetAccountForm" action="/reset" method="post">
                 <label>Reset Account</label>
-                <input id="resetAccountButton"  type="submit" value="Reset">
+                <input class="info-button" id="resetAccountButton"  type="submit" value="Reset">
             </form>
         </div>
         <div class="item">
             <form id="resetPostsForm" action="/reset_posts" method="post">
                 <label>Reset Posts</label>
-                <input id="resetPostsButton"  type="submit" value="Reset">
+                <input class="info-button" id="resetPostsButton"  type="submit" value="Reset">
             </form>
         </div>
     </div> 

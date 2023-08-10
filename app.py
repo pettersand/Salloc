@@ -511,7 +511,7 @@ def index():
         remainder = balance - total_saved
         
         cur.execute(
-            "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC",
+            "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC LIMIT 7",
             (session["user_id"],)
         )
         history = cur.fetchall()
