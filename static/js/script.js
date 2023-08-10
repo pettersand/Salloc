@@ -644,7 +644,33 @@ document.addEventListener("click", function(event) {
   }
 });
 
+//// NOTIFICATIONS / CONFIRMATIONS ////
+function showNotification(message) {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  notification.style.display = 'block';
 
+  // Hide the notification after 5 seconds
+  setTimeout(function() {
+    notification.style.display = 'none';
+  }, 5000);
+}
+
+
+function showError(message) {
+  const errorModal = document.getElementById('errorModal');
+  const errorMessage = document.getElementById('errorMessage');
+  errorMessage.textContent = message;
+  errorModal.style.display = 'block';
+
+  // Close button functionality
+  const closeButton = errorModal.querySelector('.close');
+  if (closeButton) {
+    closeButton.onclick = function() {
+      errorModal.style.display = 'none';
+    };
+  }
+}
 
 
 

@@ -106,11 +106,6 @@ form {
 }
 
 
-
-select {
-
-}
-
 /* || Typography  */
 
 h1, h2, h3, h4, h5, h6 {
@@ -183,6 +178,19 @@ span {
         "main main sidebar"
         "footer footer footer";
 }
+
+.notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Display on top */
+}  
 
 .header {
     grid-area: header;

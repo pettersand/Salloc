@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, make_response, jsonify
+from flask import Flask, render_template, request, session, redirect, url_for, make_response, jsonify, flash
 from flask_mail import Mail, Message
 import dash
 from dash import html
@@ -43,7 +43,8 @@ def contact_me():
     msg = Message("New Contact Form Submission", sender="savingsalloc@gmail.com", recipients=["petter.sand@gmail.com"])
     msg.body = f"Name: {name}\nEmail: {email}\nTopic: {topic}\nMessage: {message_body}"
     mail.send(msg)
-    return "Message Sent!", 200
+    flash("Message Sent!")
+    return redirect("/index")
 
 @server.route("/")
 def landing():
