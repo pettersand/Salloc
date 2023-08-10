@@ -35,7 +35,8 @@ main {
 }
 
 footer {
-
+    display: flex;
+    align-items: center;
 }
 
 /* || TABLES  */
@@ -224,6 +225,7 @@ span {
 .footer {
     grid-area: footer;
     display: flex;
+    justify-content: center;
     align-items: center;
     border-top: 1px solid black;
     background: var(--dark1);
@@ -542,7 +544,11 @@ span {
 
 .foot-nav {
     display: flex;
-}
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 70%;
+}   
 
 /******* MODAL *******/
 
@@ -638,15 +644,26 @@ span {
     padding: 10px;
     max-height: 200px;
     overflow-y: auto;
-  }
+}
   
-  #suggestionsList {
+#suggestionsList {
     list-style-type: none;
     padding: 0;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
-  }
+}
+
+#contactContainer {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}
+
+#contactForm {
+    display: flex;
+    width: 90%;
+}
 
 .in-line {
     display: flex;

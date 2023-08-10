@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, make_response, jsonify
+from flask_mail import Mail, Message
 import dash
 from dash import html
 from dash import dcc
@@ -21,6 +22,28 @@ def create_conncur():
 server = Flask(__name__)
 server.secret_key = "sarapus1"
 
+# Configure Flask-Mail with Gmail settings
+server.config['MAIL_SERVER'] = 'smtp.sendgrid.net'
+server.config['MAIL_PORT'] = 587
+server.config['MAIL_USERNAME'] = 'apikey'
+server.config['MAIL_PASSWORD'] = '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'
+server.config['MAIL_USE_TLS'] = True
+server.config['MAIL_USE_SSL'] = False
+
+mail = Mail(server)
+
+@server.route("/contact_me", methods=["POST"])
+@login_required
+def contact_me():
+    name = request.form["name"]
+    email = request.form["email"]
+    topic = request.form["topic"]
+    message_body = request.form["message"]
+    
+    msg = Message("New Contact Form Submission", sender="savingsalloc@gmail.com", recipients=["petter.sand@gmail.com"])
+    msg.body = f"Name: {name}\nEmail: {email}\nTopic: {topic}\nMessage: {message_body}"
+    mail.send(msg)
+    return "Message Sent!", 200
 
 @server.route("/")
 def landing():

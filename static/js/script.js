@@ -540,6 +540,17 @@ $(document).ready(function () {
   });
 });
 
+$(document).ready(function () {
+  // Open the contact modal when the link in the footer is clicked
+  $("#contactLink").click(function () {
+    $("#contactModal").show();
+  });
+
+  // Close the contact modal when the close button is clicked
+  $("#contactModal .close").click(function () {
+    $("#contactModal").hide();
+  });
+});
 
 
 
