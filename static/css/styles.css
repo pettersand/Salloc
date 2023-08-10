@@ -256,7 +256,51 @@ span {
 
 /******* MAIN *******/
 
-.main, .container {
+.container-index {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+.container-main {
+    display:flex;
+    border: 1px solid black;
+    flex: 1;
+    background-color: var(--dark3);
+    margin: 15px;
+    padding: 15px;
+    gap: 5%;
+}
+
+.container-group {
+    flex: 1;
+    display: flex;
+    flex-flow: column wrap;
+    width: 100%;
+    gap: 5%;
+    align-items: center;
+}
+
+.container-table {
+    display: flex;
+    flex-flow: column wrap;
+    border: 1px solid black;
+    background-color: var(--dark3);
+    flex: 1;
+    margin: 15px;
+    padding: 15px;
+}
+
+
+.main, .container-index {
+    display:flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    width: 100%;
+
+}
+
+.mains, .containerss {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-evenly;
@@ -360,6 +404,7 @@ span {
 
 .div-table {
     display: flex;
+    flex-direction: column;
 }
 
 
@@ -373,7 +418,7 @@ span {
 }
 
 .flex-post {
-    flex: 1.4;
+    flex: 1.3;
     display: flex;
     align-items: flex-start;
     border-right: 1px solid black;
@@ -381,7 +426,7 @@ span {
 }
 
 .flex-post-h {
-    flex: 1.4;
+    flex: 1.3;
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
@@ -390,7 +435,7 @@ span {
 }
 
 .flex-goal {
-    flex: 1.3;
+    flex: 0.8;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -399,38 +444,76 @@ span {
 }
 
 .flex-goal-h {
-    flex: 1.3;
+    flex: 0.8;
     display: flex;
     align-items: center;
     padding-inline: 8px;
     justify-content: space-around;
     border-right: 1px solid black;
-
 }
 
-.flex-alloc {
+.flex-saved {
+    flex: 0.8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 8px;
+    border-right: 1px solid black;
+}
+
+.flex-saved-h {
+    flex: 0.8;
+    display: flex;
+    align-items: center;
+    padding-inline: 8px;
+    justify-content: space-around;
+    border-right: 1px solid black;
+}
+
+.flex-progress {
     flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-inline: 8px;
-    width: 100px;
+    border-right: 1px solid black;
 }
 
-.flex-alloc-h {
+.flex-progress-h {
     flex: 1;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     padding-inline: 8px;
-    width: 100px;
+    justify-content: space-around;
+    border-right: 1px solid black;
+}
+
+.flex-salloc {
+    flex: 0.7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 8px;
+    border-right: 1px solid black;
+}
+
+.flex-salloc-h {
+    flex: 0.7;
+    display: flex;
+    align-items: center;
+    padding-inline: 8px;
+    justify-content: space-around;
+    border-right: 1px solid black;
 }
 
 .flex-row input[type="number"] {
     max-width: 70px;
 }
 
-
+.sort-arrow {
+    font-size: 12px;
+    margin-left: 5px;
+  }
 
 /******* SIDEBAR *******/
 .sidebar.container {

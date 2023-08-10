@@ -1,88 +1,62 @@
-//// TABLE SORTING ////
+/// NEW SORTING FUNCTION MAIN PAGE ////
+// Function to sort rows based on a selected column
+$(document).ready(function () {
+  function sortRows(columnIndex, ascending) {
+    const rows = $(".flex-row").not(":first").get(); // Exclude the header row
+    rows.sort(function (a, b) {
+      const aValueElement = $(a).find("div").eq(columnIndex);
+      const bValueElement = $(b).find("div").eq(columnIndex);
+      let aValue = aValueElement.text().trim();
+      let bValue = bValueElement.text().trim();
 
-// Sorting of overview table
-function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("myTable");
-  if (!table) return; // If the table doesn't exist, exit the function
-  switching = true;
-  // Set the sorting direction to descending:
-  dir = "desc"; 
-  // Remove the sort symbol from all columns:
-  for (i = 0; i < 5; i++) {
-    table.rows[0].getElementsByTagName("TH")[i].innerHTML = table.rows[0].getElementsByTagName("TH")[i].innerHTML.replace(" ▲", "").replace(" ▼", "");
-  }
-  while (switching) {
-    switching = false;
-    rows = table.rows;
-    for (i = 1; i < (rows.length - 1); i++) {
-      shouldSwitch = false;
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      if (dir == "desc") {
-        if (n === 3) { // if it's the progress bar column
-          var xVal = x.getElementsByTagName("progress")[0].value;
-          var xMax = x.getElementsByTagName("progress")[0].max;
-          var yVal = y.getElementsByTagName("progress")[0].value;
-          var yMax = y.getElementsByTagName("progress")[0].max;
-          if ((xVal / xMax) < (yVal / yMax)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (isNaN(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) { // if it's a string
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else { // if it's a number
-          if (Number(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', '')) < Number(y.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      } else if (dir == "asc") {
-        if (n === 3) { // if it's the progress bar column
-          var xVal = x.getElementsByTagName("progress")[0].value;
-          var xMax = x.getElementsByTagName("progress")[0].max;
-          var yVal = y.getElementsByTagName("progress")[0].value;
-          var yMax = y.getElementsByTagName("progress")[0].max;
-          if ((xVal / xMax) > (yVal / yMax)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (isNaN(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) { // if it's a string
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else { // if it's a number
-          if (Number(x.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', '')) > Number(y.innerHTML.replace(/,/g, '').replace('%', '').replace('kr', ''))) {
-            shouldSwitch = true;
-            break;
-          }
+      // Check if sorting by post name column
+      if (columnIndex === 0) { // Assuming post name is the first column
+        return ascending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      }
+
+      // Check if sorting by progress column
+      if (columnIndex === 3) { // Assuming progress is the fourth column
+        const progressA = aValueElement.find("progress");
+        const progressB = bValueElement.find("progress");
+        aValue = parseFloat(progressA.attr("value")) / parseFloat(progressA.attr("max")) * 100;
+        bValue = parseFloat(progressB.attr("value")) / parseFloat(progressB.attr("max")) * 100;
+      } else {
+        // Try to convert to numbers for other columns
+        const numA = parseFloat(aValue.replace(/,/g, "").replace(" kr", "").replace("%", ""));
+        const numB = parseFloat(bValue.replace(/,/g, "").replace(" kr", "").replace("%", ""));
+        if (!isNaN(numA) && !isNaN(numB)) {
+          aValue = numA;
+          bValue = numB;
         }
       }
-    }
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      switchcount ++;      
-    } else {
-      if (switchcount == 0 && dir == "desc") {
-        dir = "asc";
-        switching = true;
-      }
-    }
-  }
-  // Add the sort symbol to the sorted column:
-  if (dir == "asc") {
-    table.rows[0].getElementsByTagName("TH")[n].innerHTML += " ▼";
-  } else if (dir == "desc") {
-    table.rows[0].getElementsByTagName("TH")[n].innerHTML += " ▲";
-  }
-}
 
+      return ascending ? aValue - bValue : bValue - aValue;
+    });
+    $(".div-table .flex-row").not(":first").remove(); // Remove existing rows
+    $(".div-table").append(rows); // Re-append the sorted rows
+  }
 
+  function handleHeaderClick(event) {
+    const $header = $(event.currentTarget);
+    const columnIndex = $header.index();
+    const ascending = $header.data("ascending") || false; // Get current sort direction
+    sortRows(columnIndex, ascending); // Sort rows
+    $header.data("ascending", !ascending); // Toggle sort direction
+    // Update arrows
+    $(".sort-arrow").remove(); // Remove existing arrows
+    const arrow = ascending ? "↑" : "↓"; // Set arrow based on sort direction
+    $header.append(`<span class="sort-arrow">${arrow}</span>`); // Add arrow to header
+  }
+
+  // Add click event listener to sortable headers
+  $(".sortable").on("click", handleHeaderClick);
+
+  // Default sort by progress bar (replace 3 with the correct index of the progress column)
+  sortRows(3, false);
+
+  // Add an arrow to the default sorted column
+  $(".flex-progress-h").append('<span class="sort-arrow">↓</span>'); // Add arrow to progress header
+});
 
 
 
@@ -495,3 +469,93 @@ if (document.getElementById("profileSettingsButton")) {
       };
   }
 }
+
+//// UPDATING USER EDITS FROM TABLE ////
+
+$(document).ready(function () {
+  const initialRemainingAllocation = parseInt($("#hiddenRemainAlloc").val()); // Parse as integer
+  let totalAllocation = initialRemainingAllocation; // Initialize with the remaining allocation
+
+  function updateRemainingAllocation() {
+    let currentTotalAllocation = 0;
+    $(".flex-salloc span").each(function () {
+      const salloc = parseInt($(this).text().replace("%", ""));
+      if (!isNaN(salloc)) {
+        currentTotalAllocation += salloc;
+      }
+    });
+    totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
+    $("#remainingAllocationCounter").text(totalAllocation);
+
+    if (totalAllocation < 0) {
+      $("#updateButton").prop("disabled", true);
+      $("#remainingAllocationMessage").text("Total allocation exceeds 100%");
+    } else {
+      $("#updateButton").prop("disabled", false);
+      $("#remainingAllocationMessage").text("");
+    }
+  }
+
+  $(".flex-row [contenteditable='true']").on("input", function () {
+    $(this).addClass("edited"); // Mark the cell as edited
+    updateRemainingAllocation(); // Update the total allocation
+  });
+
+  $("#updateButton").click(function (event) {
+    const editedData = [];
+    $(".flex-row").each(function () {
+      const row = $(this);
+      const postName = row.find(".flex-post").text().trim();
+      const oldName = row.find(".flex-post").data("old-name"); // Retrieve the old name
+      const goal = parseInt(row.find(".flex-goal span").text().replace(/,/g, "").replace(" kr", ""));
+      const salloc = parseInt(row.find(".flex-salloc span").text().replace("%", ""));
+      // Add other fields as needed
+      if (row.find(".edited").length > 0) { // Check if anything in the row was edited
+        editedData.push({ postName: postName, oldName: oldName, goal: goal, salloc: salloc });
+      }
+    });
+  
+    // Send the edited data to the route using AJAX
+    $.ajax({
+      url: "/update_table",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(editedData),
+      success: function (response) {
+        // Handle success
+      },
+      error: function (error) {
+        // Handle error
+      },
+    });
+  });
+
+  $("#remainingAllocationCounter").text(initialRemainingAllocation); // Set the initial value
+
+  const editableDivs = document.querySelectorAll("[contenteditable=true]");
+  editableDivs.forEach(function (div) {
+    $(div).on("input", function () {
+      $(this).addClass("edited");
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

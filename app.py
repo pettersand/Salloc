@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, session, redirect, url_for, make_response, jsonify
 import dash
 from dash import html
 from dash import dcc
 from decimal import Decimal
 import psycopg2
-from helper import log_history, login_required
+from helper import log_history, login_required, parse_numeric_value, capitalize_string
 from functools import wraps
 import bcrypt
 import string
@@ -283,10 +283,53 @@ def edit_post():
         conn.commit()
         return redirect("/account")
 
-@server.route("/edit_all", methods=["POST"])
+@server.route("/update_table", methods=["POST"])
 @login_required
+def update_table():
+    data = request.get_json()
+    print("data collected")
+    print(data)
+    for row_data in data:
+        old_name = row_data["oldName"]
+        new_name = row_data.get("postName")
+        new_goal = row_data.get("goal")
+        new_alloc = row_data.get("salloc")
+        if new_goal:
+            new_goal = parse_numeric_value(new_goal)
+        if new_alloc:
+            new_alloc = parse_numeric_value(new_alloc)
+        if new_name:
+            new_name = capitalize_string(new_name)
+        
+        print(old_name)
+        print(new_name)
+        print(new_goal)
+        print(new_alloc)
+        print("Ready for SQL")
+        conn, cur = create_conncur()
+        with conn:
+            if new_goal:
+                cur.execute(
+                    "UPDATE posts SET goal = %s WHERE user_id = %s AND name = %s",
+                    (new_goal, session["user_id"], old_name)
+                )
+            if new_alloc:
+                cur.execute(
+                    "UPDATE posts SET allocation_percentage = %s WHERE user_id = %s AND name = %s",
+                    (new_alloc, session["user_id"], old_name)
+                )
+            if new_name:
+                cur.execute(
+                    "UPDATE posts SET name = %s WHERE user_id = %s AND name = %s",
+                    (new_name, session["user_id"], old_name)
+                )
+            print("Finished Adding - looping")
+                
+    return redirect("/index")
+
+@server.route("/edit_", methods=["POST"])
 @login_required
-def edit_all():
+def edit_():
     conn, cur = create_conncur()
     try:
         for key, value in request.form.items():
@@ -436,9 +479,10 @@ def index():
             (session["user_id"],)
         )
         posts = cur.fetchall()
+        print(posts)
         # Calulates remaining % to allocate
         total_alloc = sum(post[1] for post in posts)
-        remain_alloc = max(0, 100 - total_alloc)
+        remain_alloc = int(max(0, 100 - total_alloc))
         total_saved = sum(post[2] for post in posts)
         total_goal = sum(post[3] for post in posts)
         remainder = balance - total_saved

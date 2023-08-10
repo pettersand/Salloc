@@ -21,3 +21,18 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def parse_numeric_value(value):
+    try:
+        # Try to convert value to integer
+        return int(value)
+    except ValueError:
+        # If not a valid integer, remove non-numeric characters and try again
+        numeric_part = ''.join(filter(str.isdigit, value))
+        try:
+            return int(numeric_part)
+        except ValueError:
+            return None
+        
+def capitalize_string(s):
+    # Capitalize the first letter of each word in the string
+    return ' '.join(word.capitalize() for word in s.split())
