@@ -7,6 +7,34 @@ Index
 {% block main %}
 <div class="container-index">
     <div class="container-main">
+        <div class="container-half">
+            <div class="container-group">
+                <div class="container-header">
+                    <h4>Transaction History</h4><br>
+                </div>
+                    <div class="item">
+                        <table>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Post</th>
+                                <th>Notes</th>
+                            </tr>
+                            {% for hist in history %}
+                            <tr>
+                                <td>{{ hist[0] }}</td>
+                                <td>{{ hist[2] }}</td>
+                                <td>{{ "{:,.0f} kr".format(hist[3]) }}</td>
+                                <td>{{ hist[1] }}</td>
+                                <td>{{ hist[4] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div> 
+            </div>
+    <div class="container-half">
         <div class="container-group">
             <label for="container-group"><h3>Deposit:</h3></label>
             <div class="item">
@@ -93,6 +121,7 @@ Index
             </div>
         </div>
     </div>
+</div>
     <div class="container-table">
         <div class="container-header">
             <h4>Post Overview</h4><br>

@@ -252,9 +252,19 @@ span {
     border: 1px solid black;
     flex: 1;
     background-color: var(--dark3);
-    margin: 15px;
+    margin: 15x;
     padding: 15px;
-    gap: 5%;
+    gap: 1%;
+}
+
+.container-half {
+    flex: 1;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.history-table {
+    display: flex;
 }
 
 .container-group {

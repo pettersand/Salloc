@@ -509,6 +509,13 @@ def index():
         total_saved = sum(post[2] for post in posts)
         total_goal = sum(post[3] for post in posts)
         remainder = balance - total_saved
+        
+        cur.execute(
+            "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC",
+            (session["user_id"],)
+        )
+        history = cur.fetchall()
+        
     return render_template(
         "index.html", 
         posts=posts, 
@@ -517,7 +524,8 @@ def index():
         total_goal=total_goal, 
         remain_alloc=remain_alloc,
         balance=balance,
-        remainder=remainder
+        remainder=remainder,
+        history=history
     )
 
 
