@@ -439,32 +439,42 @@ def commit_savings():
 @login_required
 def generate_template():
     conn, cur = create_conncur()
-    with conn:
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        if balance <= 0:
-            return "Please set total savings before generating posts"
-        cur.execute("SELECT * FROM posts WHERE user_id = %s", (session["user_id"],))
-        check = cur.fetchone()
-        if check:
-            return "Please reset your posts before adding template"
-        template_posts = {
-            "Emergency": 25,
-            "Retirement": 20,
-            "Debt Repayment": 10,
-            "Vacation": 15,
-            "Home Improvement": 15,
-            "Personal": 5,
-            "Investment": 10,
-        }
-        for post_name, allocation_percentage in template_posts.items():
-            current_savings = (Decimal(allocation_percentage) / 100) * balance
-            goal = 2 * current_savings
-            cur.execute(
-                "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
-                (session["user_id"], post_name, allocation_percentage, goal),
-            )
-        return redirect("/index")
+    try:
+        with conn:
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
+            if balance is None or balance <= 0:
+                flash("Please set total savings before generating posts", "error")
+                return redirect("/index")
+
+            cur.execute("SELECT * FROM posts WHERE user_id = %s", (session["user_id"],))
+            check = cur.fetchone()
+            if check:
+                flash("Please reset your posts before adding template", "error")
+                return redirect("/index")
+
+            template_posts = {
+                "Emergency": 25,
+                "Retirement": 20,
+                "Debt Repayment": 10,
+                "Vacation": 15,
+                "Home Improvement": 15,
+                "Personal": 5,
+                "Investment": 10,
+            }
+            for post_name, allocation_percentage in template_posts.items():
+                current_savings = (Decimal(allocation_percentage) / 100) * balance
+                goal = 2 * current_savings
+                cur.execute(
+                    "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
+                    (session["user_id"], post_name, allocation_percentage, goal),
+                )
+            flash("Template generated successfully.", "success")
+    except Exception as e:
+        conn.rollback()
+        flash(f"An error occurred while generating the template: {str(e)}", "error")
+
+    return redirect("/index")
 
 
 @server.route("/custom_setup", methods=["POST"])
@@ -473,27 +483,37 @@ def custom_setup():
     post_names = request.form.getlist("postName[]")
     post_goals = request.form.getlist("postGoal[]")
     post_alloc = request.form.getlist("postAllocation[]")
+
+    if not post_names or not post_goals or not post_alloc:
+        flash("No data provided for custom setup.", "error")
+        return redirect("/index")
+
     conn, cur = create_conncur()
-    with conn:
-        for name, goal, alloc in zip(post_names, post_goals, post_alloc):
-            if name.strip() == "":
-                continue
+    try:
+        with conn:
+            total_alloc = 0
+            for name, goal, alloc in zip(post_names, post_goals, post_alloc):
+                name = string.capwords(name.strip())
+                goal = goal.strip() or "0"
+                alloc = alloc.strip() or "0"
 
-            name = string.capwords(name)
-            goal = goal.strip() or "0"
-            alloc = alloc.strip() or "0"
+                if name == "" or not goal.isdigit() or not alloc.isdigit():
+                    continue
 
-            cur.execute(
-                "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
-                (session["user_id"], name, alloc, goal),
-            )
-        cur.execute(
-            "SELECT SUM(allocation_percentage) FROM posts WHERE user_id = %s",
-            (session["user_id"],),
-        )
-        check = cur.fetchone()[0]
-        if check > 100:
-            return "Total % exceeds 100%"
+                total_alloc += int(alloc)
+                if total_alloc > 100:
+                    flash("Total % exceeds 100%", "error")
+                    return redirect("/index")
+
+                cur.execute(
+                    "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
+                    (session["user_id"], name, alloc, goal),
+                )
+
+            flash("Custom setup completed successfully.", "success")
+    except Exception as e:
+        conn.rollback()
+        flash(f"An error occurred while setting up custom posts: {str(e)}", "error")
 
     return redirect("/index")
 
