@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import Flask, render_template, request, session, redirect, url_for
+import re
 
 # Helper file, commonly used functions
 
@@ -36,3 +37,15 @@ def parse_numeric_value(value):
 def capitalize_string(s):
     # Capitalize the first letter of each word in the string
     return ' '.join(word.capitalize() for word in s.split())
+
+def is_valid_email(email):
+    # Regular expression to validate email format
+    pattern = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b')
+    return pattern.fullmatch(email) is not None
+
+def is_valid_length(input_str, min_length, max_length):
+    return min_length <= len(input_str) <= max_length
+
+def sanitize_input(input_str):
+    # Example of sanitizing input to prevent SQL injection
+    return input_str.replace("'", "''")

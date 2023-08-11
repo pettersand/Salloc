@@ -19,7 +19,7 @@
                 {% block form %}
                 <form action="/login" method="post" autocomplete="off">
                     <label id="LogOn">Login</label><br>
-                    <input type="text" id="username" name="username" placeholder="Enter username" required>
+                    <input type="username" id="username" name="username" placeholder="Enter username" required autocomplete="current-username">
                     <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
                     <input type="submit" value="Login">
                     <input type="button" onclick="window.location.href='/register'" value="Register">
@@ -80,8 +80,29 @@
                         <button id="exitButton">No, Exit</button>
                       </div>
               </div>
+            </div>
+            <div class="flashes">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="errorMessage"></p>
+            </div>
         </div>
     <footer></footer>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% if error %}
+        <script>
+            showError("{{ error }}");
+        </script>
+    {% endif %}
 </body>
 </html>
