@@ -518,7 +518,7 @@ $(document).ready(function () {
     totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
     $("#remainingAllocationCounter").text(totalAllocation);
     console.log("Total Allocation:", totalAllocation);
-  
+
     if (totalAllocation < 0) {
       $("#updateButton").prop("disabled", true);
       $("#updateButton").text("Exceeds 100%"); // Change the text of the button
@@ -571,13 +571,9 @@ $(document).ready(function () {
       contentType: "application/json",
       data: JSON.stringify(editedData),
       success: function (response) {
-        console.log("Update successful");
-        window.location.href = "/index";
-      },
-      error: function (error) {
-        console.log("Update error:", error);
-        // Handle error
-      },
+        // Redirect to the URL provided by the server
+        window.location.href = response.redirect;
+      }
     });
   });
 
@@ -589,7 +585,8 @@ $(document).ready(function () {
     });
   });
   updateRemainingAllocation();
-});
+}); 
+
 
 
 $(document).ready(function () {

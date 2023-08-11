@@ -348,6 +348,7 @@ def remove_post():
 @login_required
 def update_table():
     data = request.get_json()
+    print(data)
 
     if not data:
         flash("No data provided for update.", "error")
@@ -366,36 +367,33 @@ def update_table():
                 if not old_name:
                     continue  # Skip this row if old_name is missing
 
-                if new_goal:
+                if new_goal is not None:
                     new_goal = parse_numeric_value(new_goal)
-                if new_alloc:
-                    new_alloc = parse_numeric_value(new_alloc)
-                if new_name:
-                    new_name = capitalize_string(new_name)
-
-                # Update the database
-                if new_goal:
                     cur.execute(
                         "UPDATE posts SET goal = %s WHERE user_id = %s AND name = %s",
                         (new_goal, session["user_id"], old_name),
                     )
-                if new_alloc:
+                if new_alloc is not None:
+                    new_alloc = parse_numeric_value(new_alloc)
                     cur.execute(
                         "UPDATE posts SET allocation_percentage = %s WHERE user_id = %s AND name = %s",
                         (new_alloc, session["user_id"], old_name),
                     )
                 if new_name:
+                    new_name = capitalize_string(new_name)
                     cur.execute(
                         "UPDATE posts SET name = %s WHERE user_id = %s AND name = %s",
                         (new_name, session["user_id"], old_name),
-                    )
+                    )                
 
             conn.commit()
             flash("Table updated successfully.", "success")
+            return jsonify({"redirect": url_for('index')})
+
         except Exception as e:
             conn.rollback()
             flash(f"An error occurred while updating the table: {str(e)}", "error")
-
+            
     return redirect("/index")
 
 
