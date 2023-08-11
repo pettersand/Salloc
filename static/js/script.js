@@ -518,13 +518,13 @@ $(document).ready(function () {
     totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
     $("#remainingAllocationCounter").text(totalAllocation);
     console.log("Total Allocation:", totalAllocation);
-
+  
     if (totalAllocation < 0) {
       $("#updateButton").prop("disabled", true);
-      $("#remainingAllocationMessage").text("Total allocation exceeds 100%"); // Make sure this element exists in HTML
+      $("#updateButton").text("Exceeds 100%"); // Change the text of the button
     } else {
       $("#updateButton").prop("disabled", false);
-      $("#remainingAllocationMessage").text("");
+      $("#updateButton").text("Update Changes"); // Reset the text of the button
     }
   }
 
