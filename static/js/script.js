@@ -779,3 +779,12 @@ $(document).ready(function () {
   // Add an arrow to the default sorted column
   $(".flex-progress-h").append('<span class="sort-arrow">↓</span>'); // Add arrow to progress header
 });
+
+
+function setCurrency(currencyType) {
+  // You can use AJAX here to send the selected currency to the server
+  // Example using jQuery:
+  $.post("/set_currency", { currency_type: currencyType }, function() {
+      location.reload(); // Reload the page to apply the new currency setting
+  });
+}

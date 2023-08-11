@@ -25,7 +25,7 @@ Index
                             <tr>
                                 <td>{{ hist[0] }}</td>
                                 <td>{{ hist[2] }}</td>
-                                <td>{{ "{:,.0f} kr".format(hist[3]) }}</td>
+                                <td>{{ hist[3] | currency(currency) }}</td>
                                 <td>{{ hist[1] }}</td>
                                 <td>{{ hist[4] }}</td>
                             </tr>
@@ -171,9 +171,9 @@ Index
                     <div class="flex-post" contenteditable="true" data-old-name="{{ post[0] }}" data-field="post_name">
                         {{ post[0] }}
                     </div>
-                    <div class="flex-saved">{{ "{:,.0f} kr".format(post[2]) }}</div>
+                    <div class="flex-saved">{{ post[2] | currency(currency) }}</div>
                     <div class="flex-goal" contenteditable="true" data-field="goal">
-                        <span>{{ "{:,.0f} kr".format(post[3]) }}</span>
+                        <span>{{ post[3] | currency(currency) }}</span>
                     </div>
                     <div class="flex-progress">
                         <progress value="{{ post[2] }}" max="{{ post[3] }}"></progress>
@@ -196,14 +196,14 @@ Index
     </div>
     <div class="side-container">
         <div class="item">
-            <p>Current Savings: <br>{{ balance }} kr</p><br>
-            <p>Total Goal: <br>{{ total_goal }} kr</p><br><br>
+            <p>Current Savings: <br>{{ balance | currency(currency) }}</p><br>
+            <p>Total Goal: <br>{{ total_goal | currency(currency) }} </p><br><br>
             <span>
                 <button id="profileSettingsButton">Profile Settings</button>
             </span>
         </div>
         <div class="item">
-            <span>Funds not yet allocated: <br>{{ remainder }} kr</span>
+            <span>Funds not yet allocated: <br>{{ remainder | currency(currency) }}</span>
             <form action="/undefined" method="post">
                 <label for="undefined">Allocate now?</label>
                 <select id="post" name="post" required>

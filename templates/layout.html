@@ -26,7 +26,14 @@
         </div>
         <div class="nav3">
             <span>Language</span>
-            <span>Currency</span>
+            <div class="dropdown">
+                <button class="dropbtn">Currency</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="setCurrency('EUR')">EUR</a>
+                    <a href="#" onclick="setCurrency('USD')">USD</a>
+                    <a href="#" onclick="setCurrency('NOK')">NOK</a>
+                </div>
+            </div>
             <span><a href="/logout">Log Out</a></span>
         </div>
     </header>

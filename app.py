@@ -23,6 +23,7 @@ from helper import (
     is_valid_length, 
     is_valid_email, 
     sanitize_input,
+    format_currency,
 )
 from functools import wraps
 import bcrypt
@@ -42,6 +43,7 @@ def create_conncur():
 
 server = Flask(__name__)
 server.secret_key = "sarapus1"
+server.jinja_env.filters['currency'] = format_currency
 
 # Configure Flask-Mail with Gmail settings
 server.config["MAIL_SERVER"] = "smtp.sendgrid.net"
@@ -524,8 +526,8 @@ def index():
     try:
         conn, cur = create_conncur()
         with conn:
-            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-            balance = cur.fetchone()[0]
+            cur.execute("SELECT balance, currency FROM users WHERE id = %s", (session["user_id"],))
+            balance, currency = cur.fetchone()
 
             # Fetch posts and calculate totals
             cur.execute(
@@ -564,6 +566,7 @@ def index():
             remainder=remainder,
             history=history,
             alerts=alerts,
+            currency=currency,
         )
     except Exception as e:
         error_message = str(e)
@@ -833,7 +836,8 @@ def move():
             )
             log_history(conn, session["user_id"], pto, amount, "Deposit", "Moved To")
             conn.commit()
-
+            
+        flash("Move successful.", "success")
         return redirect("/index")
     except Exception as e:
         error_message = str(e)
@@ -901,12 +905,30 @@ def transfer():
                     )
 
             conn.commit()
+            flash("Transfer successful.", "success")
             return redirect("/index")
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while transferring funds: {error_message}", "error")
         return redirect(url_for("error_page", error_message=error_message))
 
+
+@server.route("/set_currency", methods=["POST"])
+@login_required
+def set_currency():
+    currency_type = request.form.get("currency_type")
+    if currency_type in ['NOK', 'USD', 'EUR']:
+        # Update the database
+        conn, cur = create_conncur()
+        with conn:
+            cur.execute(
+                "UPDATE users SET currency = %s WHERE id = %s",
+                (currency_type, session["user_id"]),
+            )
+        # Store the preference in the session
+        session['currency_type'] = currency_type
+    flash("Currency set successfully.", "success")
+    return redirect("/index")
 
 
 @server.errorhandler(404)

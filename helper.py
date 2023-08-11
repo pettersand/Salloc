@@ -49,3 +49,11 @@ def is_valid_length(input_str, min_length, max_length):
 def sanitize_input(input_str):
     # Example of sanitizing input to prevent SQL injection
     return input_str.replace("'", "''")
+
+def format_currency(value, currency):
+    if currency == 'USD':
+        return "${:,.2f}".format(value)
+    elif currency == 'EUR':
+        return "€{:,.2f}".format(value)
+    else: # Default to NOK
+        return "{:,.0f} kr".format(value)
