@@ -401,22 +401,38 @@ def update_table():
 @login_required
 def commit_savings():
     conn, cur = create_conncur()
-    with conn:
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        cur.execute(
-            "SELECT id, allocation_percentage FROM posts WHERE user_id = %s",
-            (session["user_id"],),
-        )
-        posts = cur.fetchall()
-        for post in posts:
-            total_saved = balance * post[1] / 100
+    try:
+        with conn:
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
+            if balance is None or balance < 0:
+                flash("Invalid balance detected. Please check your account.", "error")
+                return redirect("/index")
+
             cur.execute(
-                "UPDATE posts SET total_saved = %s WHERE id = %s",
-                (total_saved, post[0]),
+                "SELECT id, allocation_percentage FROM posts WHERE user_id = %s",
+                (session["user_id"],),
             )
-        conn.commit()
+            posts = cur.fetchall()
+            for post in posts:
+                allocation_percentage = post[1]
+                if allocation_percentage is None or allocation_percentage < 0 or allocation_percentage > 100:
+                    flash("Invalid allocation percentage detected. Please check your posts.", "error")
+                    return redirect("/index")
+
+                total_saved = balance * allocation_percentage / 100
+                cur.execute(
+                    "UPDATE posts SET total_saved = %s WHERE id = %s",
+                    (total_saved, post[0]),
+                )
+            conn.commit()
+            flash("Savings committed successfully.", "success")
+    except Exception as e:
+        conn.rollback()
+        flash(f"An error occurred while committing savings: {str(e)}", "error")
+
     return redirect("/index")
+
 
 
 @server.route("/generate_template", methods=["POST"])
