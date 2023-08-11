@@ -317,6 +317,7 @@ span {
   flex-flow: column nowrap;
   width: 100%;
   gap: 5%;
+  font-size: 0.8em;
   align-content: center;
   align-items: center;
 }

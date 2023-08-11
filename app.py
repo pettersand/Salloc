@@ -566,89 +566,43 @@ def index():
             alerts=alerts,
         )
     except Exception as e:
-        flash(f"An error occurred while loading the dashboard: {str(e)}", "error")
-        return redirect("/error_page")
+        error_message = str(e)
+        flash(f"An error occurred: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
     
 
 @server.route("/error_page")
 def error_page():
-    return render_template("error_page.html")
+    error_message = request.args.get("error_message", "An unexpected error occurred.")
+    return render_template("error_page.html", error_message=error_message)
 
 
 @server.route("/deposit", methods=["POST"])
 @login_required
 def deposit():
-    amount = int(request.form.get("deposit"))
-    conn, cur = create_conncur()
-    with conn:
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        new_balance = balance + amount
-        cur.execute(
-            "UPDATE users SET balance = %s WHERE id = %s",
-            (
-                new_balance,
-                session["user_id"],
-            ),
-        )
-        cur.execute(
-            "SELECT id, name, allocation_percentage, total_saved FROM posts WHERE user_id = %s",
-            (session["user_id"],),
-        )
-        posts = cur.fetchall()
-        for post in posts:
-            deposit_amount = amount * (post[2] / 100)
-            new_total = post[3] + deposit_amount
+    try:
+        amount_str = request.form.get("deposit")
+        if not amount_str or not amount_str.isdigit():
+            flash("Invalid deposit amount. Please enter a positive integer.", "error")
+            return redirect("/index")
+
+        amount = int(amount_str)
+        if amount <= 0:
+            flash("Deposit amount must be greater than zero.", "error")
+            return redirect("/index")
+
+        conn, cur = create_conncur()
+        with conn:
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
+            new_balance = balance + amount
             cur.execute(
-                "UPDATE posts SET total_saved = %s WHERE id = %s", (new_total, post[0])
+                "UPDATE users SET balance = %s WHERE id = %s",
+                (
+                    new_balance,
+                    session["user_id"],
+                ),
             )
-
-    log_history(conn, session["user_id"], "All", amount, "Salloc", "General Deposit")
-    return redirect("/index")
-
-
-@server.route("/specific_deposit", methods=["POST"])
-@login_required
-def specific_deposit():
-    post = request.form.get("post")
-    amount = int(request.form.get("deposit"))
-    conn, cur = create_conncur()
-    with conn:
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        new_balance = balance + amount
-        cur.execute(
-            "UPDATE users SET balance = %s WHERE id = %s",
-            (
-                new_balance,
-                session["user_id"],
-            ),
-        )
-        cur.execute(
-            "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-            (session["user_id"], post),
-        )
-        savings = cur.fetchone()[0]
-        new_savings = savings + amount
-        cur.execute(
-            "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
-            (new_savings, session["user_id"], post),
-        )
-    log_history(conn, session["user_id"], post, amount, "Deposit", "Specific Deposit")
-    return redirect("/index")
-
-
-@server.route("/undefined", methods=["POST"])
-@login_required
-def undefined():
-    destination = request.form.get("post")
-    amount = Decimal(request.form.get("remainder"))
-    if amount <= 0:
-        return redirect("/index")
-
-    conn, cur = create_conncur()
-    with conn:
-        if destination == "general":
             cur.execute(
                 "SELECT id, name, allocation_percentage, total_saved FROM posts WHERE user_id = %s",
                 (session["user_id"],),
@@ -658,129 +612,326 @@ def undefined():
                 deposit_amount = amount * (post[2] / 100)
                 new_total = post[3] + deposit_amount
                 cur.execute(
-                    "UPDATE posts SET total_saved = %s WHERE id = %s",
-                    (new_total, post[0]),
+                    "UPDATE posts SET total_saved = %s WHERE id = %s", (new_total, post[0])
                 )
+
+            log_history(conn, session["user_id"], "All", amount, "Salloc", "General Deposit")
+            flash("Deposit successful!", "success")
+            return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while processing the deposit: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
+
+@server.route("/specific_deposit", methods=["POST"])
+@login_required
+def specific_deposit():
+    try:
+        post = request.form.get("post")
+        amount_str = request.form.get("deposit")
+
+        if not post:
+            flash("Please select a post for the deposit.", "error")
             return redirect("/index")
 
-        cur.execute(
-            "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-            (session["user_id"], destination),
-        )
-        savings = cur.fetchone()[0]
-        new_savings = savings + amount
-        cur.execute(
-            "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
-            (new_savings, session["user_id"], destination),
-        )
+        if not amount_str or not amount_str.isdigit():
+            flash("Invalid deposit amount. Please enter a positive integer.", "error")
+            return redirect("/index")
 
-    return redirect("/index")
+        amount = int(amount_str)
+        if amount <= 0:
+            flash("Deposit amount must be greater than zero.", "error")
+            return redirect("/index")
+
+        conn, cur = create_conncur()
+        with conn:
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
+            new_balance = balance + amount
+            cur.execute(
+                "UPDATE users SET balance = %s WHERE id = %s",
+                (
+                    new_balance,
+                    session["user_id"],
+                ),
+            )
+            cur.execute(
+                "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
+                (session["user_id"], post),
+            )
+            savings = cur.fetchone()[0]
+            new_savings = savings + amount
+            cur.execute(
+                "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
+                (new_savings, session["user_id"], post),
+            )
+
+            log_history(conn, session["user_id"], post, amount, "Deposit", "Specific Deposit")
+            flash(f"Deposit to '{post}' successful!", "success")
+            return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while processing the specific deposit: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
+
+
+@server.route("/undefined", methods=["POST"])
+@login_required
+def undefined():
+    try:
+        destination = request.form.get("post")
+        amount_str = request.form.get("remainder")
+        amount = Decimal(amount_str)
+
+        if amount <= 0:
+            flash("No unallocated funds to distribute.", "warning")
+            return redirect("/index")
+
+        conn, cur = create_conncur()
+        with conn:
+            if destination == "general":
+                cur.execute(
+                    "SELECT SUM(allocation_percentage) FROM posts WHERE user_id = %s",
+                    (session["user_id"],),
+                )
+                total_alloc = cur.fetchone()[0]
+
+                if total_alloc != 100:
+                    flash("Total allocation percentage must be 100% to distribute unallocated funds.", "error")
+                    return redirect("/index")
+
+                cur.execute(
+                    "SELECT id, name, allocation_percentage, total_saved FROM posts WHERE user_id = %s",
+                    (session["user_id"],),
+                )
+                posts = cur.fetchall()
+                for post in posts:
+                    deposit_amount = amount * (post[2] / 100)
+                    new_total = post[3] + deposit_amount
+                    cur.execute(
+                        "UPDATE posts SET total_saved = %s WHERE id = %s",
+                        (new_total, post[0]),
+                    )
+            else:
+                cur.execute(
+                    "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
+                    (session["user_id"], destination),
+                )
+                savings = cur.fetchone()[0]
+                new_savings = savings + amount
+                cur.execute(
+                    "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
+                    (new_savings, session["user_id"], destination),
+                )
+
+            flash("Unallocated funds distributed successfully.", "success")
+            return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while distributing unallocated funds: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
 
 
 @server.route("/withdrawal", methods=["POST"])
 @login_required
 def withdrawal():
-    post = request.form.get("post")
-    amount = int(request.form.get("withdrawal"))
-    notes = request.form.get("notes")
-    conn, cur = create_conncur()
-    with conn:
-        # Updates balance minus the amount withdrawn
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        new_balance = balance - amount
-        cur.execute(
-            "UPDATE users SET balance = %s WHERE id = %s",
-            (
-                new_balance,
-                session["user_id"],
-            ),
-        )
-        # Updates savings amount from the post being withdrawn from
-        cur.execute(
-            "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-            (session["user_id"], post),
-        )
-        total = cur.fetchone()[0]
-        new_total = total - amount
-        cur.execute(
-            "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
-            (new_total, session["user_id"], post),
-        )
-    log_history(conn, session["user_id"], post, amount, "Withdrawal", notes)
-    return redirect("/index")
+    try:
+        post = request.form.get("post")
+        amount_str = request.form.get("withdrawal")
+        amount = int(amount_str)
+        notes = sanitize_input(request.form.get("notes"))
+
+        if amount <= 0:
+            flash("Withdrawal amount must be greater than zero.", "error")
+            return redirect("/index")
+
+        conn, cur = create_conncur()
+        with conn:
+            # Updates balance minus the amount withdrawn
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
+
+            if amount > balance:
+                flash("Withdrawal amount exceeds available balance.", "error")
+                return redirect("/index")
+
+            new_balance = balance - amount
+            cur.execute(
+                "UPDATE users SET balance = %s WHERE id = %s",
+                (
+                    new_balance,
+                    session["user_id"],
+                ),
+            )
+
+            # Updates savings amount from the post being withdrawn from
+            cur.execute(
+                "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
+                (session["user_id"], post),
+            )
+            total = cur.fetchone()[0]
+
+            if amount > total:
+                flash(f"Withdrawal amount exceeds total saved in '{post}'.", "error")
+                return redirect("/index")
+
+            new_total = total - amount
+            cur.execute(
+                "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
+                (new_total, session["user_id"], post),
+            )
+
+            log_history(conn, session["user_id"], post, amount, "Withdrawal", notes)
+            flash("Withdrawal successful.", "success")
+            return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while processing the withdrawal: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
 
 
 @server.route("/move", methods=["POST"])
 @login_required
 def move():
-    pfrom = request.form.get("from")
-    pto = request.form.get("to")
-    amount = int(request.form.get("amount"))
-    conn, cur = create_conncur()
-    with conn:
-        cur.execute(
-            "UPDATE posts SET total_saved = total_saved - %s WHERE user_id = %s AND name = %s",
-            (amount, session["user_id"], pfrom),
-        )
-        log_history(conn, session["user_id"], pfrom, amount, "Withdrawal", "Moved From")
-        cur.execute(
-            "UPDATE posts SET total_saved = total_saved + %s WHERE user_id = %s AND name = %s",
-            (amount, session["user_id"], pto),
-        )
-        log_history(conn, session["user_id"], pto, amount, "Deposit", "Moved To")
+    try:
+        pfrom = request.form.get("from")
+        pto = request.form.get("to")
+        amount_str = request.form.get("amount")
+        amount = int(amount_str)
+
+        if pfrom == pto or amount <= 0:
+            flash("Invalid move parameters.", "error")
+            return redirect("/index")
+
+        conn, cur = create_conncur()
+        with conn:
+            # Check if both posts exist for the user
+            cur.execute("SELECT name FROM posts WHERE user_id = %s AND name IN (%s, %s)", (session["user_id"], pfrom, pto))
+            if cur.rowcount != 2:
+                flash("One or both of the posts do not exist.", "error")
+                return redirect("/index")
+
+            # Check if the amount is not more than what's in the source post
+            cur.execute("SELECT total_saved FROM posts WHERE user_id = %s AND name = %s", (session["user_id"], pfrom))
+            total_saved_from = cur.fetchone()[0]
+            if amount > total_saved_from:
+                flash("The amount being moved is more than what's in the source post.", "error")
+                return redirect("/index")
+
+            cur.execute(
+                "UPDATE posts SET total_saved = total_saved - %s WHERE user_id = %s AND name = %s",
+                (amount, session["user_id"], pfrom),
+            )
+            log_history(conn, session["user_id"], pfrom, amount, "Withdrawal", "Moved From")
+            cur.execute(
+                "UPDATE posts SET total_saved = total_saved + %s WHERE user_id = %s AND name = %s",
+                (amount, session["user_id"], pto),
+            )
+            log_history(conn, session["user_id"], pto, amount, "Deposit", "Moved To")
+            conn.commit()
+
         return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while moving funds: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
+
 
 
 @server.route("/transfer", methods=["POST"])
 @login_required
 def transfer():
-    pfrom = request.form.get("from")
-    pto = request.form.get("to")
-    transfer_type = request.form.get("type")
-    conn, cur = create_conncur()
-    with conn:
-        cur.execute(
-            "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-            (session["user_id"], pfrom),
-        )
-        transfer_funds = cur.fetchone()[0]
-        if transfer_type == "specific":
-            cur.execute(
-                "SELECT total_saved FROM posts WHERE user_id = %s AND name = %s",
-                (session["user_id"], pto),
-            )
-            posts = cur.fetchone()[0]
-            new_saved = posts + transfer_funds
-            cur.execute(
-                "DELETE FROM posts WHERE user_id = %s AND name = %s",
-                (session["user_id"], pfrom),
-            )
-            cur.execute(
-                "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
-                (new_saved, session["user_id"], pto),
-            )
+    try:
+        pfrom = request.form.get("from")
+        pto = request.form.get("to")
+        transfer_type = request.form.get("type")
+
+        if pfrom == pto or not transfer_type:
+            flash("Invalid transfer parameters.", "error")
             return redirect("/index")
 
-        else:
-            cur.execute(
-                "DELETE FROM posts WHERE user_id = %s AND name = %s",
-                (session["user_id"], pfrom),
-            )
-            cur.execute(
-                "SELECT id, total_saved, allocation_percentage FROM posts WHERE user_id = %s",
-                (session["user_id"],),
-            )
-            posts = cur.fetchall()
-            for post in posts:
-                transfer = transfer_funds * (post[2] / 100)
-                new_total = post[1] + transfer
-                cur.execute(
-                    "UPDATE posts SET total_saved = %s WHERE id = %s",
-                    (new_total, post[0]),
-                )
+        conn, cur = create_conncur()
+        with conn:
+            # Check if the source post exists
+            cur.execute("SELECT total_saved FROM posts WHERE user_id = %s AND name = %s", (session["user_id"], pfrom))
+            transfer_funds = cur.fetchone()
+            if transfer_funds is None:
+                flash("The source post does not exist.", "error")
+                return redirect("/index")
+            transfer_funds = transfer_funds[0]
 
-        return redirect("/index")
+            if transfer_type == "specific":
+                # Check if the destination post exists
+                cur.execute("SELECT total_saved FROM posts WHERE user_id = %s AND name = %s", (session["user_id"], pto))
+                posts = cur.fetchone()
+                if posts is None:
+                    flash("The destination post does not exist.", "error")
+                    return redirect("/index")
+                new_saved = posts[0] + transfer_funds
+
+                cur.execute(
+                    "DELETE FROM posts WHERE user_id = %s AND name = %s",
+                    (session["user_id"], pfrom),
+                )
+                cur.execute(
+                    "UPDATE posts SET total_saved = %s WHERE user_id = %s AND name = %s",
+                    (new_saved, session["user_id"], pto),
+                )
+            else:
+                cur.execute(
+                    "DELETE FROM posts WHERE user_id = %s AND name = %s",
+                    (session["user_id"], pfrom),
+                )
+                cur.execute(
+                    "SELECT id, total_saved, allocation_percentage FROM posts WHERE user_id = %s",
+                    (session["user_id"],),
+                )
+                posts = cur.fetchall()
+                for post in posts:
+                    transfer = transfer_funds * (post[2] / 100)
+                    new_total = post[1] + transfer
+                    cur.execute(
+                        "UPDATE posts SET total_saved = %s WHERE id = %s",
+                        (new_total, post[0]),
+                    )
+
+            conn.commit()
+            return redirect("/index")
+    except Exception as e:
+        error_message = str(e)
+        flash(f"An error occurred while transferring funds: {error_message}", "error")
+        return redirect(url_for("error_page", error_message=error_message))
+
+
+
+@server.errorhandler(404)
+def page_not_found(error):
+    error_code = 404
+    error_message = "The page you requested could not be found."
+    return render_template("error_page.html", error_code=error_code, error_message=error_message), 404
+
+@server.errorhandler(500)
+def internal_server_error(error):
+    error_code = 500
+    error_message = "An unexpected error occurred on the server."
+    return render_template("error_page.html", error_code=error_code, error_message=error_message), 500
+
+@server.errorhandler(403)
+def forbidden(error):
+    error_code = 403
+    error_message = "You don't have permission to access this resource."
+    return render_template("error_page.html", error_code=error_code, error_message=error_message), 403
+
+@server.errorhandler(503)
+def service_unavailable(error):
+    error_code = 503
+    error_message = "The server is currently unable to handle the request due to temporary overloading or maintenance. Please try again later."
+    return render_template("error_page.html", error_code=error_code, error_message=error_message), 503
 
 
 # Dash part
