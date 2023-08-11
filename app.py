@@ -521,52 +521,58 @@ def custom_setup():
 @server.route("/index")
 @login_required
 def index():
-    conn, cur = create_conncur()
-    with conn:
-        cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
-        balance = cur.fetchone()[0]
-        cur.execute(
-            "SELECT name, allocation_percentage, total_saved, goal FROM posts WHERE user_id = %s",
-            (session["user_id"],),
-        )
-        posts = cur.fetchall()
-        alerts = []
-        # Calulates remaining % to allocate
-        total_alloc = sum(post[1] for post in posts)
-        remain_alloc = int(max(0, 100 - total_alloc))
-        total_saved = sum(post[2] for post in posts)
-        total_goal = sum(post[3] for post in posts)
-        remainder = balance - total_saved
-        for post in posts:
-            if post[2] >= post[3]:
-                alerts.append(
-                    f"Congratulations! You've reached your goal for Post '{post[0]}'. Don't forget to either increase the goal, or reallocate its percentage."
-                )
+    try:
+        conn, cur = create_conncur()
+        with conn:
+            cur.execute("SELECT balance FROM users WHERE id = %s", (session["user_id"],))
+            balance = cur.fetchone()[0]
 
-        if remainder > 0:
-            alerts.append(
-                f"You have funds not yet allocated to the sum of {remainder}. Use the 'Allocate now' button"
+            # Fetch posts and calculate totals
+            cur.execute(
+                "SELECT name, allocation_percentage, total_saved, goal FROM posts WHERE user_id = %s",
+                (session["user_id"],),
             )
-        if remain_alloc > 0:
-            alerts.append(f"You have {remain_alloc}% left to allocate.")
-        cur.execute(
-            "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC LIMIT 7",
-            (session["user_id"],),
-        )
-        history = cur.fetchall()
+            posts = cur.fetchall()
+            total_alloc = sum(post[1] for post in posts)
+            total_saved = sum(post[2] for post in posts)
+            total_goal = sum(post[3] for post in posts)
+            remain_alloc = int(max(0, 100 - total_alloc))
+            remainder = balance - total_saved
 
-    return render_template(
-        "index.html",
-        posts=posts,
-        total_alloc=total_alloc,
-        total_saved=total_saved,
-        total_goal=total_goal,
-        remain_alloc=remain_alloc,
-        balance=balance,
-        remainder=remainder,
-        history=history,
-        alerts=alerts,
-    )
+            # Generate alerts
+            alerts = [f"Congratulations! You've reached your goal for Post '{post[0]}'." for post in posts if post[2] >= post[3]]
+            if remainder > 0:
+                alerts.append(f"You have funds not yet allocated to the sum of {remainder}. Use the 'Allocate now' button")
+            if remain_alloc > 0:
+                alerts.append(f"You have {remain_alloc}% left to allocate.")
+
+            # Fetch history
+            cur.execute(
+                "SELECT TO_CHAR(date, 'DD/MM/YY'), post, type, amount, notes FROM history WHERE user_id = %s ORDER BY date DESC, time DESC LIMIT 7",
+                (session["user_id"],),
+            )
+            history = cur.fetchall()
+
+        return render_template(
+            "index.html",
+            posts=posts,
+            total_alloc=total_alloc,
+            total_saved=total_saved,
+            total_goal=total_goal,
+            remain_alloc=remain_alloc,
+            balance=balance,
+            remainder=remainder,
+            history=history,
+            alerts=alerts,
+        )
+    except Exception as e:
+        flash(f"An error occurred while loading the dashboard: {str(e)}", "error")
+        return redirect("/error_page")
+    
+
+@server.route("/error_page")
+def error_page():
+    return render_template("error_page.html")
 
 
 @server.route("/deposit", methods=["POST"])
