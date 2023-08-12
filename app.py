@@ -29,29 +29,40 @@ from functools import wraps
 import bcrypt
 import string
 import re
+import configparser
 
+config = configparser.ConfigParser()
+config.read('/config.ini')
 
 def create_conncur():
+    config = configparser.ConfigParser()
+    config.read('/path/to/your/config.ini')
+
+    dbname = config['database']['dbname']
+    user = config['database']['user']
+    password = config['database']['password']
+    host = config['database']['host']
+
     conn = psycopg2.connect(
-        dbname="salloc",
-        user="postgres",
-        password="Sarapus1",
-        host="localhost",  # or the address of your PostgreSQL server
+        dbname=dbname,
+        user=user,
+        password=password,
+        host=host,
     )
     return conn, conn.cursor()
 
 
 server = Flask(__name__)
-server.secret_key = "sarapus1"
+server.config["SECRET_KEY"] = config['secret']['key']
 server.jinja_env.filters['currency'] = format_currency
 
 # Configure Flask-Mail with Gmail settings
-server.config["MAIL_SERVER"] = "smtp.sendgrid.net"
-server.config["MAIL_PORT"] = 587
-server.config["MAIL_USERNAME"] = "apikey"
-server.config[
-    "MAIL_PASSWORD"
-] = "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"
+  # Make sure to provide the correct path
+
+server.config["MAIL_SERVER"] = config['mail']['server']
+server.config["MAIL_PORT"] = int(config['mail']['port'])
+server.config["MAIL_USERNAME"] = config['mail']['username']
+server.config["MAIL_PASSWORD"] = config['mail']['password']
 server.config["MAIL_USE_TLS"] = True
 server.config["MAIL_USE_SSL"] = False
 
