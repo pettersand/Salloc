@@ -121,6 +121,11 @@ h2 {
   width: 100%;
 }
 
+a {
+    text-decoration: none;
+    color: white;
+}
+
 span {
   display: flex;
   flex-direction: column;
@@ -341,12 +346,14 @@ span {
   flex: 1;
   display: flex;
   flex-flow: row wrap;
-  align-items: stretch;
+  align-content: stretch;
+  align-items: flex-start;
 }
 
 .table-half {
   flex: 0.7;
   display: flex;
+  min-width: 460px;
 }
 
 .container-group {
@@ -407,7 +414,7 @@ span {
 }
 
 .container h4 {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .container,
@@ -577,6 +584,10 @@ span {
   padding-inline: 8px;
   border-right: 1px solid black;
 }
+
+.flex-salloc[contenteditable="true"] {
+    min-height: 20px; /* Adjust as needed */
+  }
 
 .flex-salloc-h {
   flex: 0.7;
@@ -904,8 +915,37 @@ button {
   border: 1px solid white;
 }
 
-@media screen and (max-width: 700px) {
-  body {
-    font-size: 12px;
-  }
+@media screen and (max-width: 810px) {
+    body {
+        font-size: 12px;
+    }
+
+    .container-half {
+        flex-direction: column;
+    }
+
+    .table-half {
+        min-width: 380px;
+    }
+}
+
+@media (max-width: 1360px) {
+    .container-half {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 960px) {
+    .container-main {
+        flex-direction: column;
+    }
+
+    .container-half {
+        flex-direction: row;
+    }
+
+    h4 {
+        font-size: 16px;
+    }
+
 }

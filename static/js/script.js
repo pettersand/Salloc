@@ -500,42 +500,48 @@ if (document.getElementById("profileSettingsButton")) {
 //// UPDATING USER EDITS FROM TABLE ////
 $(document).ready(function () {
   console.log("Document ready");
-  const initialRemainingAllocation = parseInt($("#hiddenRemainAlloc").val()); // Parse as integer
+  const initialRemainingAllocation = parseInt($("#hiddenRemainAlloc").val());
   console.log("Initial Remaining Allocation:", initialRemainingAllocation);
-  let totalAllocation = initialRemainingAllocation; // Initialize with the remaining allocation
+  let totalAllocation = initialRemainingAllocation;
 
   function updateRemainingAllocation() {
     console.log("Updating remaining allocation");
     let currentTotalAllocation = 0;
     $(".flex-salloc span").each(function () {
-      const salloc = parseInt($(this).text().replace("%", ""));
-      console.log("Parsed salloc:", salloc); // Log the parsed salloc value
-      if (!isNaN(salloc)) {
-        currentTotalAllocation += salloc;
+      let salloc = $(this).text().trim();
+      if (salloc === "" || isNaN(salloc)) {
+        salloc = "0";
+      }
+      const parsedSalloc = parseInt(salloc);
+      if (parsedSalloc >= 0 && parsedSalloc <= 100) {
+        currentTotalAllocation += parsedSalloc;
       }
     });
-    console.log("Current Total Allocation:", currentTotalAllocation);
-    totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
+    console.log("Final Total Allocation:", currentTotalAllocation);
+    totalAllocation = 100 - currentTotalAllocation;
     $("#remainingAllocationCounter").text(totalAllocation);
     console.log("Total Allocation:", totalAllocation);
 
     if (totalAllocation < 0) {
       $("#updateButton").prop("disabled", true);
-      $("#updateButton").text("Exceeds 100%"); // Change the text of the button
+      $("#updateButton").text("Exceeds 100%");
     } else {
       $("#updateButton").prop("disabled", false);
-      $("#updateButton").text("Update Changes"); // Reset the text of the button
+      $("#updateButton").text("Update Changes");
     }
   }
 
-  $(".flex-row [contenteditable='true']").each(function () {
-    console.log("Adding listener to:", this); // Log the element
-  });
-
   $(".div-table").on("input", "[contenteditable='true']", function () {
     console.log("Input event detected on contenteditable element");
-    $(this).addClass("edited"); // Mark the cell as edited
-    updateRemainingAllocation(); // Update the total allocation
+    let content = $(this).find("span").text().trim();
+    let value = parseInt(content);
+    if (isNaN(value) || value < 0) {
+      value = 0;
+      $(this).find("span").text(value); // Update the display to 0
+    }
+    console.log("Contenteditable value:", value); // Log the value
+    $(this).addClass("edited");
+    updateRemainingAllocation(value);
   });
 
   $("#updateButton").click(function (event) {
