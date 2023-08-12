@@ -513,18 +513,14 @@ $(document).ready(function () {
         salloc = "0"; // Default to 0 if the field is empty or non-numeric
       }
       const parsedSalloc = parseInt(salloc);
-      console.log("Parsed salloc:", parsedSalloc); // Log the parsed salloc value
-      if (parsedSalloc >= 0 && parsedSalloc <= 100) {
-        currentTotalAllocation += parsedSalloc;
-      }
-      console.log("Current Total Allocation (in loop):", currentTotalAllocation); // Log the total allocation after each iteration
+      currentTotalAllocation += parsedSalloc;
     });
     console.log("Final Total Allocation:", currentTotalAllocation);
     totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
     $("#remainingAllocationCounter").text(totalAllocation);
     console.log("Total Allocation:", totalAllocation);
   
-    if (totalAllocation < 0) {
+    if (totalAllocation < 0 || totalAllocation > 100) {
       $("#updateButton").prop("disabled", true);
       $("#updateButton").text("Exceeds 100%"); // Change the text of the button
     } else {
