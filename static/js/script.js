@@ -506,42 +506,40 @@ $(document).ready(function () {
 
   function updateRemainingAllocation() {
     console.log("Updating remaining allocation");
-    let currentTotalAllocation = 0;
-    $(".flex-salloc span").each(function () {
-      let salloc = $(this).text().trim();
+    let currentTotalAllocation = 0; // Reset the total allocation
+    $(".flex-salloc-input").each(function () {
+      let salloc = $(this).val().trim(); // Get the value from the input element
       if (salloc === "" || isNaN(salloc)) {
-        salloc = "0";
+        salloc = "0"; // Default to 0 if the field is empty or non-numeric
       }
       const parsedSalloc = parseInt(salloc);
+      console.log("Parsed salloc:", parsedSalloc); // Log the parsed salloc value
       if (parsedSalloc >= 0 && parsedSalloc <= 100) {
         currentTotalAllocation += parsedSalloc;
       }
+      console.log("Current Total Allocation (in loop):", currentTotalAllocation); // Log the total allocation after each iteration
     });
     console.log("Final Total Allocation:", currentTotalAllocation);
-    totalAllocation = 100 - currentTotalAllocation;
+    totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
     $("#remainingAllocationCounter").text(totalAllocation);
     console.log("Total Allocation:", totalAllocation);
-
+  
     if (totalAllocation < 0) {
       $("#updateButton").prop("disabled", true);
-      $("#updateButton").text("Exceeds 100%");
+      $("#updateButton").text("Exceeds 100%"); // Change the text of the button
     } else {
       $("#updateButton").prop("disabled", false);
-      $("#updateButton").text("Update Changes");
+      $("#updateButton").text("Update Changes"); // Reset the text of the button
     }
   }
 
-  $(".div-table").on("input", "[contenteditable='true']", function () {
-    console.log("Input event detected on contenteditable element");
-    let content = $(this).find("span").text().trim();
-    let value = parseInt(content);
-    if (isNaN(value) || value < 0) {
-        value = 0; // Set the value to 0 without changing the display
-    }
+  $(".div-table").on("input", ".flex-salloc-input", function () {
+    let value = $(this).val().trim();
+  
     $(this).addClass("edited"); // Mark the cell as edited
-    updateRemainingAllocation(value); // Update the total allocation
+    updateRemainingAllocation(); // Update the total allocation
   });
-
+  
 
 
   $("#updateButton").click(function (event) {
@@ -554,9 +552,8 @@ $(document).ready(function () {
       const goal = parseInt(
         row.find(".flex-goal span").text().replace(/,/g, "").replace(" kr", "")
       );
-      const salloc = parseInt(
-        row.find(".flex-salloc span").text().replace("%", "")
-      );
+      // Retrieve the value from the input field instead of the span
+      const salloc = parseInt(row.find(".flex-salloc-input").val());
       // Add other fields as needed
       if (row.find(".edited").length > 0) {
         // Check if anything in the row was edited
@@ -713,53 +710,33 @@ function showError(message) {
   }
 }
 
-
+//// TABLE SORTER ////
 $(document).ready(function () {
   function sortRows(columnIndex, ascending) {
     const rows = $(".flex-row").not(":first").get(); // Exclude the header row
     rows.sort(function (a, b) {
-      const aValueElement = $(a).find("div").eq(columnIndex);
-      const bValueElement = $(b).find("div").eq(columnIndex);
-      let aValue = aValueElement.text().trim();
-      let bValue = bValueElement.text().trim();
-
-      // Check if sorting by post name column
-      if (columnIndex === 0) {
-        // Assuming post name is the first column
-        return ascending
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
+      let aValue, bValue;
+    
+      if (columnIndex === 0) { // Post Name
+        aValue = $(a).find(".flex-post").text().trim();
+        bValue = $(b).find(".flex-post").text().trim();
+        return ascending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      } else if (columnIndex === 1 || columnIndex === 2) { // Saved or Goal
+        aValue = parseFloat($(a).find(columnIndex === 1 ? ".flex-saved" : ".flex-goal span").text().replace(/[^\d.]/g, ""));
+        bValue = parseFloat($(b).find(columnIndex === 1 ? ".flex-saved" : ".flex-goal span").text().replace(/[^\d.]/g, ""));
+      } else if (columnIndex === 3) { // Progress
+        const progressA = $(a).find("progress");
+        const progressB = $(b).find("progress");
+        aValue = (parseFloat(progressA.attr("value")) / parseFloat(progressA.attr("max"))) * 100;
+        bValue = (parseFloat(progressB.attr("value")) / parseFloat(progressB.attr("max"))) * 100;
+      } else if (columnIndex === 4) { // Salloc
+        aValue = parseFloat($(a).find(".flex-salloc-input").val());
+        bValue = parseFloat($(b).find(".flex-salloc-input").val());
       }
-
-      // Check if sorting by progress column
-      if (columnIndex === 3) {
-        // Assuming progress is the fourth column
-        const progressA = aValueElement.find("progress");
-        const progressB = bValueElement.find("progress");
-        aValue =
-          (parseFloat(progressA.attr("value")) /
-            parseFloat(progressA.attr("max"))) *
-          100;
-        bValue =
-          (parseFloat(progressB.attr("value")) /
-            parseFloat(progressB.attr("max"))) *
-          100;
-      } else {
-        // Try to convert to numbers for other columns
-        const numA = parseFloat(
-          aValue.replace(/,/g, "").replace(" kr", "").replace("%", "")
-        );
-        const numB = parseFloat(
-          bValue.replace(/,/g, "").replace(" kr", "").replace("%", "")
-        );
-        if (!isNaN(numA) && !isNaN(numB)) {
-          aValue = numA;
-          bValue = numB;
-        }
-      }
-
+    
       return ascending ? aValue - bValue : bValue - aValue;
     });
+
     $(".div-table .flex-row").not(":first").remove(); // Remove existing rows
     $(".div-table").append(rows); // Re-append the sorted rows
   }

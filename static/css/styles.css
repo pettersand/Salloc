@@ -525,7 +525,7 @@ span {
 .flex-goal {
   flex: 0.8;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-inline: 8px;
   border-right: 1px solid black;
@@ -543,7 +543,7 @@ span {
 .flex-saved {
   flex: 0.8;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-inline: 8px;
   border-right: 1px solid black;
@@ -561,7 +561,7 @@ span {
 .flex-progress {
   flex: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-inline: 8px;
   border-right: 1px solid black;
@@ -579,7 +579,7 @@ span {
 .flex-salloc {
   flex: 0.7;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-inline: 8px;
   border-right: 1px solid black;
@@ -587,6 +587,18 @@ span {
 
 .flex-salloc[contenteditable="true"] {
     min-height: 20px; /* Adjust as needed */
+}
+
+.placeholder-zero {
+    color: grey;
+}
+
+.flex-salloc-input {
+    flex: 0.7;
+    border: none;
+    background: none;
+    width: 100%;
+    font-size: inherit;
   }
 
 .flex-salloc-h {
@@ -596,10 +608,6 @@ span {
   padding-inline: 8px;
   justify-content: space-around;
   border-right: 1px solid black;
-}
-
-.flex-row input[type="number"] {
-  max-width: 70px;
 }
 
 .sort-arrow {
@@ -898,6 +906,12 @@ input[type="button"] {
   padding: 5px 15px;
   background: var(--dark1);
   border: 1px solid white;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {

@@ -178,10 +178,8 @@ Index
                     <div class="flex-progress">
                         <progress value="{{ post[2] }}" max="{{ post[3] }}"></progress>
                     </div>
-                    <div class="flex-salloc" contenteditable="true" data-field="salloc">
-                        <span>{{ post[1]|int }}</span>
-                    </div>
-                    <div>%</div>
+                    <input type="number" class="flex-salloc-input" value="{{ post[1]|int }}" min="0" max="100" placeholder="0">%
+                    
                 </div>
                 {% endfor %}   
             </div>
