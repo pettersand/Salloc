@@ -536,13 +536,13 @@ $(document).ready(function () {
     let content = $(this).find("span").text().trim();
     let value = parseInt(content);
     if (isNaN(value) || value < 0) {
-      value = 0;
-      $(this).find("span").text(value); // Update the display to 0
+        value = 0; // Set the value to 0 without changing the display
     }
-    console.log("Contenteditable value:", value); // Log the value
-    $(this).addClass("edited");
-    updateRemainingAllocation(value);
+    $(this).addClass("edited"); // Mark the cell as edited
+    updateRemainingAllocation(value); // Update the total allocation
   });
+
+
 
   $("#updateButton").click(function (event) {
     console.log("Update button clicked");
