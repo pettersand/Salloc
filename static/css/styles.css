@@ -315,6 +315,7 @@ button, .button, input[type="button"], input[type="submit"] {
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    font-size: 0.8em;
 }
 
 /* Style the links inside the dropdown */
@@ -978,6 +979,25 @@ button {
   background: var(--dark1);
   border: 1px solid white;
 }
+
+/* Targeting all buttons and submit inputs */
+button, input[type="button"], input[type="submit"] {
+    transition: all 0.3s ease; /* Smooth transition for all effects */
+    /* Add other default styles here, like background-color, color, etc. */
+}
+  
+  /* Hover effect: changing background color and enlarging text */
+button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+    background-color: #3e8e41; /* Change to your preferred color */
+    color: #ffffff; /* Change to your preferred color */
+    font-size: 105%; /* Enlarges the text by 5% */
+}
+  
+  /* Active (click) effect: changing background color */
+button:active, input[type="button"]:active, input[type="submit"]:active {
+    background-color: #2d6a31; /* Slightly darker shade */
+}
+  
 
 @media screen and (max-width: 810px) {
     body {
