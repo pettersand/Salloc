@@ -247,7 +247,15 @@ addButtonClickHandler(
   "warningModal",
   "Warning: Resetting your savings will delete all your currently allocated saved funds. Meaning you will have to reallocate again with the commit button.",
   "resetSavingsForm",
-  "ignoreResetAccountWarning"
+  "ignoreResetSavingsWarning"
+);
+
+addButtonClickHandler(
+  "setSavingsButton",
+  "warningModal",
+  "Warning: Setting your total savings will override your current balance. If there is a significant difference this can adversely affect your data.",
+  "setSavingsForm",
+  "ignoreSetSavingsWarning"
 );
 
 if (document.getElementById("deleteConfirmation")) {

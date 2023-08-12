@@ -360,7 +360,7 @@ button, .button, input[type="button"], input[type="submit"] {
   display: flex;
   flex-flow: row wrap;
   align-content: stretch;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .table-half {
@@ -399,6 +399,7 @@ button, .button, input[type="button"], input[type="submit"] {
   flex: 1;
   margin: 15px;
   padding: 15px;
+  align-content: space-around;
 }
 
 .main,
@@ -446,6 +447,10 @@ button, .button, input[type="button"], input[type="submit"] {
   display: flex;
   justify-content: center;
 }
+
+.container-header h4 {
+    font-size: 1.5em;
+  }
 
 .items-index {
   display: flex;
@@ -507,6 +512,7 @@ button, .button, input[type="button"], input[type="submit"] {
 .div-table {
   display: flex;
   flex-direction: column;
+  width: 80%;
 }
 
 .flex-row {

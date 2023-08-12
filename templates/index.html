@@ -246,11 +246,11 @@ Index
     </div>
     <div class="side-container">
         <div class="item">
-            <form action="/set_savings" method="post">
+            <form id="setSavingsForm" action="/set_savings" method="post">
                 <label for="savings">Set Total Savings:</label>
                 <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
                 <div class="info-container">
-                    <input class="info-button" id="setSavings" type="submit" value="Submit">
+                    <input class="info-button" id="setSavingsButton" type="submit" value="Submit">
                     <span class="info-icon" onclick="showInfo(event);">
                         <i class="fa-solid fa-info-circle"></i>
                     <span>
