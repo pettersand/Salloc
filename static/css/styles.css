@@ -133,6 +133,10 @@ span {
   justify-content: center;
 }
 
+button, .button, input[type="button"], input[type="submit"] {
+    font-family: "Tektur", cursive;
+  }
+
 /******** LANDING PAGE *********/
 
 .landing-background {
@@ -220,7 +224,7 @@ span {
   align-items: center;
   border-bottom: 1px solid black;
   background: var(--dark1);
-  color: var(--light5);
+  color: var(--light3);
 }
 
 .main {
@@ -257,6 +261,7 @@ span {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
   padding: 10px;
   gap: 15px;
   font-size: 16px;
@@ -268,11 +273,18 @@ span {
 
 .nav2 {
   font-size: 2.1em;
+  color: white;
 }
+
+
 
 .nav3 {
   font-size: 1em;
   margin-right: 10px;
+}
+
+#helpNav {
+    font-size: inherit;
 }
 
 /* Style the dropdown container */
@@ -603,10 +615,6 @@ input[type="number"].flex-salloc-input {
     width: 50px;
 }
 
-.salloc-percent {
-
-}
-
 .flex-salloc-h {
   flex: 0.7;
   display: flex;
@@ -730,6 +738,42 @@ input[type="number"].flex-salloc-input {
   width: 40%;
   height: auto;
 }
+
+#privacyModal .modal-content {
+    margin-top: 0;
+}
+
+#privacyModal p, ul, h2 {
+    margin-bottom: 15px;
+}
+
+#privacyModal h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#setupGuideModal .modal-content {
+    margin-top: 0;
+}
+
+#setupGuideModal p, ul, h2 {
+    margin-bottom: 15px;
+}
+
+#setupGuideModal h3, h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#setupGuideModal .modal-content ul, ol {
+    padding-left: 20px; /* Adjust as needed */
+}
+  
+#setupGuideModal .modal-content li {
+    margin: 0; /* Remove any default margin */
+    padding: 5px 0; /* Add padding as needed */
+}
+
 
 .settings-content {
   background-color: #fefefe;

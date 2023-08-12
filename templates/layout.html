@@ -19,10 +19,19 @@
             <a href="{{ url_for('index') }}"><span>Home</span></a>
             <span>History</span>
             <span>Dashboard</span>
-            <span>Help</span>
+            <div class="dropdown">
+                <button id="helpNav" class="dropbtn">Help</button>
+                <div class="dropdown-content">
+                    <a href="#" class="contactLink">Contact</a>
+                  <a href="#accessibility">Accessibility</a>
+                  <a href="#watch-demo">Watch Demo</a>
+                  <a href="#setup-guide" id="setupGuideLink">Read Setup Guide</a>
+                  <a href="#readme">Readme</a>
+                </div>
+              </div>
         </div>
         <div class="nav2"> 
-            <span>SALLOC</span>
+            <span id="sallocName">SALLOC</span>
         </div>
         <div class="nav3">
             <span>Language</span>
@@ -160,6 +169,82 @@
                 </form>
             </div>
         </div>
+
+        <div id="privacyModal" class="modal">
+            <div id="privacyContainer" class="modal-content">
+                <h2>Privacy Policy<span class="close">&times;<span></h2>
+                    <p>Last updated: 12/8/2023</p>
+                    <p>Salloc operates www.pettersa.com website and the web application Salloc (the "Service").</p>
+                    <p>This page informs you of our policies regarding the collection, use, 
+                        and disclosure of personal information when you use our Service.</p>
+                    <h3>Information Collection and Use</h3>
+                    <p>While using our Service, we may ask you to provide us with certain personally identifiable 
+                        information that can be used to contact or identify you. 
+                        Personally identifiable information may include, but is not limited to:</p>
+                        <ul>
+                            <li>Username</li>
+                            <li>Password (hashed and secured)</li>
+                            <li>Cookie preferences</li>
+                            <li>Account data</li>
+                            <li>History of transactions</li>
+                        </ul>
+                    <p>We use this information solely to provide and improve our Service. 
+                        We do not share your personal information with third parties, 
+                        nor do we use it for advertising or other commercial purposes.</p>
+                    <h3>Log Data</h3>
+                    <p>We may also in the future collect information that your browser sends whenever you visit our Service ("Log Data"). 
+                        This Log Data may include information such as your computer's Internet Protocol ("IP") address, 
+                        browser type, browser version, the pages of our Service that you visit, 
+                        the time and date of your visit, the time spent on those pages, and other statistics.
+                        This would solely be used for tracking user experiences/habits in order to improve our service.</p>
+                    <h3>Cookies</h3>
+                    <p>Cookies are files with a small amount of data, which may include an anonymous unique identifier. 
+                        Cookies are sent to your browser from a web site and stored on your computer's hard drive.</p>
+                    <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. 
+                        However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>
+                    <h3>Security</h3>
+                    <p>The security of your Personal Information is important to us, but remember that no method of 
+                        transmission over the Internet, or method of electronic storage, is 100% secure. 
+                        While we strive to use commercially acceptable means to protect your Personal Information, 
+                        we cannot guarantee its absolute security.</p>
+                    <h3>Changes to This Privacy Policy</h3>
+                    <p>We may update our Privacy Policy from time to time. 
+                        We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+                    <p>You are advised to review this Privacy Policy periodically for any changes. 
+                        Changes to this Privacy Policy are effective when they are posted on this page.</p>
+                    <h3>Contact us</h3>
+                    <p>If you have any questions about this Privacy Policy, please contact us.</p>
+                    <p>petter.sand@gmail.com</p>
+                    <p>Alternatively use the contact form and we will get back to you</p>
+            </div>
+        </div>
+        <div id="setupGuideModal" class="modal">
+            <div class="modal-content">
+              <h2>Setup Guide<span class="close">&times;</span></h2>
+              <h3>Setup Process:</h3>
+              <ol>
+                <li>Use the Setup/Controls container to set your total savings/balance amount.</li>
+                <li>Add or generate posts using the "Add Posts" or "Generate Template" buttons.</li>
+                <li>Click "Commit Changes" to finalize the setup.</li>
+              </ol>
+              <h3>Main Functions:</h3>
+              <h4>Managing Deposits, Withdrawals, and Funds:</h4>
+              <ul>
+                <li>Deposits: Enter the same amount in the app as your real-life savings deposit.</li>
+                <li>Withdrawals: Select the post for withdrawals made from savings.</li>
+                <li>Manage Funds: Move funds between posts.</li>
+                <li>Transfers: Reallocate and delete posts.</li>
+              </ul>
+              <h4>Overview Edit Table:</h4>
+              <p>Edit the % allocation, post name, and goals by clicking on the editable fields.</p>
+              <h4>Account Buttons:</h4>
+              <ul>
+                <li>Reallocate Funds: Reallocate unassigned funds.</li>
+                <li>Reset Options: Reset the account, posts, or total saved per post.</li>
+                <li>Profile Settings: Delete your account or change cookie preferences.</li>
+              </ul>
+            </div>
+          </div>
         <div id="infoModal" class="info-modal">
             <div class="info-modal-content">
               <span class="info-modal-close">&times;</span>
@@ -172,7 +257,8 @@
             <span>Salloc</span>
             <span>Copyright © Petter Sand Austnes</span>
             <span id="contactLink">Contact/Feedback</span>
-            <span>Privacy Policy</span>
+            <span id="privacyLink">Privacy Policy</span>
+
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

@@ -269,6 +269,17 @@ if (document.getElementById("deleteConfirmation")) {
   };
 }
 
+// Get the privacy link element
+const privacyLink = document.getElementById("privacyLink");
+
+// Add a click event listener to the privacy link
+if (privacyLink) {
+  privacyLink.onclick = function (event) {
+    event.preventDefault(); // Prevent the default link behavior
+    openModal("privacyModal"); // Open the privacy modal
+  };
+}
+
 //// REGISTRATION MODAL ///////
 
 // Get the modal
@@ -599,6 +610,28 @@ $(document).ready(function () {
     $("#contactModal").hide();
   });
 });
+
+$(document).ready(function () {
+  // Open the contact modal when the link in the header or footer is clicked
+  $(".contactLink").click(function (event) {
+    event.preventDefault(); // Prevent the default link behavior
+    $("#contactModal").show();
+  });
+
+  // Close the contact modal when the close button is clicked
+  $("#contactModal .close").click(function () {
+    $("#contactModal").hide();
+  });
+});
+
+
+$(document).ready(function () {
+  $("#setupGuideLink").click(function (event) {
+    event.preventDefault(); // Prevent the default behavior of the anchor tag
+    openModal("setupGuideModal");
+  });
+});
+
 
 //// INFO MODAL POPUP ////
 function showInfo(event) {
