@@ -29,11 +29,11 @@ import string
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/config.ini')
+config.read('config.ini')
 
 def create_conncur():
     config = configparser.ConfigParser()
-    config.read('//config.ini')
+    config.read('config.ini')
 
     dbname = config['database']['dbname']
     user = config['database']['user']
