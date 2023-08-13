@@ -28,6 +28,8 @@ import bcrypt
 import string
 import configparser
 
+
+
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -52,6 +54,7 @@ def create_conncur():
 server = Flask(__name__, static_url_path='/static')
 
 server.config["SECRET_KEY"] = config['secret']['key']
+server.config['APPLICATION_ROOT'] = '/salloc'
 server.jinja_env.filters['currency'] = format_currency
 
 # Configure Flask-Mail with Gmail settings
