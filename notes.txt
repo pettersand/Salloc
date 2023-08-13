@@ -5,25 +5,4 @@ python3 -m venv .venv
 flask --app app run --debug
 
 
-Cookie Preferences Handling: x
-Since this is a common functionality that might be used in various parts of the code, it makes sense to define it first.
-
-Modal Handling: x
-General functions related to opening and closing modals will likely be used in various places, so defining them early on is beneficial.
-
-Warning Popup Functionality: x
-With the modal handling in place, we can then build the specific warning popup functionality.
-
-Button Click Handlers: 
-Once the warning popups and modals are set up, we can handle the click events for various buttons.
-
-Delete Confirmation: 
-This is a specific case that can be handled after the general click handlers.
-
-Table Modal and Custom Setup: 
-Building on the modal handling, we can work on the custom setup form and related functionalities.
-
-Profile Settings Modal: 
-Finally, we can rebuild the profile settings modal functionality.
-
 
