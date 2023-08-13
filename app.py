@@ -976,4 +976,4 @@ app.layout = html.Div("My Dash app")
 
 
 if __name__ == "__main__":
-    server.run()
+    server.run(debug=True)
