@@ -11,8 +11,7 @@ from flask import (
 )
 from flask_mail import Mail, Message
 import dash
-from dash import html, dcc
-from dash import dcc
+from dash import html
 from decimal import Decimal
 import psycopg2
 from helper import (
@@ -25,10 +24,8 @@ from helper import (
     sanitize_input,
     format_currency,
 )
-from functools import wraps
 import bcrypt
 import string
-import re
 import configparser
 
 config = configparser.ConfigParser()
@@ -36,7 +33,7 @@ config.read('/config.ini')
 
 def create_conncur():
     config = configparser.ConfigParser()
-    config.read('/path/to/your/config.ini')
+    config.read('//config.ini')
 
     dbname = config['database']['dbname']
     user = config['database']['user']
@@ -972,8 +969,7 @@ app = dash.Dash(__name__, server=server, routes_pathname_prefix="/dash/")
 
 
 app.layout = html.Div("My Dash app")
-app.debug = True
 
 
 if __name__ == "__main__":
-    server.run(debug=True)
+    server.run()
