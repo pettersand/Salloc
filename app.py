@@ -11,8 +11,7 @@ from flask import (
 )
 from flask_mail import Mail, Message
 import dash
-from dash import html, dcc
-from dash import dcc
+from dash import html
 from decimal import Decimal
 import psycopg2
 from helper import (
@@ -25,10 +24,8 @@ from helper import (
     sanitize_input,
     format_currency,
 )
-from functools import wraps
 import bcrypt
 import string
-import re
 import configparser
 
 config = configparser.ConfigParser()
