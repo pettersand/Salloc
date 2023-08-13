@@ -49,7 +49,8 @@ def create_conncur():
     return conn, conn.cursor()
 
 
-server = Flask(__name__)
+server = Flask(__name__, static_url_path='/static')
+
 server.config["SECRET_KEY"] = config['secret']['key']
 server.jinja_env.filters['currency'] = format_currency
 
