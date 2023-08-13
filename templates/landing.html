@@ -8,7 +8,7 @@
 
     <title>Landing Page {% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="/salloc/static/css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
   </head>
