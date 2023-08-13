@@ -1,2 +1,3 @@
 config.ini
-notes.txt
+notes.txt*.pyc
+__pycache__/
