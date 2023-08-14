@@ -51,7 +51,7 @@ def create_conncur():
     return conn, conn.cursor()
 
 
-server = Flask(__name__, static_url_path="/salloc/static")
+server = Flask(__name__, static_url_path="/static")
 
 server.config["SECRET_KEY"] = config['secret']['key']
 server.config['APPLICATION_ROOT'] = '/salloc'
