@@ -48,7 +48,13 @@ def create_conncur():
     )
     return conn, conn.cursor()
 
-salloc_blueprint = Blueprint("salloc", __name__, url_prefix="/salloc", static_url_path="/salloc/static")
+salloc_blueprint = Blueprint(
+    "salloc",
+    __name__, 
+    url_prefix="/salloc", 
+    static_folder="static",
+    static_url_path="/salloc/static"
+)
 
 
 # Add check if logged in, auto redirect
