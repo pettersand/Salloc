@@ -78,7 +78,7 @@ def login():
             user = cur.fetchone()
             if user and bcrypt.checkpw(password, user[2].encode("utf-8")):
                 session["user_id"] = user[0]
-                next_url = request.args.get('next') or url_for('index')
+                next_url = request.args.get('next') or url_for('salloc.index')
                 resp = make_response(redirect(next_url))
                 if user[4] and "consent" not in request.cookies:
                     resp.set_cookie("consent", "true", secure=True, httponly=True)
@@ -93,7 +93,7 @@ def login():
 def register():
     error = None
     if "user_id" in session:
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
     if request.method == "POST":
         username = sanitize_input(request.form.get("username"))
@@ -128,7 +128,7 @@ def register():
                             "INSERT INTO users (username, password, cookies) VALUES (%s, %s, %s)",
                             (username, hashpass, consent_db),
                         )
-                        resp = make_response(redirect("/index"))
+                        resp = make_response(redirect(url_for("salloc.index")))
 
                         if consent == "yes":
                             resp.set_cookie("consent", "true", max_age=60 * 60 * 24 * 365 * 2, secure=True, httponly=True)
@@ -141,7 +141,7 @@ def register():
 def logout():
     session.clear() # Clear the entire session
     flash("You have been logged out successfully.", "success") # Flash a success message
-    return redirect("/")
+    return redirect(url_for("salloc.landing"))
 
 from flask import flash, redirect, url_for
 
@@ -155,7 +155,7 @@ def contact_me():
 
     if not is_valid_email(email):
         flash("Invalid email address!", "error")
-        return redirect(url_for('index')) # Redirect to the contact page or appropriate page
+        return redirect(url_for('salloc.index')) # Redirect to the contact page or appropriate page
 
     msg = Message(
         "New Contact Form Submission",
@@ -170,7 +170,7 @@ def contact_me():
     except Exception as e:
         flash(f"An error occurred while sending the message: {str(e)}", "error")
 
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/delete_account", methods=["POST"])
@@ -192,7 +192,7 @@ def delete_account():
         conn.autocommit = True # Turn autocommit back on
 
     session.pop("user_id", None)
-    return redirect("/")
+    return redirect(url_for("salloc.landing"))
 
 
 @salloc_blueprint.route("/update_consent", methods=["POST"])
@@ -201,9 +201,9 @@ def update_consent():
     consent = request.form.get("consentUpdate")
     if consent not in ["yes", "no"]:
         flash("Invalid consent value provided.", "error")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
-    resp = make_response(redirect("/index"))
+    resp = make_response(redirect(url_for("salloc.index")))
 
     if consent == "yes":
         consent_db = "t"
@@ -238,10 +238,10 @@ def set_savings():
         savings = float(savings)
         if savings <= 0:
             flash("Savings amount cannot be negative.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except ValueError:
         flash("Invalid savings amount provided.", "error")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
     conn, cur = create_conncur()
     with conn:
@@ -254,7 +254,7 @@ def set_savings():
 
         if savings < total_allocated_savings:
             flash("Total savings must be greater than or equal to the total allocated savings.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         cur.execute(
             "UPDATE users SET balance = %s WHERE id = %s", 
@@ -262,7 +262,7 @@ def set_savings():
         )
         
         flash("Savings amount updated successfully.", "success")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/reset", methods=["POST"])
@@ -281,7 +281,7 @@ def reset():
         except:
             cur.execute("ROLLBACK") # Roll back the transaction in case of an error
             flash("An error occurred while resetting the account. Please try again.", "error")
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/reset_posts", methods=["POST"])
@@ -297,7 +297,7 @@ def reset_posts():
             flash("Posts reset successfully.", "success")
         except:
             flash("An error occurred while resetting the posts. Please try again.", "error")
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/reset_savings", methods=["POST"])
@@ -313,7 +313,7 @@ def reset_savings():
             flash("Savings reset successfully.", "success")
         except:
             flash("An error occurred while resetting the savings. Please try again.", "error")
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/remove_post", methods=["POST"])
@@ -324,7 +324,7 @@ def remove_post():
     # Validate the post parameter
     if not post:
         flash("Invalid post name provided.", "error")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
     conn, cur = create_conncur()
     with conn:
@@ -340,7 +340,7 @@ def remove_post():
             conn.commit()
         except:
             flash("An error occurred while removing the post. Please try again.", "error")
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/update_table", methods=["POST"])
@@ -351,7 +351,7 @@ def update_table():
 
     if not data:
         flash("No data provided for update.", "error")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
     conn, cur = create_conncur()
     with conn:
@@ -393,7 +393,7 @@ def update_table():
             conn.rollback()
             flash(f"An error occurred while updating the table: {str(e)}", "error")
             
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/commit_savings", methods=["POST"])
@@ -406,18 +406,18 @@ def commit_savings():
             balance = cur.fetchone()[0]
             if balance is None or balance < 0:
                 flash("Invalid balance detected. Please check your account.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             cur.execute(
                 "SELECT id, allocation_percentage FROM posts WHERE user_id = %s",
-                (session["user_id"],),
+                (session["user_id"],)
             )
             posts = cur.fetchall()
             for post in posts:
                 allocation_percentage = post[1]
                 if allocation_percentage is None or allocation_percentage < 0 or allocation_percentage > 100:
                     flash("Invalid allocation percentage detected. Please check your posts.", "error")
-                    return redirect("/index")
+                    return redirect(url_for("salloc.index"))
 
                 total_saved = balance * allocation_percentage / 100
                 cur.execute(
@@ -430,7 +430,7 @@ def commit_savings():
         conn.rollback()
         flash(f"An error occurred while committing savings: {str(e)}", "error")
 
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 
@@ -444,13 +444,13 @@ def generate_template():
             balance = cur.fetchone()[0]
             if balance is None or balance <= 0:
                 flash("Please set total savings before generating posts", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             cur.execute("SELECT * FROM posts WHERE user_id = %s", (session["user_id"],))
             check = cur.fetchone()
             if check:
                 flash("Please reset your posts before adding template", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             template_posts = {
                 "Emergency": 25,
@@ -473,7 +473,7 @@ def generate_template():
         conn.rollback()
         flash(f"An error occurred while generating the template: {str(e)}", "error")
 
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/custom_setup", methods=["POST"])
@@ -485,7 +485,7 @@ def custom_setup():
 
     if not post_names or not post_goals or not post_alloc:
         flash("No data provided for custom setup.", "error")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
 
     conn, cur = create_conncur()
     try:
@@ -502,7 +502,7 @@ def custom_setup():
                 total_alloc += int(alloc)
                 if total_alloc > 100:
                     flash("Total % exceeds 100%", "error")
-                    return redirect("/index")
+                    return redirect(url_for("salloc.index"))
 
                 cur.execute(
                     "INSERT INTO posts (user_id, name, allocation_percentage, goal) VALUES (%s, %s, %s, %s)",
@@ -514,7 +514,7 @@ def custom_setup():
         conn.rollback()
         flash(f"An error occurred while setting up custom posts: {str(e)}", "error")
 
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 @salloc_blueprint.route("/index")
@@ -584,12 +584,12 @@ def deposit():
         amount_str = request.form.get("deposit")
         if not amount_str or not amount_str.isdigit():
             flash("Invalid deposit amount. Please enter a positive integer.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         amount = int(amount_str)
         if amount <= 0:
             flash("Deposit amount must be greater than zero.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -617,7 +617,7 @@ def deposit():
 
             log_history(conn, session["user_id"], "All", amount, "Salloc", "General Deposit")
             flash("Deposit successful!", "success")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while processing the deposit: {error_message}", "error")
@@ -633,16 +633,16 @@ def specific_deposit():
 
         if not post:
             flash("Please select a post for the deposit.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         if not amount_str or not amount_str.isdigit():
             flash("Invalid deposit amount. Please enter a positive integer.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         amount = int(amount_str)
         if amount <= 0:
             flash("Deposit amount must be greater than zero.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -669,7 +669,7 @@ def specific_deposit():
 
             log_history(conn, session["user_id"], post, amount, "Deposit", "Specific Deposit")
             flash(f"Deposit to '{post}' successful!", "success")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while processing the specific deposit: {error_message}", "error")
@@ -687,7 +687,7 @@ def undefined():
 
         if amount <= 0:
             flash("No unallocated funds to distribute.", "warning")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -700,7 +700,7 @@ def undefined():
 
                 if total_alloc != 100:
                     flash("Total allocation percentage must be 100% to distribute unallocated funds.", "error")
-                    return redirect("/index")
+                    return redirect(url_for("salloc.index"))
 
                 cur.execute(
                     "SELECT id, name, allocation_percentage, total_saved FROM posts WHERE user_id = %s",
@@ -727,7 +727,7 @@ def undefined():
                 )
 
             flash("Unallocated funds distributed successfully.", "success")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while distributing unallocated funds: {error_message}", "error")
@@ -746,7 +746,7 @@ def withdrawal():
 
         if amount <= 0:
             flash("Withdrawal amount must be greater than zero.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -756,7 +756,7 @@ def withdrawal():
 
             if amount > balance:
                 flash("Withdrawal amount exceeds available balance.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             new_balance = balance - amount
             cur.execute(
@@ -776,7 +776,7 @@ def withdrawal():
 
             if amount > total:
                 flash(f"Withdrawal amount exceeds total saved in '{post}'.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             new_total = total - amount
             cur.execute(
@@ -786,7 +786,7 @@ def withdrawal():
 
             log_history(conn, session["user_id"], post, amount, "Withdrawal", notes)
             flash("Withdrawal successful.", "success")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while processing the withdrawal: {error_message}", "error")
@@ -805,7 +805,7 @@ def move():
 
         if pfrom == pto or amount <= 0:
             flash("Invalid move parameters.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -813,14 +813,14 @@ def move():
             cur.execute("SELECT name FROM posts WHERE user_id = %s AND name IN (%s, %s)", (session["user_id"], pfrom, pto))
             if cur.rowcount != 2:
                 flash("One or both of the posts do not exist.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             # Check if the amount is not more than what's in the source post
             cur.execute("SELECT total_saved FROM posts WHERE user_id = %s AND name = %s", (session["user_id"], pfrom))
             total_saved_from = cur.fetchone()[0]
             if amount > total_saved_from:
                 flash("The amount being moved is more than what's in the source post.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
 
             cur.execute(
                 "UPDATE posts SET total_saved = total_saved - %s WHERE user_id = %s AND name = %s",
@@ -835,7 +835,7 @@ def move():
             conn.commit()
             
         flash("Move successful.", "success")
-        return redirect("/index")
+        return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while moving funds: {error_message}", "error")
@@ -852,7 +852,7 @@ def transfer():
 
         if pfrom == pto or not transfer_type:
             flash("Invalid transfer parameters.", "error")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
 
         conn, cur = create_conncur()
         with conn:
@@ -861,7 +861,7 @@ def transfer():
             transfer_funds = cur.fetchone()
             if transfer_funds is None:
                 flash("The source post does not exist.", "error")
-                return redirect("/index")
+                return redirect(url_for("salloc.index"))
             transfer_funds = transfer_funds[0]
 
             if transfer_type == "specific":
@@ -870,7 +870,7 @@ def transfer():
                 posts = cur.fetchone()
                 if posts is None:
                     flash("The destination post does not exist.", "error")
-                    return redirect("/index")
+                    return redirect(url_for("salloc.index"))
                 new_saved = posts[0] + transfer_funds
 
                 cur.execute(
@@ -901,7 +901,7 @@ def transfer():
 
             conn.commit()
             flash("Transfer successful.", "success")
-            return redirect("/index")
+            return redirect(url_for("salloc.index"))
     except Exception as e:
         error_message = str(e)
         flash(f"An error occurred while transferring funds: {error_message}", "error")
@@ -923,7 +923,7 @@ def set_currency():
         # Store the preference in the session
         session['currency_type'] = currency_type
     flash("Currency set successfully.", "success")
-    return redirect("/index")
+    return redirect(url_for("salloc.index"))
 
 
 server = Flask(__name__)

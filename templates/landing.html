@@ -17,12 +17,12 @@
             <div class="landing">
                 <img src="{{ url_for('salloc.static', filename='images/landing.png') }}" alt="Landing Page Image">
                 {% block form %}
-                <form action="/login" method="post" autocomplete="off">
+                <form action="{{ url_for('salloc.login') }}" method="post" autocomplete="off">
                     <label id="LogOn">Login</label><br>
                     <input type="username" id="username" name="username" placeholder="Enter username" required autocomplete="current-username">
                     <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
                     <input type="submit" value="Login">
-                    <input type="button" onclick="window.location.href='/register'" value="Register">
+                    <input type="button" onclick="window.location.href='/salloc/register'" value="Register">
                 </form><br>
                 {% endblock %}
             </div>

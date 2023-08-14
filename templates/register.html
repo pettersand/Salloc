@@ -5,13 +5,13 @@ Register
 {% endblock %}
 
 {% block form %}
-    <form id="registerForm" action="/register" method="post" autocomplete="off">
+    <form id="registerForm" action="{{ url_for('salloc.register') }}" method="post" autocomplete="off">
         <label id="LogOn">Register</label><br>
         <input type="text" id="username" name="username" placeholder="Enter username" required>
         <input type="password" id="password" name="password" placeholder="Enter password" required>
         <input type="password" id="confirm" name="confirm" placeholder="Confirm password" required>
         <input type="hidden" id="consentField" name="consentField">
         <input type="button" id="registerButton" value="Register">
-        <input type="button" onclick="window.location.href='/login'" value="Back">
+        <input type="button" onclick="window.location.href='/salloc/login'" value="Back">
     </form><br>
 {% endblock %}
