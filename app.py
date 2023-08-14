@@ -11,8 +11,6 @@ from flask import (
     Blueprint,
 )
 from flask_mail import Mail, Message
-import dash
-from dash import html
 from decimal import Decimal
 import psycopg2
 from helper import (
@@ -28,7 +26,6 @@ from helper import (
 import bcrypt
 import string
 import configparser
-
 
 
 config = configparser.ConfigParser()
@@ -51,27 +48,7 @@ def create_conncur():
     )
     return conn, conn.cursor()
 
-salloc_blueprint = Blueprint("salloc", __name__, url_prefix="/salloc", static_url_path="/sallic/static")
-
-server = Flask(__name__)
-server.register_blueprint(salloc_blueprint)
-
-server.config["SECRET_KEY"] = config['secret']['key']
-server.jinja_env.filters['currency'] = format_currency
-
-# Configure Flask-Mail with Gmail settings
-  # Make sure to provide the correct path
-
-server.config["MAIL_SERVER"] = config['mail']['server']
-server.config["MAIL_PORT"] = int(config['mail']['port'])
-server.config["MAIL_USERNAME"] = config['mail']['username']
-server.config["MAIL_PASSWORD"] = config['mail']['password']
-server.config["MAIL_USE_TLS"] = True
-server.config["MAIL_USE_SSL"] = False
-
-mail = Mail(server)
-
-
+salloc_blueprint = Blueprint("salloc", __name__, url_prefix="/salloc", static_url_path="/salloc/static")
 
 
 # Add check if logged in, auto redirect
@@ -943,6 +920,25 @@ def set_currency():
     return redirect("/index")
 
 
+server = Flask(__name__)
+server.register_blueprint(salloc_blueprint)
+
+
+server.config["SECRET_KEY"] = config['secret']['key']
+server.jinja_env.filters['currency'] = format_currency
+
+# Configure Flask-Mail with Gmail settings
+  # Make sure to provide the correct path
+
+server.config["MAIL_SERVER"] = config['mail']['server']
+server.config["MAIL_PORT"] = int(config['mail']['port'])
+server.config["MAIL_USERNAME"] = config['mail']['username']
+server.config["MAIL_PASSWORD"] = config['mail']['password']
+server.config["MAIL_USE_TLS"] = True
+server.config["MAIL_USE_SSL"] = False
+
+mail = Mail(server)
+
 @server.errorhandler(404)
 def page_not_found(error):
     error_code = 404
@@ -966,13 +962,6 @@ def service_unavailable(error):
     error_code = 503
     error_message = "The server is currently unable to handle the request due to temporary overloading or maintenance. Please try again later."
     return render_template("error_page.html", error_code=error_code, error_message=error_message), 503
-
-
-# Dash part
-app = dash.Dash(__name__, server=server, routes_pathname_prefix="/dash/")
-
-
-app.layout = html.Div("My Dash app")
 
 
 if __name__ == "__main__":
