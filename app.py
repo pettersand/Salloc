@@ -8,6 +8,7 @@ from flask import (
     make_response,
     jsonify,
     flash,
+    Blueprint,
 )
 from flask_mail import Mail, Message
 import dash
@@ -50,11 +51,12 @@ def create_conncur():
     )
     return conn, conn.cursor()
 
+salloc_blueprint = Blueprint("salloc", __name__, url_prefix="/salloc", static_url_path="/sallic/static")
 
-server = Flask(__name__, static_url_path="/static")
+server = Flask(__name__)
+server.register_blueprint(salloc_blueprint)
 
 server.config["SECRET_KEY"] = config['secret']['key']
-server.config['APPLICATION_ROOT'] = '/salloc'
 server.jinja_env.filters['currency'] = format_currency
 
 # Configure Flask-Mail with Gmail settings
@@ -73,13 +75,13 @@ mail = Mail(server)
 
 
 # Add check if logged in, auto redirect
-@server.route("/")
+@salloc_blueprint.route("/")
 def landing():
     return render_template("landing.html")
 
 
 # LOGIN
-@server.route("/login", methods=["GET", "POST"])
+@salloc_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     error = None
     if request.method == "POST":
@@ -104,7 +106,7 @@ def login():
     return render_template("landing.html", error=error)
 
 
-@server.route("/register", methods=["GET", "POST"])
+@salloc_blueprint.route("/register", methods=["GET", "POST"])
 def register():
     error = None
     if "user_id" in session:
@@ -152,7 +154,7 @@ def register():
     return render_template("register.html", error=error)
 
 
-@server.route("/logout")
+@salloc_blueprint.route("/logout")
 def logout():
     session.clear() # Clear the entire session
     flash("You have been logged out successfully.", "success") # Flash a success message
@@ -160,7 +162,7 @@ def logout():
 
 from flask import flash, redirect, url_for
 
-@server.route("/contact_me", methods=["POST"])
+@salloc_blueprint.route("/contact_me", methods=["POST"])
 @login_required
 def contact_me():
     name = sanitize_input(request.form["name"])
@@ -188,7 +190,7 @@ def contact_me():
     return redirect("/index")
 
 
-@server.route("/delete_account", methods=["POST"])
+@salloc_blueprint.route("/delete_account", methods=["POST"])
 @login_required
 def delete_account():
     conn, cur = create_conncur()
@@ -210,7 +212,7 @@ def delete_account():
     return redirect("/")
 
 
-@server.route("/update_consent", methods=["POST"])
+@salloc_blueprint.route("/update_consent", methods=["POST"])
 @login_required
 def update_consent():
     consent = request.form.get("consentUpdate")
@@ -243,7 +245,7 @@ def update_consent():
 
 
 # Gets new savings amount from user input, updates db
-@server.route("/set_savings", methods=["POST"])
+@salloc_blueprint.route("/set_savings", methods=["POST"])
 @login_required
 def set_savings():
     savings = request.form.get("savings")
@@ -280,7 +282,7 @@ def set_savings():
         return redirect("/index")
 
 
-@server.route("/reset", methods=["POST"])
+@salloc_blueprint.route("/reset", methods=["POST"])
 @login_required
 def reset():
     user_id = session["user_id"]
@@ -299,7 +301,7 @@ def reset():
     return redirect("/index")
 
 
-@server.route("/reset_posts", methods=["POST"])
+@salloc_blueprint.route("/reset_posts", methods=["POST"])
 @login_required
 def reset_posts():
     conn, cur = create_conncur()
@@ -315,7 +317,7 @@ def reset_posts():
     return redirect("/index")
 
 
-@server.route("/reset_savings", methods=["POST"])
+@salloc_blueprint.route("/reset_savings", methods=["POST"])
 @login_required
 def reset_savings():
     conn, cur = create_conncur()
@@ -331,7 +333,7 @@ def reset_savings():
     return redirect("/index")
 
 
-@server.route("/remove_post", methods=["POST"])
+@salloc_blueprint.route("/remove_post", methods=["POST"])
 @login_required
 def remove_post():
     post = request.form.get("post")
@@ -358,7 +360,7 @@ def remove_post():
     return redirect("/index")
 
 
-@server.route("/update_table", methods=["POST"])
+@salloc_blueprint.route("/update_table", methods=["POST"])
 @login_required
 def update_table():
     data = request.get_json()
@@ -411,7 +413,7 @@ def update_table():
     return redirect("/index")
 
 
-@server.route("/commit_savings", methods=["POST"])
+@salloc_blueprint.route("/commit_savings", methods=["POST"])
 @login_required
 def commit_savings():
     conn, cur = create_conncur()
@@ -449,7 +451,7 @@ def commit_savings():
 
 
 
-@server.route("/generate_template", methods=["POST"])
+@salloc_blueprint.route("/generate_template", methods=["POST"])
 @login_required
 def generate_template():
     conn, cur = create_conncur()
@@ -491,7 +493,7 @@ def generate_template():
     return redirect("/index")
 
 
-@server.route("/custom_setup", methods=["POST"])
+@salloc_blueprint.route("/custom_setup", methods=["POST"])
 @login_required
 def custom_setup():
     post_names = request.form.getlist("postName[]")
@@ -532,7 +534,7 @@ def custom_setup():
     return redirect("/index")
 
 
-@server.route("/index")
+@salloc_blueprint.route("/index")
 @login_required
 def index():
     try:
@@ -586,13 +588,13 @@ def index():
         return redirect(url_for("error_page", error_message=error_message))
     
 
-@server.route("/error_page")
+@salloc_blueprint.route("/error_page")
 def error_page():
     error_message = request.args.get("error_message", "An unexpected error occurred.")
     return render_template("error_page.html", error_message=error_message)
 
 
-@server.route("/deposit", methods=["POST"])
+@salloc_blueprint.route("/deposit", methods=["POST"])
 @login_required
 def deposit():
     try:
@@ -639,7 +641,7 @@ def deposit():
         return redirect(url_for("error_page", error_message=error_message))
 
 
-@server.route("/specific_deposit", methods=["POST"])
+@salloc_blueprint.route("/specific_deposit", methods=["POST"])
 @login_required
 def specific_deposit():
     try:
@@ -692,7 +694,7 @@ def specific_deposit():
 
 
 
-@server.route("/undefined", methods=["POST"])
+@salloc_blueprint.route("/undefined", methods=["POST"])
 @login_required
 def undefined():
     try:
@@ -750,7 +752,7 @@ def undefined():
 
 
 
-@server.route("/withdrawal", methods=["POST"])
+@salloc_blueprint.route("/withdrawal", methods=["POST"])
 @login_required
 def withdrawal():
     try:
@@ -809,7 +811,7 @@ def withdrawal():
 
 
 
-@server.route("/move", methods=["POST"])
+@salloc_blueprint.route("/move", methods=["POST"])
 @login_required
 def move():
     try:
@@ -857,9 +859,7 @@ def move():
         return redirect(url_for("error_page", error_message=error_message))
 
 
-
-
-@server.route("/transfer", methods=["POST"])
+@salloc_blueprint.route("/transfer", methods=["POST"])
 @login_required
 def transfer():
     try:
@@ -925,7 +925,7 @@ def transfer():
         return redirect(url_for("error_page", error_message=error_message))
 
 
-@server.route("/set_currency", methods=["POST"])
+@salloc_blueprint.route("/set_currency", methods=["POST"])
 @login_required
 def set_currency():
     currency_type = request.form.get("currency_type")
