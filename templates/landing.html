@@ -8,14 +8,14 @@
 
     <title>Landing Page {% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('salloc.static', filename='css/styles.css') }}">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
   </head>
   <body class="landing-background">
         <main id="landing">
             <div class="landing">
-                <img src="{{ url_for('static', filename='images/landing.png') }}" alt="Landing Page Image">
+                <img src="{{ url_for('salloc.static', filename='images/landing.png') }}" alt="Landing Page Image">
                 {% block form %}
                 <form action="/login" method="post" autocomplete="off">
                     <label id="LogOn">Login</label><br>
@@ -98,7 +98,7 @@
         </div>
     <footer></footer>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('salloc.static', filename='js/script.js') }}"></script>
     {% if error %}
         <script>
             showError("{{ error }}");
