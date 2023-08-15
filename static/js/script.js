@@ -522,56 +522,50 @@ $(document).ready(function () {
   let totalAllocation = initialRemainingAllocation;
 
   function updateRemainingAllocation() {
-    let currentTotalAllocation = 0; // Reset the total allocation
-    $(".flex-salloc-input").each(function () {
-      let salloc = $(this).val().trim(); // Get the value from the input element
-      if (salloc === "" || isNaN(salloc)) {
-        salloc = "0"; // Default to 0 if the field is empty or non-numeric
+      let currentTotalAllocation = 0;
+      $(".flex-salloc-input").each(function () {
+          let salloc = $(this).val().trim();
+          if (salloc === "" || isNaN(salloc)) {
+              salloc = "0";
+          }
+          const parsedSalloc = parseInt(salloc);
+          currentTotalAllocation += parsedSalloc;
+      });
+      totalAllocation = 100 - currentTotalAllocation;
+      $("#remainingAllocationCounter").text(totalAllocation);
+
+      if (totalAllocation < 0 || totalAllocation > 100) {
+          $("#updateButton").prop("disabled", true);
+          $("#updateButton").text("Exceeds 100%");
+      } else {
+          $("#updateButton").prop("disabled", false);
+          $("#updateButton").text("Update Changes");
       }
-      const parsedSalloc = parseInt(salloc);
-      currentTotalAllocation += parsedSalloc;
-    });
-    totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
-    $("#remainingAllocationCounter").text(totalAllocation);
-  
-    if (totalAllocation < 0 || totalAllocation > 100) {
-      $("#updateButton").prop("disabled", true);
-      $("#updateButton").text("Exceeds 100%"); // Change the text of the button
-    } else {
-      $("#updateButton").prop("disabled", false);
-      $("#updateButton").text("Update Changes"); // Reset the text of the button
-    }
   }
 
   $(".div-table").on("input", ".flex-salloc-input", function () {
-    let value = $(this).val().trim();
-  
-    $(this).addClass("edited"); // Mark the cell as edited
-    updateRemainingAllocation(); // Update the total allocation
+      $(this).addClass("edited");
+      updateRemainingAllocation();
   });
 
   const editableDivs = document.querySelectorAll("[contenteditable=true]");
-    editableDivs.forEach(function (div) {
-        $(div).on("keyup", function () {
-            console.log("Editable div input detected");
-            $(this).addClass("edited");
-        });
-    });
-  
-    $("#updateButton").click(function (event) {
+  editableDivs.forEach(function (div) {
+      $(div).on("keyup", function () {
+          console.log("Editable div input detected");
+          $(this).addClass("edited");
+      });
+  });
+
+  $("#updateButton").click(function (event) {
       const editedData = [];
       $(".flex-row").each(function () {
           const row = $(this);
           const postName = row.find(".flex-post").text().trim();
-          const oldName = row.find(".flex-post").data("old-name"); // Retrieve the old name
-          const goal = parseInt(
-              row.find(".flex-goal span").text().replace(/,/g, "").replace(" kr", "")
-          );
-          // Retrieve the value from the input field instead of the span
+          const oldName = row.find(".flex-post").data("old-name");
+          const goal = parseInt(row.find(".flex-goal span").text().replace(/,/g, "").replace(" kr", ""));
           const salloc = parseInt(row.find(".flex-salloc-input").val());
-          // Add other fields as needed
+
           if (row.find(".edited").length > 0) {
-              // Check if anything in the row was edited
               editedData.push({
                   postName: postName,
                   oldName: oldName,
@@ -580,8 +574,7 @@ $(document).ready(function () {
               });
           }
       });
-  
-      // Send the edited data to the route using AJAX
+
       console.log(JSON.stringify(editedData));
       $.ajax({
           url: "/salloc/update_table",
@@ -589,15 +582,14 @@ $(document).ready(function () {
           contentType: "application/json",
           data: JSON.stringify(editedData),
           success: function (response) {
-              // Simply reload the page
               location.reload();
           },
           error: function (jqXHR, textStatus, errorThrown) {
-              // Optional: Handle any errors here, e.g., show an alert to the user
               alert("An error occurred: " + textStatus);
           }
       });
   });
+});
 
 
 
