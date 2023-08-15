@@ -85,7 +85,7 @@
         </div>
         <div id="customSetupModal" class="modal">
             <div class="modal-content">
-                <form id="customSetupForm" action="/custom_setup" method="post">                  
+                <form id="customSetupForm" action="{{ url_for('salloc.custom_setup') }}" method="post">                  
                     <h2>Custom Setup<span class="close">&times;</span></h2>
                     <input type="hidden" id="initialRemainingAllocation" value="{{ remain_alloc }}">
                     <span id="remainingPercentage">Remaining Percentage: 100%</span>

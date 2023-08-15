@@ -446,6 +446,8 @@ button, .button, input[type="button"], input[type="submit"] {
 .container-header {
   display: flex;
   justify-content: center;
+  max-height: 35px;
+  align-items: center;
 }
 
 .container-header h4 {
@@ -1004,6 +1006,16 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     background-color: #2d6a31; /* Slightly darker shade */
 }
   
+#contactLink, #privacyLink {
+    cursor: pointer; /* Change the cursor to a hand pointer */
+    transition: all 0.3s; /* Smooth transition for all changes */
+}
+
+#contactLink:hover, #privacyLink:hover {
+    color: #007BFF; /* Change the text color to a shade of blue on hover */
+    text-decoration: underline; /* Add an underline on hover */
+    font-size: 105%; /* Increase the font size slightly on hover */
+}
 
 @media screen and (max-width: 810px) {
     body {

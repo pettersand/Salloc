@@ -128,7 +128,7 @@ def register():
                             "INSERT INTO users (username, password, cookies) VALUES (%s, %s, %s)",
                             (username, hashpass, consent_db),
                         )
-                        resp = make_response(redirect(url_for("salloc.index")))
+                        resp = make_response(redirect(url_for("salloc.login")))
 
                         if consent == "yes":
                             resp.set_cookie("consent", "true", max_age=60 * 60 * 24 * 365 * 2, secure=True, httponly=True)
@@ -387,7 +387,7 @@ def update_table():
 
             conn.commit()
             flash("Table updated successfully.", "success")
-            return jsonify({"redirect": url_for('index')})
+            return jsonify({"redirect": url_for('salloc.index')})
 
         except Exception as e:
             conn.rollback()
