@@ -518,13 +518,10 @@ if (document.getElementById("profileSettingsButton")) {
 
 //// UPDATING USER EDITS FROM TABLE ////
 $(document).ready(function () {
-  console.log("Document ready");
   const initialRemainingAllocation = parseInt($("#hiddenRemainAlloc").val());
-  console.log("Initial Remaining Allocation:", initialRemainingAllocation);
   let totalAllocation = initialRemainingAllocation;
 
   function updateRemainingAllocation() {
-    console.log("Updating remaining allocation");
     let currentTotalAllocation = 0; // Reset the total allocation
     $(".flex-salloc-input").each(function () {
       let salloc = $(this).val().trim(); // Get the value from the input element
@@ -534,10 +531,8 @@ $(document).ready(function () {
       const parsedSalloc = parseInt(salloc);
       currentTotalAllocation += parsedSalloc;
     });
-    console.log("Final Total Allocation:", currentTotalAllocation);
     totalAllocation = 100 - currentTotalAllocation; // Calculate the remaining allocation
     $("#remainingAllocationCounter").text(totalAllocation);
-    console.log("Total Allocation:", totalAllocation);
   
     if (totalAllocation < 0 || totalAllocation > 100) {
       $("#updateButton").prop("disabled", true);
@@ -558,7 +553,6 @@ $(document).ready(function () {
 
 
   $("#updateButton").click(function (event) {
-    console.log("Update button clicked");
     const editedData = [];
     $(".flex-row").each(function () {
       const row = $(this);
@@ -580,7 +574,6 @@ $(document).ready(function () {
         });
       }
     });
-    console.log("Edited Data:", editedData);
 
     // Send the edited data to the route using AJAX
     $.ajax({
@@ -589,11 +582,14 @@ $(document).ready(function () {
       contentType: "application/json",
       data: JSON.stringify(editedData),
       success: function (response) {
-        // Redirect to the URL provided by the server
-        window.location.href = response.redirect;
+          if (response && response.redirect) {
+              window.location.href = response.redirect;
+          } else {
+              console.error("Unexpected response from the server:", response);
+          }
       }
-    });
   });
+});
 
   const editableDivs = document.querySelectorAll("[contenteditable=true]");
   editableDivs.forEach(function (div) {
