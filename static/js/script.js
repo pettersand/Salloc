@@ -548,13 +548,11 @@ $(document).ready(function () {
       updateRemainingAllocation();
   });
 
-  const editableDivs = document.querySelectorAll("[contenteditable=true]");
-  editableDivs.forEach(function (div) {
-      $(div).on("keyup", function () {
-          console.log("Editable div input detected");
-          $(this).addClass("edited");
-      });
+  $(".div-table").on("keyup", "[contenteditable=true]", function () {
+    console.log("Editable div input detected");
+    $(this).addClass("edited");
   });
+
 
   $("#updateButton").click(function (event) {
       const editedData = [];
