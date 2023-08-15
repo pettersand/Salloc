@@ -8,7 +8,7 @@ Home
 <div class="container-index">
     <div class="container-main">
         <div class="table-half">
-            <div class="table-group" data-intro="Tooltip 9" data-step="9">
+            <div class="table-group" data-intro="Any recent deposits, moves, or withdrawals will show up here!" data-step="9">
                 <div class="container-header">
                     <h4>Transaction History</h4><br>
                 </div>
@@ -34,8 +34,9 @@ Home
                     </div>
                 </div>
             </div>
-    <div class="container-half">
-        <div class="container-group" data-intro="Tooltip 8" data-step="8">
+    <div class="container-half" data-intro="Here are your day-to-day controls for depositing money, 
+    withdrawing funds, or moving them around" data-step="8">
+        <div class="container-group">
             <label for="container-group"><h3>Deposit:</h3></label>
             <div class="item">
                 <form action="{{ url_for('salloc.deposit') }}" method="post">
@@ -153,7 +154,7 @@ Home
         </div>
     </div>
 </div>
-    <div class="container-table" data-intro="Seventh Tooltip" data-step="7">
+    <div class="container-table" data-intro="This is where you can check out your savings and edit post name, goal, or %Salloc once its set up." data-step="7">
         <div class="container-header">
             <h4>Post Overview - Click fields to edit</h4><br>
         </div>
@@ -194,7 +195,7 @@ Home
     <div class="container-header">
         <h4>Account</h4><br>
     </div>
-    <div class="side-container" data-intro="Sixth Tooltip" data-step="6">
+    <div class="side-container" data-intro="Check your current standing, change profile settings, and reset your accounts parameters at will." data-step="6">
         <div class="item">
             <p>Current Savings: <br>{{ balance | currency(currency) }}</p><br>
             <p>Total Goal: <br>{{ total_goal | currency(currency) }} </p><br><br>
@@ -245,7 +246,7 @@ Home
         <h4>Setup / Controls</h4><br>
     </div>
     <div class="side-container">
-        <div class="item" data-intro="First Tooltip" data-step="1">
+        <div class="item" data-intro="This is where you enter your starting balance and get things going!" data-step="1">
             <form id="setSavingsForm" action="{{ url_for('salloc.set_savings') }}" method="post">
                 <label for="savings">Set Total Savings:</label>
                 <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
@@ -258,7 +259,8 @@ Home
             </form>
         </div>
         
-        <div class="item" data-intro="Second Tooltip" data-step="2">
+        <div class="item" data-intro="Use this to add your custom savings posts with goals and % allocation. 
+        The % (Salloc) is used to distribute your starting balance, and future deposits" data-step="2">
             <form id="setupCustomTemplate">
                 <label for="custom">Add Posts</label>
                 <div class="info-container">
@@ -280,7 +282,8 @@ Home
                     </div>
             </form>
         </div>
-        <div class="item" data-intro="Third Tooltip" data-step="3">
+        <div class="item" data-intro="Use this to remove posts completely. 
+        If there is money saved on the post you should use the transfer/delete form instead" data-step="3">
             <form id="removePostForm" action="{{ url_for('salloc.remove_post') }}" method="post">
                 <label for="post">Remove Post:</label>
                 <select id="post" name="post" required>
@@ -297,7 +300,8 @@ Home
                 </div>
             </form>
         </div>
-        <div class="item" data-intro="Fourth Tooltip" data-step="4">
+        <div class="item" data-intro="Click here to commit your changes and calculate the Salloc spread! 
+        Pressing this later will redistribute your currently held balance and override your post savings. " data-step="4">
             <form id="commitSavingsForm" action="{{ url_for('salloc.commit_savings') }}" method="post">
                 <label>Commit Changes</label>
                 <div class="info-container">
@@ -309,7 +313,7 @@ Home
             </form>
         </div>
     </div> 
-    <div class="container-header" data-intro="Fifth Tooltip" data-step="5">
+    <div class="container-header" data-intro="Alerts will show up here when your account requires some attention / redistribution etc." data-step="5">
         <h4>Alerts</h4><br>
     </div>
     <div class="alerts-container">

@@ -12,8 +12,9 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/38debcdf82.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/intro.js@3.4.0/introjs.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/intro.js@3.4.0/introjs.js"></script>
+    <link href="https://unpkg.com/intro.js/introjs.css" rel="stylesheet">
+    <link href="https://unpkg.com/intro.js/themes/introjs-modern.css" rel="stylesheet">
+    <script src="https://unpkg.com/intro.js/intro.js"></script>
   </head>
   <body id="layout">
     <header class="header">
@@ -26,7 +27,8 @@
                 <div class="dropdown-content">
                     <a href="#" class="contactLink">Contact</a>
                   <a href="#accessibility">Accessibility</a>
-                  <a href="#watch-demo">Watch Demo</a>
+                  <a href="#watch-demo">Watch Video Demo</a>
+                  <a href="#guided-tour" id="startIntro">Setup Guided Tour</a>
                   <a href="#setup-guide" id="setupGuideLink">Read Setup Guide</a>
                   <a href="#readme">Readme</a>
                 </div>
@@ -270,5 +272,11 @@
             showError("{{ error }}");
         </script>
     {% endif %}
+    <script>
+        // Check if it's the user's first login
+        if ({{ intro }}) {
+            introJs().start();
+        }
+    </script>
 </body>
 </html>

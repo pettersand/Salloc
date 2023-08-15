@@ -524,8 +524,8 @@ def index():
     try:
         conn, cur = create_conncur()
         with conn:
-            cur.execute("SELECT balance, currency FROM users WHERE id = %s", (session["user_id"],))
-            balance, currency = cur.fetchone()
+            cur.execute("SELECT balance, currency, first_login FROM users WHERE id = %s", (session["user_id"],))
+            balance, currency, intro = cur.fetchone()
 
             # Fetch posts and calculate totals
             cur.execute(
@@ -565,6 +565,7 @@ def index():
             history=history,
             alerts=alerts,
             currency=currency,
+            intro="true" if intro else "false",
         )
     except Exception as e:
         error_message = str(e)

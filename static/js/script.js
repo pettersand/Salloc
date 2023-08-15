@@ -795,3 +795,15 @@ function setCurrency(currencyType) {
       location.reload(); // Reload the page to apply the new currency setting
   });
 }
+
+
+// INTRO.JS //
+document.getElementById('startIntro').onclick = function(event) {
+  event.preventDefault();  // Prevent the default link behavior
+  introJs().start();
+};
+
+if (intro) {
+  // Start the intro.js tour
+  introJs().start();
+}
