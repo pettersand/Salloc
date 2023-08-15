@@ -24,6 +24,7 @@ body {
   min-height: 100vh;
   font-family: "Tektur", cursive;
   font-size: 16px;
+  color: var(--light5);
 }
 
 header {
@@ -831,6 +832,7 @@ input[type="number"].flex-salloc-input {
   border: 1px solid #ccc;
   padding: 10px;
   max-height: 200px;
+  width: 80%;
   overflow-y: auto;
 }
 

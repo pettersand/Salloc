@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Index
+Home
 {% endblock %}
 
 {% block main %}
@@ -257,23 +257,7 @@ Index
                 </div>
             </form>
         </div>
-        <div class="item">
-            <form id="removePostForm" action="{{ url_for('salloc.remove_post') }}" method="post">
-                <label for="post">Remove Post:</label>
-                <select id="post" name="post" required>
-                    <option value="" disabled selected>Select Post</option>
-                    {% for post in posts %}
-                    <option value="{{ post[0] }}">{{ post[0] }}</option>
-                    {% endfor %}
-                </select>
-                <div class="info-container">
-                    <input class="info-button" type="button" id="removePostButton" value="Remove">
-                    <span class="info-icon" onclick="showInfo(event);">
-                        <i class="fa-solid fa-info-circle"></i>
-                    <span>
-                </div>
-            </form>
-        </div>
+        
         <div class="item">
             <form id="setupCustomTemplate">
                 <label for="custom">Add Posts</label>
@@ -294,6 +278,23 @@ Index
                             <i class="fa-solid fa-info-circle"></i>
                         <span>
                     </div>
+            </form>
+        </div>
+        <div class="item">
+            <form id="removePostForm" action="{{ url_for('salloc.remove_post') }}" method="post">
+                <label for="post">Remove Post:</label>
+                <select id="post" name="post" required>
+                    <option value="" disabled selected>Select Post</option>
+                    {% for post in posts %}
+                    <option value="{{ post[0] }}">{{ post[0] }}</option>
+                    {% endfor %}
+                </select>
+                <div class="info-container">
+                    <input class="info-button" type="button" id="removePostButton" value="Remove">
+                    <span class="info-icon" onclick="showInfo(event);">
+                        <i class="fa-solid fa-info-circle"></i>
+                    <span>
+                </div>
             </form>
         </div>
         <div class="item">
