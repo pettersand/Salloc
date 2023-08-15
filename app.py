@@ -387,7 +387,7 @@ def update_table():
 
             conn.commit()
             flash("Table updated successfully.", "success")
-            return jsonify({"redirect": url_for('salloc.index')})
+            return jsonify({"status": "success"})
 
         except Exception as e:
             conn.rollback()

@@ -582,11 +582,12 @@ $(document).ready(function () {
       contentType: "application/json",
       data: JSON.stringify(editedData),
       success: function (response) {
-          if (response && response.redirect) {
-              window.location.href = response.redirect;
-          } else {
-              console.error("Unexpected response from the server:", response);
-          }
+          // Simply reload the page
+          location.reload();
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+          // Optional: Handle any errors here, e.g., show an alert to the user
+          alert("An error occurred: " + textStatus);
       }
   });
 });
