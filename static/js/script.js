@@ -595,7 +595,7 @@ $(document).ready(function () {
 
   const editableDivs = document.querySelectorAll("[contenteditable=true]");
   editableDivs.forEach(function (div) {
-    $(div).on("input", function () {
+    $(div).on("keyup", function () {
       console.log("Editable div input detected");
       $(this).addClass("edited");
     });
