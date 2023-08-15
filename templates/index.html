@@ -38,7 +38,7 @@ Index
         <div class="container-group">
             <label for="container-group"><h3>Deposit:</h3></label>
             <div class="item">
-                <form action="/deposit" method="post">
+                <form action="{{ url_for('salloc.deposit') }}" method="post">
                     <label for="deposit">General Deposit:</label>
                     <input type="number" id="deposit" name="deposit" placeholder="Enter amount" required>
                     <div class="info-container">
@@ -51,7 +51,7 @@ Index
                 </form>
             </div>
             <div class="item">
-                <form action="/specific_deposit" method="post">
+                <form action="{{ url_for('salloc.specific_deposit') }}" method="post">
                     <label for="deposit">Specific Deposit:</label>
                     <select id="post" name="post" required>
                         <option value="" disabled selected>Select Post</option>
@@ -74,7 +74,7 @@ Index
             <label for="container-group">
                 <h3>Withdrawal:</h3></label>
             <div class="item">
-                <form action="/withdrawal" method="post">
+                <form action="{{ url_for('salloc.withdrawal') }}" method="post">
                     <label for="withdrawal">Withdrawal:</label>
                     <select id="post" name="post" required>
                         <option value="" disabled selected>From post</option>
@@ -97,7 +97,7 @@ Index
         <div class="container-group">
             <label for="container-group"><h3>Manage Funds:</h3></label>
             <div class="item">
-                <form action="/move" method="post">
+                <form action="{{ url_for('salloc.move') }}" method="post">
                     <label for="move">Move Funds:</label>
                     <select id="from" name="from" required>
                         <option value="" disabled selected>From post</option>
@@ -122,7 +122,7 @@ Index
                 </form>
             </div>
             <div class="item">
-                <form action="/transfer" method="post">
+                <form action="{{ url_for('salloc.transfer') }}" method="post">
                     <label for="move">Transfer & Delete</label>
                     <select id="from" name="from" required>
                         <option value="" disabled selected>From post</option>
@@ -204,7 +204,7 @@ Index
         </div>
         <div class="item">
             <span>Funds not yet allocated: <br>{{ remainder | currency(currency) }}</span>
-            <form action="/undefined" method="post">
+            <form action="{{ url_for('salloc.undefined') }}" method="post">
                 <label for="undefined">Allocate now?</label>
                 <select id="post" name="post" required>
                     <option value="" disabled selected>Select Post</option>
@@ -223,19 +223,19 @@ Index
             </form>
         </div>
         <div class="item">
-            <form id="resetAccountForm" action="/reset" method="post">
+            <form id="resetAccountForm" action="{{ url_for('salloc.reset') }}" method="post">
                 <label>Reset Account</label>
                 <input class="info-button" id="resetAccountButton"  type="submit" value="Reset">
             </form>
         </div>
         <div class="item">
-            <form id="resetPostsForm" action="/reset_posts" method="post">
+            <form id="resetPostsForm" action="{{ url_for('salloc.reset_posts') }}" method="post">
                 <label>Reset Posts</label>
                 <input class="info-button" id="resetPostsButton"  type="submit" value="Reset">
             </form>
         </div>
         <div class="item">
-            <form id="resetSavingsForm" action="/reset_savings" method="post">
+            <form id="resetSavingsForm" action="{{ url_for('salloc.reset_savings') }}" method="post">
                 <label>Reset Savings</label>
                 <input class="info-button" id="resetSavingsButton"  type="submit" value="Reset">
             </form>
@@ -246,7 +246,7 @@ Index
     </div>
     <div class="side-container">
         <div class="item">
-            <form id="setSavingsForm" action="/set_savings" method="post">
+            <form id="setSavingsForm" action="{{ url_for('salloc.set_savings') }}" method="post">
                 <label for="savings">Set Total Savings:</label>
                 <input type="number" id="savings" name="savings" placeholder="Enter total savings" required>
                 <div class="info-container">
@@ -258,7 +258,7 @@ Index
             </form>
         </div>
         <div class="item">
-            <form id="removePostForm" action="/remove_post" method="post">
+            <form id="removePostForm" action="{{ url_for('salloc.remove_post') }}" method="post">
                 <label for="post">Remove Post:</label>
                 <select id="post" name="post" required>
                     <option value="" disabled selected>Select Post</option>
@@ -286,7 +286,7 @@ Index
             </form>
         </div>
         <div class="item">
-            <form id="generateTemplate" action="/generate_template" method="post">
+            <form id="generateTemplate" action="{{ url_for('salloc.generate_template') }}" method="post">
                 <label for="generate">Generate Template</label>
                     <div class="info-container">
                         <input class="info-button" id="generateTemplateButton" type="submit" value="Generate Example">
@@ -297,7 +297,7 @@ Index
             </form>
         </div>
         <div class="item">
-            <form id="commitSavingsForm" action="/commit_savings" method="post">
+            <form id="commitSavingsForm" action="{{ url_for('salloc.commit_savings') }}" method="post">
                 <label>Commit Changes</label>
                 <div class="info-container">
                     <input class="info-button" id="commitSavingsButton" type="submit" value="Calculate">

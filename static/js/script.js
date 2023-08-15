@@ -584,7 +584,7 @@ $(document).ready(function () {
 
     // Send the edited data to the route using AJAX
     $.ajax({
-      url: "/update_table",
+      url: "/salloc/update_table",
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(editedData),
@@ -804,7 +804,7 @@ $(document).ready(function () {
 function setCurrency(currencyType) {
   // You can use AJAX here to send the selected currency to the server
   // Example using jQuery:
-  $.post("/set_currency", { currency_type: currencyType }, function() {
+  $.post("/salloc/set_currency", { currency_type: currencyType }, function() {
       location.reload(); // Reload the page to apply the new currency setting
   });
 }

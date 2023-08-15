@@ -8,7 +8,7 @@
 
     <title>Layout {% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('salloc.static', filename='css/styles.css') }}">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/38debcdf82.js" crossorigin="anonymous"></script>
@@ -16,7 +16,7 @@
   <body id="layout">
     <header class="header">
         <div class="nav">
-            <a href="{{ url_for('index') }}"><span>Home</span></a>
+            <a href="{{ url_for('salloc.index') }}"><span>Home</span></a>
             <span>History</span>
             <span>Dashboard</span>
             <div class="dropdown">
@@ -43,7 +43,7 @@
                     <a href="#" onclick="setCurrency('NOK')">NOK</a>
                 </div>
             </div>
-            <span><a href="/logout">Log Out</a></span>
+            <span><a href="{{ url_for('salloc.logout') }}">Log Out</a></span>
         </div>
     </header>
     
@@ -129,7 +129,7 @@
                 <div class="settings-item">
                     <h3>Cookie Preferences:</h3>
                     <div id="checkboxProfileContainer">
-                        <form id="profileSettingsForm" action="/update_consent" method="post">
+                        <form id="profileSettingsForm" action="{{ url_for('salloc.update_consent') }}" method="post">
                             <div>
                                 <input type="checkbox" id="consentCookies" name="consentCookies">
                                 <label for="consentCookies">Activate Cookies</label>
@@ -146,7 +146,7 @@
               <!-- Delete Account Section -->
               <div class="settings-item">
                 <h3>Account Deletion:</h3>
-                <form id="deleteAccountForm" action="/delete_account" method="post">
+                <form id="deleteAccountForm" action="{{ url_for('salloc.delete_account') }}" method="post">
                   <button id="deleteConfirmation" type="button">Delete Account</button>
                 </form>
               </div>
@@ -155,7 +155,7 @@
         </div>
         <div id="contactModal" class="modal">
             <div id="contactContainer" class="modal-content">
-                <form id="contactForm" action="/contact_me" method="post">
+                <form id="contactForm" action="{{ url_for('salloc.contact_me') }}" method="post">
                     <h2>Contact Me/Give Feedback<span class="close">&times;</span></h2>
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -262,7 +262,7 @@
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('salloc.static', filename='js/script.js') }}"></script>
     {% if error %}
         <script>
             showError("{{ error }}");
