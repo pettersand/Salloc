@@ -347,7 +347,7 @@ def remove_post():
 @login_required
 def update_table():
     data = request.get_json()
-    print(data)
+    print("Received data:", data)
 
     if not data:
         flash("No data provided for update.", "error")
@@ -391,6 +391,7 @@ def update_table():
 
         except Exception as e:
             conn.rollback()
+            print("Error:", e)
             flash(f"An error occurred while updating the table: {str(e)}", "error")
             
     return redirect(url_for("salloc.index"))

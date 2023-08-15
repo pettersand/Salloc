@@ -576,6 +576,7 @@ $(document).ready(function () {
     });
 
     // Send the edited data to the route using AJAX
+    console.log(JSON.stringify(editedData));
     $.ajax({
       url: "/salloc/update_table",
       method: "POST",
