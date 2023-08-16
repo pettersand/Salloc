@@ -69,17 +69,17 @@ table {
   border-collapse: collapse;
   table-layout: fixed;
   margin-bottom: 10px;
-  border-color: white;
+  border: 1px solid var(--light4);
 }
 
 th {
-  border: 1px solid black;
+  border: 1px solid var(--light4);
   text-align: center;
   padding: 3px;
 }
 
 td {
-  border: 1px solid black;
+  border: 1px solid var(--light4);
   text-align: center;
   padding: 3px;
   width: 100%;
@@ -225,7 +225,7 @@ button, .button, input[type="button"], input[type="submit"] {
   grid-area: header;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--light4);
   background: var(--dark1);
   color: var(--light3);
 }
@@ -251,7 +251,7 @@ button, .button, input[type="button"], input[type="submit"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid black;
+  border-top: 1px solid var(--light4);
   background: var(--dark1);
 }
 
@@ -446,6 +446,7 @@ button, .button, input[type="button"], input[type="submit"] {
   flex-flow: row wrap;
   justify-content: space-around;
   gap: 10px;
+  color: white;
 }
 
 .container-header {
@@ -628,6 +629,11 @@ button, .button, input[type="button"], input[type="submit"] {
 
 input[type="number"].flex-salloc-input {
     width: 50px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: inherit;
+    color: white;
 }
 
 .flex-salloc-h {
@@ -695,6 +701,7 @@ input[type="number"].flex-salloc-input {
   align-items: center;
   justify-content: space-evenly;
   width: 70%;
+  color: white;
 }
 
 /******* MODAL *******/
@@ -957,21 +964,29 @@ textarea {
   color: white; /* Darker blue on hover */
 }
 
+label {
+  color: white;
+}
+
 input[type="submit"] {
   padding: 5px 15px;
   background: var(--dark1);
-  border: 1px solid white;
+  border: 1px solid var(--light4);
 }
 
 input[type="text"] {
   width: 160px;
   box-sizing: border-box;
+  border: 1px solid var(--light4);
+  border-radius: 0;
+  background-color: var(--dark4);
+  color: white;
 }
 
 input[type="button"] {
   padding: 5px 15px;
   background: var(--dark1);
-  border: 1px solid white;
+  border: 1px solid var(--light4);
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -983,10 +998,18 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   width: 160px;
   box-sizing: border-box;
+  border: 1px solid var(--light4);
+  border-radius: 0;
+  background-color: var(--dark4);
+  color: white;
 }
 
 select {
   width: 160px;
+  border: 1px solid var(--light4);
+  border-radius: 0;
+  background-color: var(--dark4);
+  color: white;
 }
 
 button {
@@ -998,7 +1021,6 @@ button {
 /* Targeting all buttons and submit inputs */
 button, input[type="button"], input[type="submit"] {
     transition: all 0.3s ease; /* Smooth transition for all effects */
-    /* Add other default styles here, like background-color, color, etc. */
 }
   
   /* Hover effect: changing background color and enlarging text */

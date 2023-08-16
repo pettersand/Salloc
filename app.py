@@ -189,7 +189,7 @@ def intro_guide():
     else:
         flash("Invalid data received for intro", "error")
         return jsonify({"status": "error",})
-    
+
 
 @salloc_blueprint.route("/delete_account", methods=["POST"])
 @login_required
