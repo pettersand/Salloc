@@ -956,10 +956,10 @@ server.jinja_env.filters['currency'] = format_currency
 # Configure Flask-Mail with Gmail settings
   # Make sure to provide the correct path
 
-server.config["MAIL_SERVER"] = config['mail']['server']
-server.config["MAIL_PORT"] = int(config['mail']['port'])
-server.config["MAIL_USERNAME"] = config['mail']['username']
-server.config["MAIL_PASSWORD"] = config['mail']['password']
+server.config["MAIL_SERVER"] = config["mail"]["server"]
+server.config["MAIL_PORT"] = int(config["mail"]["port"])
+server.config["MAIL_USERNAME"] = config["mail"]["username"]
+server.config["MAIL_PASSWORD"] = config["mail"]["password"]
 server.config["MAIL_USE_TLS"] = True
 server.config["MAIL_USE_SSL"] = False
 
