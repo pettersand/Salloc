@@ -85,7 +85,7 @@ def login():
                 return resp
             else:
                 error = "Incorrect username or password"
-
+    
     return render_template("landing.html", error=error)
 
 

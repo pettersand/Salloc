@@ -49,6 +49,42 @@
             </div>
             <span><a href="{{ url_for('salloc.logout') }}">Log Out</a></span>
         </div>
+        <div class="mobile-nav">
+            <div class="title">SALLOC</div>
+            <div>
+                <div class="hamburger-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                </div>
+                    <div class="mobile-items">
+                        <a href="#">Home</a>
+                        <a href="#" class="contactLink">Contact</a>
+            
+                <div class="mobile-dropdown">
+                    <button id="helpNav" class="dropbtn">Help</button>
+                    <div class="dropdown-content">
+                        <a href="#" class="contactLink">Contact</a>
+                    <a href="#accessibility">Accessibility</a>
+                    <a href="#watch-demo">Watch Video Demo</a>
+                    <a href="#guided-tour" id="startIntro">Setup Guided Tour</a>
+                    <a href="#setup-guide" id="setupGuideLink">Read Setup Guide</a>
+                    <a href="#readme">Readme</a>
+                    </div>
+                </div>
+            
+                <div class="mobile-dropdown">
+                    <button class="dropbtn">Currency</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="setCurrency('EUR')">EUR</a>
+                        <a href="#" onclick="setCurrency('USD')">USD</a>
+                        <a href="#" onclick="setCurrency('NOK')">NOK</a>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+          </div>
     </header>
     
             <main class="main">

@@ -839,3 +839,25 @@ function startIntroWithListeners() {
   // Start the intro
   intro.start();
 }
+
+/// DROP DOWNS ///
+// Get all dropdown buttons
+// Get the elements
+const hamburgerIcon = document.querySelector('.hamburger-icon');
+const mobileItems = document.querySelector('.mobile-items');
+const dropdowns = document.querySelectorAll('.mobile-dropdown');
+
+// Toggle mobile items and dropdowns
+hamburgerIcon.addEventListener('click', () => {
+  mobileItems.classList.toggle('active');
+});
+
+// Toggle dropdowns
+dropdowns.forEach((dropdown) => {
+  const dropdownButton = dropdown.querySelector('.dropbtn');
+  const dropdownContent = dropdown.querySelector('.dropdown-content');
+
+  dropdownButton.addEventListener('click', () => {
+    dropdownContent.classList.toggle('active');
+  });
+});

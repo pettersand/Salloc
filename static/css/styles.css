@@ -1057,37 +1057,81 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   background-color: #000 !important;  /* This ensures the background is black */
 }
 
-@media screen and (max-width: 810px) {
-    body {
-        font-size: 12px;
-    }
-
-    .container-half {
-        flex-direction: column;
-    }
-
-    .table-half {
-        min-width: 380px;
-    }
+/* MOBILE NAV */
+.mobile-nav {
+  background-color: var(--dark1); /* Adjust as needed */
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-@media (max-width: 1360px) {
-    .container-half {
-        flex-direction: column;
-    }
+.title {
+  font-size: 26px; /* Adjust font size as needed */
+  color: #fff; /* Adjust font color as needed */
 }
 
-@media (max-width: 960px) {
-    .container-main {
-        flex-direction: column;
-    }
+.hamburger-icon {
+  display: inline-block;
+  cursor: pointer;
+  color: white;
+}
 
-    .container-half {
-        flex-direction: row;
-    }
+.bar {
+  display: block;
+  width: 25px; /* Adjust width as needed */
+  height: 3px; /* Adjust height as needed */
+  background-color: var(--light5); /* Adjust color as needed */
+  margin: 6px 0; /* Adjust margin as needed */
+}
 
-    h4 {
-        font-size: 16px;
-    }
+.mobile-items a {
+  color: #fff; /* Adjust font color as needed */
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+}
 
+.mobile-dropdown {
+  position: relative;
+  display: inline-block;
+  color: white;
+}
+
+.mobile-items {
+  display: none; /* Hide mobile items by default */
+  flex-direction: column; /* Arrange items in a column */
+  align-items: flex-start; /* Align items to the start of the column */
+}
+
+.mobile-items.active {
+  display: flex; /* Show mobile items when active class is added */
+}
+
+.mobile-dropdown .dropdown-content {
+  display: none; /* Hide dropdown content by default */
+  
+}
+
+.mobile-dropdown .dropdown-content.active {
+  display: block; /* Show dropdown content when active class is added */
+  min-width: auto;
+}
+
+@media screen and (max-width: 480px) {
+  #layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav, .nav2, .nav3 {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .mobile-nav {
+    display: none;
+  }
 }
