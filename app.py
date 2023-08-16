@@ -173,6 +173,24 @@ def contact_me():
     return redirect(url_for("salloc.index"))
 
 
+@salloc_blueprint.route("/intro_guide", methods=["POST"])
+@login_required
+def intro_guide():
+    data  = request.get_json()
+    if data.get("completed") or data.get("skipped"):
+        conn, cur = create_conncur()
+        with conn:
+            cur.execute(
+                "UPDATE users SET first_login = FALSE WHERE id = %s",
+                (session["user_id"],)
+            )
+        flash("Intro skipped or completed. It can be found in the Help dropdown menu.", "success")
+    else:
+        flash("Invalid data received for intro", "error")
+    
+    return jsonify(success=True)
+
+
 @salloc_blueprint.route("/delete_account", methods=["POST"])
 @login_required
 def delete_account():
@@ -795,7 +813,7 @@ def withdrawal():
         return redirect(url_for("error_page", error_message=error_message))
 
 
-
+# Moves funds from one post to another
 @salloc_blueprint.route("/move", methods=["POST"])
 @login_required
 def move():

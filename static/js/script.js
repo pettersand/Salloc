@@ -798,12 +798,42 @@ function setCurrency(currencyType) {
 
 
 // INTRO.JS //
+// Function to handle the completion or exit of the intro
+function handleIntroStatus(status) {
+  $.ajax({
+      url: '/salloc/intro_guide',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(status),
+      success: function() {
+          location.reload();  // Reload the page to see the flash message
+      },
+      error: function(error) {
+          console.error("Error updating intro status:", error);
+      }
+  });
+}
+
+// Start the intro when the button is clicked
 document.getElementById('startIntro').onclick = function(event) {
   event.preventDefault();  // Prevent the default link behavior
-  introJs().start();
+  introJs().start();  // Start the intro without any additional event listeners
 };
 
-if (intro) {
-  // Start the intro.js tour
-  introJs().start();
+function startIntroWithListeners() {
+  // Initialize intro.js
+  const intro = introJs();
+
+  // Set up the oncomplete event
+  intro.oncomplete(function() {
+      handleIntroStatus({ completed: true });
+  });
+
+  // Set up the onexit event
+  intro.onexit(function() {
+      handleIntroStatus({ skipped: true });
+  });
+
+  // Start the intro
+  intro.start();
 }

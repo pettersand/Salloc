@@ -1025,7 +1025,7 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
 }
 
 .introjs-overlay {
-  opacity: 0.9 !important;  /* Adjust this value as needed */
+  opacity: 0.8 !important;  /* Adjust this value as needed */
   background-color: #000 !important;  /* This ensures the background is black */
 }
 
