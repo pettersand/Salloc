@@ -185,11 +185,11 @@ def intro_guide():
                 (session["user_id"],)
             )
         flash("Intro skipped or completed. It can be found in the Help dropdown menu.", "success")
+        return jsonify({"status": "success",})
     else:
         flash("Invalid data received for intro", "error")
+        return jsonify({"status": "error",})
     
-    return jsonify(success=True)
-
 
 @salloc_blueprint.route("/delete_account", methods=["POST"])
 @login_required

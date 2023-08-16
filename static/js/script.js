@@ -789,8 +789,6 @@ $(document).ready(function () {
 
 
 function setCurrency(currencyType) {
-  // You can use AJAX here to send the selected currency to the server
-  // Example using jQuery:
   $.post("/salloc/set_currency", { currency_type: currencyType }, function() {
       location.reload(); // Reload the page to apply the new currency setting
   });
@@ -805,12 +803,16 @@ function handleIntroStatus(status) {
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(status),
-      success: function() {
+      success: function(response) {
+        if (response.status === "success") {
           location.reload();  // Reload the page to see the flash message
-      },
-      error: function(error) {
-          console.error("Error updating intro status:", error);
-      }
+        } else {
+          alert("An error occurred.");  // Display a generic error message
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        alert("An error occurred: " + textStatus);
+    }
   });
 }
 
