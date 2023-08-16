@@ -633,7 +633,7 @@ function showInfo(event) {
   // Determine the infoType based on the parent container's class or ID
   const parentContainer = event.target.closest(".item");
   let infoType = "";
-  if (parentContainer.querySelector("#setSavings")) infoType = "setSavings";
+  if (parentContainer.querySelector("#setSavingsButton")) infoType = "setSavings";
   if (parentContainer.querySelector("#removePostButton"))
     infoType = "removePost";
   if (parentContainer.querySelector("#setupButton")) infoType = "setupCustom";

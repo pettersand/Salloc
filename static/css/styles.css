@@ -722,27 +722,27 @@ input[type="number"].flex-salloc-input {
 
 /* Modal Content */
 .modal-cookies {
-  background-color: #fefefe;
+  background-color: var(--dark1);
+  color: white;
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fefefe;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--light2);
   max-height: 800px;
   max-width: 500px;
 }
 
 .modal-warning {
-  background-color: #fefefe;
+  background-color: var(--dark1);
+  color: white;
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fefefe;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--light2);
   max-height: 800px;
   max-width: 500px;
   z-index: 2;
@@ -753,10 +753,11 @@ input[type="number"].flex-salloc-input {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--dark1);
+  border: 1px solid var(--light2);
+  color: white;
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
   width: 40%;
   height: auto;
 }
@@ -798,10 +799,11 @@ input[type="number"].flex-salloc-input {
 
 
 .settings-content {
-  background-color: #fefefe;
+  background-color: var(--dark1);
+  border: 1px solid var(--light2);
+  color: white;
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
   width: 30%;
   height: auto;
 }
@@ -841,10 +843,10 @@ input[type="number"].flex-salloc-input {
 }
 
 #suggestionsContainer {
-  border: 1px solid #ccc;
+  border: 1px solid var(--light2);
   padding: 10px;
   max-height: 200px;
-  width: 80%;
+  width: 95%;
   overflow-y: auto;
 }
 
@@ -875,6 +877,9 @@ input[type="number"].flex-salloc-input {
 #contactForm input,
 textarea {
   width: 100%;
+  color: white;
+  background-color: var(--dark4);
+  border: 1px solid var(--light2)
 }
 
 .in-line {
@@ -900,7 +905,7 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  background-color: #fff;
+  background-color: var(--dark1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -911,8 +916,9 @@ textarea {
 
 .tooltip {
   position: absolute;
-  background-color: var(--light2);
-  border: 1px solid #ccc;
+  background-color: var(--dark1);
+  border: 1px solid var(--light2);
+  color: white;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -1015,7 +1021,7 @@ select {
 button {
   padding: 5px 15px;
   background: var(--dark1);
-  border: 1px solid white;
+  border: 1px solid var(--light2);
 }
 
 /* Targeting all buttons and submit inputs */
