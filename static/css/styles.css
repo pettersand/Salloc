@@ -1320,7 +1320,6 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
 /* DESKTOP */
 @media screen and (min-width: 948px) and (max-width: 1200px) {
   #layout {
-    grid-template-rows: auto;
     grid-template-columns: auto;
   }
   
@@ -1368,8 +1367,11 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   }
 
   #layout {
-    grid-template-rows: auto;
     grid-template-columns: auto;
+  }
+
+  .container-main {
+    flex-direction: column;
   }
 
   .modal-content, .settings-content, #contactContainer {
