@@ -324,7 +324,7 @@ input[type=password], input[type=username] {
     display: none;
     position: absolute;
     background-color: var(--dark3);
-    color: white:
+    color: white;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
