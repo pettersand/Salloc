@@ -1214,7 +1214,7 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     order: 4;
   }
 
-  .modal-content, .settings-content, #contactContainer {
+  .modal-content, .settings-content, #contactContainer, .modal-warning {
     width: 95%;
     font-size: 0.8em;
   }
@@ -1305,6 +1305,11 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     margin-right: 10px;
   }
 
+  .modal-content, .settings-content, #contactContainerm .modal-warning {
+    width: 80%;
+    font-size: 0.8em;
+  }
+
 }
 
 
@@ -1343,6 +1348,12 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   #updateButton {
     width: 95%;
   }
+
+  .modal-content, .settings-content, #contactContainer {
+    width: 80%;
+    font-size: 0.8em;
+  }
+
 }
 
 
@@ -1355,6 +1366,11 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   #layout {
     grid-template-rows: auto;
     grid-template-columns: auto;
+  }
+
+  .modal-content, .settings-content, #contactContainer {
+    width: 70%;
+    font-size: 0.8em;
   }
 
 }
