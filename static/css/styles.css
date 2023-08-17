@@ -535,6 +535,10 @@ input[type=password], input[type=username] {
   width: 85%;
 }
 
+#updateButton {
+  width: 85%;
+}
+
 .flex-row {
   display: flex;
   justify-content: space-around;
