@@ -223,25 +223,27 @@ Home
                 </div>
             </form>
         </div>
-        <div class="item">
-            <form id="resetAccountForm" action="{{ url_for('salloc.reset') }}" method="post">
-                <label>Reset Account</label>
-                <input class="info-button" id="resetAccountButton"  type="submit" value="Reset">
-            </form>
+        <div class="button-group">
+            <div class="item">
+                <form id="resetAccountForm" action="{{ url_for('salloc.reset') }}" method="post">
+                    <label>Reset Account</label>
+                    <input class="info-button" id="resetAccountButton"  type="submit" value="Reset">
+                </form>
+            </div>
+            <div class="item">
+                <form id="resetPostsForm" action="{{ url_for('salloc.reset_posts') }}" method="post">
+                    <label>Reset Posts</label>
+                    <input class="info-button" id="resetPostsButton"  type="submit" value="Reset">
+                </form>
+            </div>
+            <div class="item">
+                <form id="resetSavingsForm" action="{{ url_for('salloc.reset_savings') }}" method="post">
+                    <label>Reset Savings</label>
+                    <input class="info-button" id="resetSavingsButton"  type="submit" value="Reset">
+                </form>
+            </div>
         </div>
-        <div class="item">
-            <form id="resetPostsForm" action="{{ url_for('salloc.reset_posts') }}" method="post">
-                <label>Reset Posts</label>
-                <input class="info-button" id="resetPostsButton"  type="submit" value="Reset">
-            </form>
-        </div>
-        <div class="item">
-            <form id="resetSavingsForm" action="{{ url_for('salloc.reset_savings') }}" method="post">
-                <label>Reset Savings</label>
-                <input class="info-button" id="resetSavingsButton"  type="submit" value="Reset">
-            </form>
-        </div>
-        </div> 
+    </div> 
     <div class="container-header">
         <h4>Setup / Controls</h4><br>
     </div>
@@ -258,7 +260,7 @@ Home
                 </div>
             </form>
         </div>
-        
+        <div class="button-group">
         <div class="item" data-intro="Use this to add your custom savings posts with goals and % allocation. 
         The % (Salloc) is used to distribute your starting balance, and future deposits" data-step="2">
             <form id="setupCustomTemplate">
@@ -282,6 +284,8 @@ Home
                     </div>
             </form>
         </div>
+    </div>
+    <div class="button-group">
         <div class="item" data-intro="Use this to remove posts completely. 
         If there is money saved on the post you should use the transfer/delete form instead" data-step="3">
             <form id="removePostForm" action="{{ url_for('salloc.remove_post') }}" method="post">
@@ -313,6 +317,7 @@ Home
             </form>
         </div>
     </div> 
+</div>
     <div class="container-header" data-intro="Alerts will show up here when your account requires some attention / redistribution etc." data-step="5">
         <h4>Alerts</h4><br>
     </div>

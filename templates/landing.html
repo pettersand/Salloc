@@ -16,6 +16,10 @@
         <main id="landing">
             <div class="landing">
                 <img src="{{ url_for('salloc.static', filename='images/landing.png') }}" alt="Landing Page Image">
+                <div class="salloc-title">
+                  <h1>Salloc</h1>
+                  <p>Make your dreams come true</p>
+                </div>
                 {% block form %}
                 <form action="{{ url_for('salloc.login') }}" method="post" autocomplete="off">
                     <label id="LogOn">Login</label><br>
