@@ -314,7 +314,7 @@ button, .button, input[type="button"], input[type="submit"] {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: var(--light2);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -639,10 +639,16 @@ input[type="number"].flex-salloc-input {
 .flex-salloc-h {
   flex: 0.7;
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding-inline: 8px;
   justify-content: space-around;
   border-right: 1px solid var(--light5);
+}
+
+#remainingAllocationCounter {
+  display: flex;
+  flex-direction: row;
 }
 
 .sort-arrow {
@@ -1063,8 +1069,8 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   padding: 10px;
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .title {
@@ -1090,7 +1096,12 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   color: #fff; /* Adjust font color as needed */
   text-decoration: none;
   display: block;
-  padding: 10px;
+  padding: 8px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
 }
 
 .mobile-dropdown {
@@ -1107,6 +1118,7 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
 
 .mobile-items.active {
   display: flex; /* Show mobile items when active class is added */
+  flex-direction: row;
 }
 
 .mobile-dropdown .dropdown-content {
@@ -1125,13 +1137,77 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     flex-direction: column;
   }
 
-  .nav, .nav2, .nav3 {
+
+  .nav, .nav2, .nav3, .table-half {
     display: none;
   }
+
+  .flex-progress-h, .flex-progress {
+    display: none;
+  }
+
+  .container-header {
+    font-size: 0.8em;
+  }
+
+  .flex-row {
+    height: auto;
+  }
+
+  .div-table {
+    width: 95%;
+    font-size: 0.8em;
+  }
+
+  .footer {
+    height: 50px;
+    flex-direction: column;
+  }
+
+  .foot-nav {
+    font-size: 0.8em;
+    width: 95%;
+    height: 100%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .foot-nav span {
+    margin-right: 10px;
+  }
+
+  header {
+    order: 1;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+
+  main {
+    order: 3;
+  }
+  
+  footer {
+    order: 4;
+  }
+
+  .modal-content, .settings-content, #contactContainer {
+    width: 95%;
+    font-size: 0.8em;
+  }
+
+  .modal-content input {
+    width: 120px;
+  }
 }
+
 
 @media screen and (min-width: 500px) {
   .mobile-nav {
     display: none;
   }
+
 }
