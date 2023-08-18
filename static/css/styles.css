@@ -1162,7 +1162,6 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     flex-direction: column;
   }
 
-
   .nav, .nav2, .nav3, .table-half {
     display: none;
   }
@@ -1227,6 +1226,34 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   .modal-content input {
     width: 120px;
   }
+
+  .modal-cookies {
+    font-size: 0.8em;
+    max-width: 80vw;
+    top: 20%;
+    left: 30%;
+  }
+
+  .landing {
+    align-items: stretch;
+  }
+
+  .salloc-title {
+    position: absolute;
+    top: 8%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    color: rgb(22, 9, 4);
+    font-size: 1.2em;
+  }
+
+  .landing form {
+
+    top: 33%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+  }
+
 }
 
 /* TABLETS */
