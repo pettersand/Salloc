@@ -104,8 +104,8 @@ Salloc saves no personal identifiable information. Your password is hashed and s
 
 My name is Petter Sand Austnes. After 13 years as a strength coach and personal trainer I found love on a different path. Salloc is an improved implementation of an excel spreadsheet I had been using privately. And thus, my first project on my software development journey. I had been coding for just over 3 months at the launch of Salloc. So I assume it will only get better with time. I hope you will enjoy and find a use for this application, and that it may help you reach your savings goals! 
 
-github.com/pettersand
-pettersa.com
+[GitHub Profile](https://github.com/pettersand)
+[Portfolio Website](https://pettersa.com)
 
 ---
 
