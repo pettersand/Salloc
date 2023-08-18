@@ -89,6 +89,26 @@ Salloc empowers users to take control of their finances, make informed decisions
 
 Salloc empowers you to manage your finances with precision, make deliberate choices about your spending, and achieve your financial aspirations one step at a time.
 
+## Design Process of Salloc
+
+1. **Initial Inspiration:** I had an old Excel spreadsheet with some of the functionalities of Salloc and found it really helped me with managing my savings. Though it had many limitations. So upon starting my programming journey I decided this would be my first full project. 
+
+2. **One Page To Rule Them All:** I wanted a dashboard-type application where the user could manage their savings and customize it to their own needs. I wanted this integrated on a single page for an improved user experience. Initially the account and home pages were separate and it lead to a confusing user experience. 
+
+3. **Dashboard:** Initially I wanted graphs integrated through Dash/Plotly right there on the main page. However it soon became clear that the functionality of the site was more important. A future implementation will give the user a reactive graph dashboard so they can better visualize their savings journey and habits. 
+
+4. **Bit Off Too Much?:** Being a man of ideas I had high aspirations for what functionalities I wanted on this site. I knew early that a SQL based database was needed, or well, I wanted one for the experience of working with SQL. I also at some point decided I wanted simple cookies. This caused a couple headaches at the time but was a valuable experience. The best, as well as worst, implementation was probably the editable overview table. It required several days of troubleshooting to fix, and I'm sure there is a better way to do it, but from a user experience point of view it is probably my favorite function on the app. 
+
+5. **Hosting:** The last headache I had to meet was finding suitable hosting for my site and portfolio through a personal domain. Since it's a flask app I needed to host it on a VPS, and configure it all with linux. Making sure the routes path was working as intended proved to be another big headache. However I got there in the end. 
+
+
+## Files of Salloc
+
+1. **Python:** The backend code was written in python using Flask and a helper.py file for self written functions. App.py runs all the SQL queries and backend functions as well as routing and user feedback in the form of error messages or flash messages. 
+
+2. **Static:** I have static files, specifically images, css, and javascript files. Nothing special about these but I wanted stand-alone files to reference in my HTML. My CSS file has the styling for the entire web app. While my javascript file is mostly used for modal handling, some AJAX json forms, and sorting functionality of my tables. 
+
+3. **Templates:** The main files are my landing, layout, and index.html. Landing takes care of the login/register screen using images created through midjourney AI. Layout lays the foundation for the HTML visuals and is extended using jinja. Index is where the main program resides. All functionality starts here. 
 
 ## Troubleshooting & Feedback
 
