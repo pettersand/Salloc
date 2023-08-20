@@ -26,6 +26,7 @@ from helper import (
 import bcrypt
 import string
 import configparser
+from dashboard_app import dash_app
 
 
 config = configparser.ConfigParser()
@@ -56,6 +57,11 @@ salloc_blueprint = Blueprint(
     static_url_path="/salloc/static"
 )
 
+
+@salloc_blueprint.route("/dashboard")
+@login_required
+def dashboard():
+    return dash_app.index()
 
 # Add check if logged in, auto redirect
 @salloc_blueprint.route("/")
