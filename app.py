@@ -61,7 +61,7 @@ salloc_blueprint = Blueprint(
 @salloc_blueprint.route("/dashboard")
 @login_required
 def dashboard():
-    return dash_app.index()
+    return render_template("dashboard.html")
 
 # Add check if logged in, auto redirect
 @salloc_blueprint.route("/")

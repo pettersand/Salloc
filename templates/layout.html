@@ -21,7 +21,7 @@
         <div class="nav">
             <a href="{{ url_for('salloc.index') }}"><span>Home</span></a>
             <span>History</span>
-            <span>Dashboard</span>
+            <a href="{{ url_for('salloc.dashboard') }}"><span>Dashboard</span></a>
             <div class="dropdown" data-intro="You can always restart this setup guide in the Help menu!" data-step="10">
                 <button id="helpNav" class="dropbtn">Help</button>
                 <div class="dropdown-content">
@@ -302,6 +302,8 @@
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="{{ url_for('salloc.static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('salloc.static', filename='dash.js') }}"></script>
     {% if error %}
         <script>
             showError("{{ error }}");

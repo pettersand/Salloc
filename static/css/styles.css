@@ -1154,6 +1154,15 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   min-width: auto;
 }
 
+/* DASHBOARD */
+.dashboard {
+  display: flex;
+  width: 100%;
+
+}
+
+
+
 /* MEDIA SETUP */
 /* MOBILE */
 @media screen and (max-width: 480px) {

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('salloc.static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('salloc.static', filename='css/dash.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur&display=swap" rel="stylesheet">
+</head>
+<body id="dashboard">
+    <header class="header">
+        <div class="nav">
+            <a href="{{ url_for('salloc.index') }}"><span>Home</span></a>
+            <span>History</span>
+            <a href="{{ url_for('salloc.dashboard') }}"><span>Dashboard</span></a>
+            <div class="dropdown" data-intro="You can always restart this setup guide in the Help menu!" data-step="10">
+                <button id="helpNav" class="dropbtn">Help</button>
+                <div class="dropdown-content">
+                    <a href="#" class="contactLink">Contact</a>
+                  <a href="#accessibility">Accessibility</a>
+                  <a href="#watch-demo">Watch Video Demo</a>
+                  <a href="#guided-tour" id="startIntro">Setup Guided Tour</a>
+                  <a href="#setup-guide" id="setupGuideLink">Read Setup Guide</a>
+                  <a href="#readme">Readme</a>
+                </div>
+              </div>
+        </div>
+        <div class="nav2"> 
+            <span id="sallocName">SALLOC</span>
+        </div>
+        <div class="nav3">
+            <span>Language</span>
+            <div class="dropdown">
+                <button class="dropbtn">Currency</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="setCurrency('EUR')">EUR</a>
+                    <a href="#" onclick="setCurrency('USD')">USD</a>
+                    <a href="#" onclick="setCurrency('NOK')">NOK</a>
+                </div>
+            </div>
+            <span><a href="{{ url_for('salloc.logout') }}">Logout</a></span>
+        </div>
+        <div class="mobile-nav">
+            <div class="title">SALLOC</div>
+            <div class="menu">
+                <div class="hamburger-icon">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                </div>
+                    <div class="mobile-items">
+                        <a href="#">Home</a>
+                        <a href="#" class="contactLink">Contact</a>
+            
+                <div class="mobile-dropdown">
+                    <button id="helpNav" class="dropbtn">Help</button>
+                    <div class="dropdown-content">
+                    <a href="#accessibility">Accessibility</a>
+                    <a href="#watch-demo">Watch Video Demo</a>
+                    <a href="#guided-tour" id="startIntro">Setup Guided Tour</a>
+                    <a href="#setup-guide" id="setupGuideLink">Read Setup Guide</a>
+                    <a href="#readme">Readme</a>
+                    </div>
+                </div>
+            
+                <div class="mobile-dropdown">
+                    <button class="dropbtn">Currency</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="setCurrency('EUR')">EUR</a>
+                        <a href="#" onclick="setCurrency('USD')">USD</a>
+                        <a href="#" onclick="setCurrency('NOK')">NOK</a>
+                    </div>
+                    </div>
+                    <span><a href="{{ url_for('salloc.logout') }}">Logout</a></span>
+                </div>
+                </div>
+            </div>
+          </div>
+    </header>
+    <main>
+        <div class="dashboard">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Dashboard</h2>
+                    <iframe src="" width="100%" height="900" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="flashes">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+    <footer>
+
+    </footer>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('salloc.static', filename='js/dash.js') }}"></script>
+    {% if error %}
+        <script>
+            showError("{{ error }}");
+        </script>
+    {% endif %}
+</body>
+</html>
