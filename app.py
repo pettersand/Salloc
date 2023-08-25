@@ -104,8 +104,8 @@ def register():
         # Validate username and password
         if not is_valid_length(username, 4, 12) or not username.isalnum():
             error = "Invalid username. Must be 4-12 alphanumeric characters."
-        elif not is_valid_length(password, 6, 40) or password != confirm:
-            error = "Invalid password or passwords do not match."
+        elif not is_valid_length(password, 4, 40) or password != confirm:
+            error = "Invalid password (min 4 characters) or passwords do not match."
         else:
             hashpass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
             hashpass = hashpass.decode("utf-8")
