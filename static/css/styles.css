@@ -153,8 +153,8 @@ button, .button, input[type="button"], input[type="submit"] {
 
 .landing form {
   position: absolute;
-  top: 25%;
-  left: 60%;
+  top: 35%;
+  left: 65%;
   transform: translate(-50%, -50%);
   background-color: rgba(17, 15, 15, 0.7);
   padding: 20px;
@@ -165,9 +165,9 @@ button, .button, input[type="button"], input[type="submit"] {
 .salloc-title {
   position: absolute;
   top: 8%;
-  left: 52%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  color: rgb(22, 9, 4);
+  color: rgb(251, 248, 204);
   font-size: 1.2em;
 }
 
@@ -1238,21 +1238,26 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
     align-items: stretch;
   }
 
+  .landing form {
+    position: absolute;
+    top: 40%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(17, 15, 15, 0.7);
+    padding: 20px;
+    display: flex;
+    gap: 5px;
+  }
+
   .salloc-title {
     position: absolute;
     top: 8%;
-    left: 40%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    color: rgb(22, 9, 4);
+    color: rgb(251, 248, 204);
     font-size: 1.2em;
   }
 
-  .landing form {
-
-    top: 33%;
-    left: 60%;
-    transform: translate(-50%, -50%);
-  }
 
 }
 
@@ -1340,6 +1345,17 @@ button:active, input[type="button"]:active, input[type="submit"]:active {
   .modal-content, .settings-content, #contactContainerm .modal-warning {
     width: 80%;
     font-size: 0.8em;
+  }
+
+  .landing form {
+    position: absolute;
+    top: 35%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(17, 15, 15, 0.7);
+    padding: 20px;
+    display: flex;
+    gap: 5px;
   }
 
 }
